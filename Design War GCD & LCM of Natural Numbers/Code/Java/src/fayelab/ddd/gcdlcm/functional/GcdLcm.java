@@ -1,4 +1,4 @@
-package fayelab.ddd.gcdlcm.interpreter;
+package fayelab.ddd.gcdlcm.functional;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.IntStream;
 
 import fayelab.ddd.gcdlcm.util.ListOp;
@@ -21,30 +22,24 @@ public class GcdLcm
     private static final String EXTRACTION_TYPE_PF = "prime_factor";
     private static final String EXTRACTION_TYPE_POWER = "power";
     
-    static final String PF_EXTRACTION_TYPE_COMMON = "common";
-    static final String PF_EXTRACTION_TYPE_ALLNP = "all_np";
-    
-    static final String POWER_EXTRACTION_TYPE_MIN = "min";
-    static final String POWER_EXTRACTION_TYPE_MAX = "max";
-    
     @SuppressWarnings("serial")
-    private static final Map<String, Map<String, String>> spec = 
-            new HashMap<String, Map<String, String>>(){
+    private static final Map<String, Map<String, Object>> spec = 
+            new HashMap<String, Map<String, Object>>(){
         {
             put(SOLUTION_TYPE_GCD, 
-                new HashMap<String, String>(){
+                new HashMap<String, Object>(){
                     {
-                        put(EXTRACTION_TYPE_PF, PF_EXTRACTION_TYPE_COMMON);
-                        put(EXTRACTION_TYPE_POWER, POWER_EXTRACTION_TYPE_MIN);
+                        put(EXTRACTION_TYPE_PF, (Function<List<List<Integer>>, List<Integer>>)(listOfPfs -> extractCommonPrimeFactors(listOfPfs)));
+                        put(EXTRACTION_TYPE_POWER, (Function<List<Integer>, Integer>)(powers -> extractMinPower(powers)));
                     }       
                 }
             );
             
             put(SOLUTION_TYPE_LCM, 
-                new HashMap<String, String>(){
+                new HashMap<String, Object>(){
                     {
-                        put(EXTRACTION_TYPE_PF, PF_EXTRACTION_TYPE_ALLNP);
-                        put(EXTRACTION_TYPE_POWER, POWER_EXTRACTION_TYPE_MAX);
+                        put(EXTRACTION_TYPE_PF, (Function<List<List<Integer>>, List<Integer>>)(listOfPfs -> extractAllnpPrimeFactors(listOfPfs)));
+                        put(EXTRACTION_TYPE_POWER, (Function<List<Integer>, Integer>)(powers -> extractMaxPower(powers)));
                     }       
                 }
             );
@@ -65,24 +60,25 @@ public class GcdLcm
     private static int unifiedProc(String solutionType, List<Integer> numbers)
     {
         List<Object> pfResult = primeFactorizeList(numbers);
-        List<Integer> pfs = extractPrimeFactors(getExtractionTypePf(solutionType), (List<List<Integer>>)pfResult.get(0));
-        List<List<Integer>> pfps = extractPowers(getExtractionTypePower(solutionType), pfs, (List<List<List<Integer>>>)pfResult.get(1));
+        List<Integer> pfs = extractPrimeFactors(getExtractionTypePfFunc(solutionType), (List<List<Integer>>)pfResult.get(0));
+        List<List<Integer>> pfps = extractPowers(getExtractionTypePowerFunc(solutionType), pfs, (List<List<List<Integer>>>)pfResult.get(1));
         return productPowers(pfps);
     }
 
-    static String getExtractionTypePf(String solutionType)
+    static Function<List<List<Integer>>, List<Integer>> getExtractionTypePfFunc(String solutionType)
     {
         return extractSpecItem(solutionType, EXTRACTION_TYPE_PF);
     }
     
-    static String getExtractionTypePower(String solutionType)
+    static Function<List<Integer>, Integer> getExtractionTypePowerFunc(String solutionType)
     {
         return extractSpecItem(solutionType, EXTRACTION_TYPE_POWER);
     }
 
-    private static String extractSpecItem(String solutionType, String extractionType)
+    @SuppressWarnings("unchecked")
+    private static <T, R> Function<T, R> extractSpecItem(String solutionType, String extractionType)
     {
-        return spec.get(solutionType).get(extractionType);
+        return (Function<T, R>)spec.get(solutionType).get(extractionType);
     }
     
     static List<Object> primeFactorizeList(List<Integer> numbers)
@@ -123,17 +119,22 @@ public class GcdLcm
         }
     }
     
-    static List<Integer> extractPrimeFactors(String extractionTypePf, List<List<Integer>> pfps)
+    static List<Integer> extractPrimeFactors(Function<List<List<Integer>>, List<Integer>> extractionTypePfFunc, List<List<Integer>> pfps)
     {
-        if(PF_EXTRACTION_TYPE_COMMON.equals(extractionTypePf))
-        {
-            return ListOp.intersect(pfps);
-        }
-        
+        return extractionTypePfFunc.apply(pfps);
+    }
+    
+    static List<Integer> extractCommonPrimeFactors(List<List<Integer>> pfps)
+    {
+        return ListOp.intersect(pfps);
+    }
+    
+    static List<Integer> extractAllnpPrimeFactors(List<List<Integer>> pfps)
+    {
         return ListOp.union(pfps);
     }
 
-    static List<List<Integer>> extractPowers(String extractionTypePower, List<Integer> pfs, List<List<List<Integer>>> listOfPfps)
+    static List<List<Integer>> extractPowers(Function<List<Integer>, Integer> extractPowerFunc, List<Integer> pfs, List<List<List<Integer>>> listOfPfps)
     {
         return pfs.stream()
                   .map(pf -> {
@@ -154,18 +155,18 @@ public class GcdLcm
                                          (acc1, acc2) -> {
                                              acc1.addAll(acc2);
                                          });
-                      return asList(pf, extractPower(extractionTypePower, powers));
+                      return asList(pf, extractPowerFunc.apply(powers));
                   })
                   .collect(toList());
     }
     
-    private static int extractPower(String extractionTypePower, List<Integer> powers)
+    static int extractMinPower(List<Integer> powers)
     {
-        if(POWER_EXTRACTION_TYPE_MIN.equals(extractionTypePower))
-        {
-            return powers.stream().min(Integer::compare).orElse(0);
-        }
-        
+        return powers.stream().min(Integer::compare).orElse(0);
+    }
+    
+    static int extractMaxPower(List<Integer> powers)
+    {
         return powers.stream().max(Integer::compare).orElse(0);
     }
     
@@ -175,3 +176,4 @@ public class GcdLcm
                             .reduce((x, y) -> x * y).orElse(Integer.MIN_VALUE);
     }
 }
+

@@ -1,4 +1,4 @@
-package fayelab.ddd.gcdlcm.interpreter;
+package fayelab.ddd.gcdlcm.util;
 
 import java.util.ArrayList;
 import java.util.HashSet;

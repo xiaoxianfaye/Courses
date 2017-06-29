@@ -1,13 +1,12 @@
-package fayelab.ddd.gcdlcm.interpreter;
+package fayelab.ddd.gcdlcm.util;
 
 import junit.framework.TestCase;
 
 import java.util.List;
-import java.util.Optional; 
+import java.util.Optional;
 
+import static fayelab.ddd.gcdlcm.util.ListOp.*;
 import static java.util.Arrays.asList;
-
-import static fayelab.ddd.gcdlcm.interpreter.ListOp.*;
 
 public class ListOpTest extends TestCase
 {

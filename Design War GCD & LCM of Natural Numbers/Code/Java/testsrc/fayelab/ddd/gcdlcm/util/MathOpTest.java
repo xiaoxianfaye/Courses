@@ -1,6 +1,6 @@
-package fayelab.ddd.gcdlcm.interpreter;
+package fayelab.ddd.gcdlcm.util;
 
-import static fayelab.ddd.gcdlcm.interpreter.MathOp.*;
+import static fayelab.ddd.gcdlcm.util.MathOp.*;
 
 import junit.framework.TestCase;
 
