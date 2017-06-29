@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 public class GcdLcm
 {
@@ -47,11 +48,22 @@ public class GcdLcm
         }
     };
     
+    public static int gcd(int...numbers)
+    {
+        return unifiedProc(SOLUTION_TYPE_GCD, ListOp.of(numbers));
+    }
+    
+    public static int lcm(int...numbers)
+    {
+        return unifiedProc(SOLUTION_TYPE_LCM, ListOp.of(numbers));
+    }
+
+    @SuppressWarnings("unchecked")
     private static int unifiedProc(String solutionType, List<Integer> numbers)
     {
         List<Object> pfResult = primeFactorizeList(numbers);
-        List<Integer> pfs = extractPrimeFactors(getExtractionTypePf(solutionType), pfResult.get(0));
-        List<List<Integer>> pfps = extractPowers(getExtractionTypePower(solutionType), pfs, pfResult.get(1));
+        List<Integer> pfs = extractPrimeFactors(getExtractionTypePf(solutionType), (List<List<Integer>>)pfResult.get(0));
+        List<List<Integer>> pfps = extractPowers(getExtractionTypePower(solutionType), pfs, (List<List<List<Integer>>>)pfResult.get(1));
         return productPowers(pfps);
     }
 
@@ -88,15 +100,11 @@ public class GcdLcm
     
     private static void primeFactorize(int n, List<List<Integer>> pfps)
     {
-        for(int i = 2; i <= n; i++)
-        {
-            if(isPrime(i) && n % i == 0)
-            {
-                accPrimeFactors(i, pfps);
-                primeFactorize(n / i, pfps);
-                break;
-            }
-        }
+        IntStream.range(2, n + 1).filter(i -> MathOp.isPrime(i) && n % i == 0).findFirst()
+                 .ifPresent(pf -> {
+                     accPrimeFactors(pf, pfps);
+                     primeFactorize(n / pf, pfps);
+                 });
     }
     
     private static void accPrimeFactors(int pf, List<List<Integer>> pfps)
@@ -111,35 +119,56 @@ public class GcdLcm
             pfps.add(asList(pf, 1));
         }
     }
-
-    static boolean isPrime(int n)
+    
+    static List<Integer> extractPrimeFactors(String extractionTypePf, List<List<Integer>> pfps)
     {
-        for(int i = 2; i < n; i++)
+        if(PF_EXTRACTION_TYPE_COMMON.equals(extractionTypePf))
         {
-            if(n % i == 0)
-            {
-                return false;
-            }
+            return ListOp.intersect(pfps);
         }
         
-        return true;
-    }
-    
-    static List<Integer> extractPrimeFactors(String extractionTypePf, Object object)
-    {
-        // TODO Auto-generated method stub
-        return null;
+        return ListOp.union(pfps);
     }
 
-    static List<List<Integer>> extractPowers(String extractionTypePower, List<Integer> pfs, Object object)
+    static List<List<Integer>> extractPowers(String extractionTypePower, List<Integer> pfs, List<List<List<Integer>>> listOfPfps)
     {
-        // TODO Auto-generated method stub
-        return null;
+        return pfs.stream()
+                  .map(pf -> {
+                      List<Integer> powers = new ArrayList<>();
+                      listOfPfps.stream()
+                                .collect(() -> powers, 
+                                         (acc, pfps) -> {
+                                             Optional<List<Integer>> opfp = ListOp.keyFind(pf, pfps);
+                                             if(opfp.isPresent())
+                                             {
+                                                 acc.add(opfp.get().get(1));
+                                             }
+                                             else
+                                             {
+                                                 acc.add(0);
+                                             }
+                                         },
+                                         (acc1, acc2) -> {
+                                             acc1.addAll(acc2);
+                                         });
+                      return asList(pf, extractPower(extractionTypePower, powers));
+                  })
+                  .collect(toList());
+    }
+    
+    private static int extractPower(String extractionTypePower, List<Integer> powers)
+    {
+        if(POWER_EXTRACTION_TYPE_MIN.equals(extractionTypePower))
+        {
+            return powers.stream().min(Integer::compare).orElse(0);
+        }
+        
+        return powers.stream().max(Integer::compare).orElse(0);
     }
     
     static int productPowers(List<List<Integer>> pfps)
     {
-        // TODO Auto-generated method stub
-        return 0;
+        return pfps.stream().map(pfp -> MathOp.pow(pfp.get(0), pfp.get(1)))
+                            .reduce((x, y) -> x * y).orElse(Integer.MIN_VALUE);
     }
 }
