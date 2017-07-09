@@ -1,7 +1,7 @@
 -module(measure).
 -compile(export_all).
 
--define (MAX_INT, 16#7FFFFFFF).
+-define(MAX_INT, 16#7FFFFFFF).
 
 %% Vector Operations
 vec_equal(Vec1, Vec2) ->
