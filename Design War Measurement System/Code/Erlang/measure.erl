@@ -104,23 +104,23 @@ ms_ui_parse_unitconversiondesc([H1_Tokens, H2_Tokens|T_Tokens], StepFactors, Sys
 
 ms_ui_parse_quantity(Quantity, SysUnits) ->
     Tokens = string:tokens(string:strip(Quantity), " +"),
-    {QuantityValues, QuantityUnits} = ms_ui_parse_quantity_values_and_units(Tokens, [], []),
-    ms_ui_quantity_vec(QuantityValues, QuantityUnits, SysUnits, 1, []).
+    QuantityUnitAndValues = ms_ui_parse_quantity_unit_and_values(Tokens, []),
+    ms_ui_quantity_vec(QuantityUnitAndValues, SysUnits).
 
-ms_ui_parse_quantity_values_and_units([], QuantityValues, QuantityUnits) ->
-    {lists:reverse(QuantityValues), lists:reverse(QuantityUnits)};
-ms_ui_parse_quantity_values_and_units([H1_Tokens, H2_Tokens|T_Tokens], QuantityValues, QuantityUnits) ->
-    ms_ui_parse_quantity_values_and_units(T_Tokens, [list_to_integer(H1_Tokens)|QuantityValues], [H2_Tokens|QuantityUnits]).
+ms_ui_parse_quantity_unit_and_values([], QuantityUnitAndValues) ->
+    lists:reverse(QuantityUnitAndValues);
+ms_ui_parse_quantity_unit_and_values([H1_Tokens, H2_Tokens|T_Tokens], QuantityUnitAndValues) ->
+    ms_ui_parse_quantity_unit_and_values(T_Tokens, [{H2_Tokens, list_to_integer(H1_Tokens)}|QuantityUnitAndValues]).
 
-ms_ui_quantity_vec(_QuantityValues, _QuantityUnits, [], _Idx, QuantityVec) ->
-    lists:reverse(QuantityVec);
-ms_ui_quantity_vec(QuantityValues, QuantityUnits, [H_SysUnits|T_SysUnits], Idx, QuantityVec) ->
-    case lists:member(H_SysUnits, QuantityUnits) of
-        true ->
-            ms_ui_quantity_vec(QuantityValues, QuantityUnits, T_SysUnits, Idx + 1, [lists:nth(Idx, QuantityValues)|QuantityVec]);
-        false ->
-            ms_ui_quantity_vec(QuantityValues, QuantityUnits, T_SysUnits, Idx, [0|QuantityVec])
-    end.
+ms_ui_quantity_vec(QuantityUnitAndValues, SysUnits) ->
+    [begin
+        case lists:keyfind(SysUnit, 1, QuantityUnitAndValues) of
+            {_QuantityUnit, QuantityValue} ->
+                QuantityValue;
+            false ->
+                0
+        end
+     end || SysUnit <- SysUnits].
 
 ms_ui_equal(Quantity1, Quantity2, SysUnits, StepFactors) ->
     ms_equal(ms_ui_parse_quantity(Quantity1, SysUnits), ms_ui_parse_quantity(Quantity2, SysUnits), StepFactors).
@@ -231,7 +231,7 @@ test_ms_ui_parse_unitconversiondesc() ->
 test_ms_ui_parse_quantity() ->
     SysUnits = ["Mile", "Yard", "Feet", "Inch"],
     [1, 2, 3, 4] = ms_ui_parse_quantity(" 1 Mile  2 Yard 3 Feet 4 Inch  ", SysUnits),
-    % [1, 2, 0, 4] = ms_ui_parse_quantity("1 Mile 4 Inch 2 Yard", SysUnits), %not supported temporarily
+    [1, 2, 0, 4] = ms_ui_parse_quantity("1 Mile 4 Inch 2 Yard", SysUnits),
     [1, 2, 0, 4] = ms_ui_parse_quantity("1 Mile 2 Yard 4 Inch", SysUnits),
     [0, 0, 3, 0] = ms_ui_parse_quantity("3 Feet", SysUnits),
     
