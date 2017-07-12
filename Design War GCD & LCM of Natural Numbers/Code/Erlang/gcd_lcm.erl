@@ -43,7 +43,7 @@ prime_factorize(N) ->
 prime_factorize(1, _C, PfPs) ->
     lists:reverse(PfPs);
 prime_factorize(N, C, PfPs) ->
-    case is_prime(C) andalso N rem C =:= 0 of
+    case is_prime(C) andalso is_factor(C, N) of
         true ->
             NewPfPs = acc_prime_factors(C, PfPs),
             prime_factorize(N div C, 2, NewPfPs);
@@ -70,6 +70,9 @@ is_prime(I, N) ->
         true ->
             is_prime(I + 1, N)
     end.
+
+is_factor(N1, N2) ->
+    N2 rem N1 =:= 0
 
 % Extract Prime Factors According to the Specification
 extract_prime_factors(common, ListOfPfs) ->
@@ -148,7 +151,16 @@ test_is_prime() ->
     true = is_prime(3),
     false = is_prime(4),
     true = is_prime(5),
+
     test_is_prime_ok.
+
+test_is_factor() ->
+    true = is_factor(1, 3),
+    false = is_factor(2, 3),
+    true = is_factor(3, 3),
+    true = is_factor(2, 6),
+    
+    test_is_factor_ok.
 
 test_prime_factorize() ->
     [{2, 1}] = prime_factorize(2),
@@ -243,6 +255,7 @@ test() ->
     test_extract_spec_items(),
 
     test_is_prime(),
+    test_is_factor(),
     test_prime_factorize(),
     test_prime_factorize_list(),
 

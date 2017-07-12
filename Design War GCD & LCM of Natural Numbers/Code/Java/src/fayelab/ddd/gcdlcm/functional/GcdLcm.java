@@ -99,7 +99,7 @@ public class GcdLcm
     
     private static void primeFactorize(int n, List<List<Integer>> pfps)
     {
-        IntStream.range(2, n + 1).filter(i -> MathOp.isPrime(i) && n % i == 0).findFirst()
+        IntStream.range(2, n + 1).filter(i -> MathOp.isPrime(i) && MathOp.isFactor(i, n)).findFirst()
                  .ifPresent(pf -> {
                      accPrimeFactors(pf, pfps);
                      primeFactorize(n / pf, pfps);

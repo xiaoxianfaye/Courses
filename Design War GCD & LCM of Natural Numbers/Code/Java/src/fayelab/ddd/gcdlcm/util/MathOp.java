@@ -8,6 +8,11 @@ public class MathOp
     {
         return IntStream.range(2, n).noneMatch(i -> n % i == 0);
     }
+    
+    public static boolean isFactor(int n1, int n2)
+    {
+        return n2 % n1 == 0;
+    }
         
     public static int pow(int n, int power)
     {
