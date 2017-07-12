@@ -9,6 +9,7 @@ public class MeasureSystemTest extends TestCase
 {
     private MeasureSystem ms;
 
+    @Override
     protected void setUp()
     {
         this.ms = new MeasureSystem(asList(Integer.MAX_VALUE, 1760, 3, 12));

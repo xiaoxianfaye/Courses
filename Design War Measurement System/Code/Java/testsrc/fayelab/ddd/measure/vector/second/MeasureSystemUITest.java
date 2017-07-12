@@ -11,6 +11,7 @@ public class MeasureSystemUITest extends TestCase
 {
     private MeasureSystemUI ui;
 
+    @Override
     protected void setUp()
     {
         ui = new MeasureSystemUI("Imperial Length", "Mile 1760 Yard 3 Feet 12 Inch");

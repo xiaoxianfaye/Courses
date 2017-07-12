@@ -3,7 +3,7 @@ package fayelab.ddd.measure.arithmetic.first;
 import java.util.ArrayList;
 import java.util.List;
 
-import fayelab.depttrain.ddd.measure.arithmetic.first.VecOp;
+import fayelab.ddd.measure.arithmetic.first.VecOp;
 
 public class MeasureSystem
 {
