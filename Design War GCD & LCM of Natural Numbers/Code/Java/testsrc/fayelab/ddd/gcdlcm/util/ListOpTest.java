@@ -51,7 +51,7 @@ public class ListOpTest extends TestCase
         assertEquals(asList(), intersect(asList(1, 2, 3), asList(4, 5)));
         
         assertEquals(asList(), intersect(asList()));
-        assertEquals(asList(1), intersect(asList(asList(1))));
+        assertEquals(asList(), intersect(asList(asList(1))));
         assertEquals(asList(2, 3), intersect(asList(asList(1, 2, 3, 5), asList(2, 3, 4))));
         assertEquals(asList(), intersect(asList(asList(1, 2, 3), asList(4, 5))));
         assertEquals(asList(3, 4), intersect(asList(asList(1, 2, 3, 4), asList(3, 4, 5), asList(3, 4, 5, 6))));

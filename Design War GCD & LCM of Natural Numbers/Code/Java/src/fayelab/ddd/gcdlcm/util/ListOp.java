@@ -53,12 +53,32 @@ public class ListOp
     
     public static <T> List<T> intersect(List<List<T>> lists)
     {
-        return lists.stream().reduce((list1, list2) -> intersect(list1, list2)).orElse(asList());
+        if(lists.isEmpty())
+        {
+            return asList();
+        }
+        
+        if(lists.size() == 1)
+        {
+            return asList();
+        }
+        
+        return lists.stream().reduce((list1, list2) -> intersect(list1, list2)).get();
     }
     
     public static <T> List<T> union(List<List<T>> lists)
     {
-        return lists.stream().reduce((list1, list2) -> union(list1, list2)).orElse(asList());
+        if(lists.isEmpty())
+        {
+            return asList();
+        }
+        
+        if(lists.size() == 1)
+        {
+            return lists.get(0);
+        }
+        
+        return lists.stream().reduce((list1, list2) -> union(list1, list2)).get();
     }
     
     public static <T> List<T> intersect(List<T> list1, List<T> list2)

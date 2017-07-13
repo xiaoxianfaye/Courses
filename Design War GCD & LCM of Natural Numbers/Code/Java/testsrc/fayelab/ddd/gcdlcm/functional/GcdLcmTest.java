@@ -41,16 +41,16 @@ public class GcdLcmTest extends TestCase
     
     public void test_extractPowers()
     {
-        List<Integer> pfs = asList(2, 3, 5);
+        List<Integer> pfs = asList(2, 3, 5, 7);
         List<List<List<Integer>>> listOfPfPs =
                 asList(asList(asList(2, 1), asList(3, 2), asList(5, 1)),
                        asList(asList(2, 2), asList(3, 1), asList(5, 1), asList(7, 1)),
                        asList(asList(2, 1), asList(3, 3), asList(5, 2), asList(7, 1)));
         
-        List<List<Integer>> expectedPfps = asList(asList(2, 1), asList(3, 1), asList(5, 1));
+        List<List<Integer>> expectedPfps = asList(asList(2, 1), asList(3, 1), asList(5, 1), asList(7, 0));
         assertEquals(expectedPfps, extractPowers(powers -> extractMinPower(powers), pfs, listOfPfPs));
         
-        List<List<Integer>> expectedPfps2 = asList(asList(2, 2), asList(3, 3), asList(5, 2));
+        List<List<Integer>> expectedPfps2 = asList(asList(2, 2), asList(3, 3), asList(5, 2), asList(7, 1));
         assertEquals(expectedPfps2, extractPowers(powers -> extractMaxPower(powers), pfs, listOfPfPs));
     } 
     

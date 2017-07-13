@@ -136,27 +136,21 @@ public class GcdLcm
     static List<List<Integer>> extractPowers(String extractionTypePower, List<Integer> pfs, List<List<List<Integer>>> listOfPfps)
     {
         return pfs.stream()
-                  .map(pf -> {
-                      List<Integer> powers = new ArrayList<>();
-                      listOfPfps.stream()
-                                .collect(() -> powers, 
-                                         (acc, pfps) -> {
-                                             Optional<List<Integer>> opfp = ListOp.keyFind(pf, pfps);
-                                             if(opfp.isPresent())
-                                             {
-                                                 acc.add(opfp.get().get(1));
-                                             }
-                                             else
-                                             {
-                                                 acc.add(0);
-                                             }
-                                         },
-                                         (acc1, acc2) -> {
-                                             acc1.addAll(acc2);
-                                         });
-                      return asList(pf, extractPower(extractionTypePower, powers));
-                  })
+                  .map(pf -> asList(pf, extractPower(extractionTypePower, extractPfPowers(pf, listOfPfps))))
                   .collect(toList());
+    }
+    
+    private static List<Integer> extractPfPowers(int pf, List<List<List<Integer>>> listOfPfps)
+    {
+        return listOfPfps.stream()
+                         .map(pfps -> extractPfPower(pf, pfps))
+                         .collect(toList());
+    }
+    
+    private static int extractPfPower(int pf, List<List<Integer>> pfps)
+    {
+        Optional<List<Integer>> opfp = ListOp.keyFind(pf, pfps);
+        return opfp.isPresent() ? opfp.get().get(1) : 0;
     }
     
     private static int extractPower(String extractionTypePower, List<Integer> powers)
