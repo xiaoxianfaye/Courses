@@ -18,7 +18,9 @@ public class DoubleStackProcessor
     {
         operatorAndFuncMap = new HashMap<>();
         operatorAndFuncMap.put('+', (x, y) -> x + y);
+        operatorAndFuncMap.put('-', (x, y) -> x - y);
         operatorAndFuncMap.put('*', (x, y) -> x * y);
+        operatorAndFuncMap.put('/', (x, y) -> x / y);
     }
     
     private static Map<Character, Integer> operatorAndPriorityMap = null;
@@ -27,7 +29,9 @@ public class DoubleStackProcessor
     {
         operatorAndPriorityMap = new HashMap<>();
         operatorAndPriorityMap.put('+', 1);
+        operatorAndPriorityMap.put('-', 1);
         operatorAndPriorityMap.put('*', 2);
+        operatorAndPriorityMap.put('/', 2);
     }
         
     private int[] operands = new int[OPERAND_STACK_MAX_SIZE];
@@ -44,6 +48,20 @@ public class DoubleStackProcessor
         else
         {
             processOperator(c);
+        }
+    }
+
+    public int result()
+    {
+        calc();
+        return popOperand();
+    }
+
+    private void calc()
+    {
+        while(notEmptyOperatorStack())
+        {
+            calcOnce();
         }
     }
 
@@ -85,7 +103,7 @@ public class DoubleStackProcessor
         return operatorAndFuncMap.get(operator).apply(lOperand, rOperand);
     }
 
-    private void pushOperand(int operand)
+    void pushOperand(int operand)
     {
         operands[idxOfOperands++] = operand;
     }
