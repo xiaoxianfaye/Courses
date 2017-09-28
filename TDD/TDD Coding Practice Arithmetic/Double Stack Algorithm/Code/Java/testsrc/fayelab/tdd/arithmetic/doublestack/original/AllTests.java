@@ -1,4 +1,4 @@
-package fayelab.tdd.arithmetic.doublestack;
+package fayelab.tdd.arithmetic.doublestack.original;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

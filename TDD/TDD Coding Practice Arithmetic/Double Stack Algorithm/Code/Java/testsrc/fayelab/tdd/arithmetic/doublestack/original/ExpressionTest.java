@@ -1,5 +1,7 @@
-package fayelab.tdd.arithmetic.doublestack;
+package fayelab.tdd.arithmetic.doublestack.original;
 
+import fayelab.tdd.arithmetic.doublestack.original.Context;
+import fayelab.tdd.arithmetic.doublestack.original.Expression;
 import junit.framework.TestCase;
 
 public class ExpressionTest extends TestCase

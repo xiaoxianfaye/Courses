@@ -1,8 +1,10 @@
-package fayelab.tdd.arithmetic.doublestack;
+package fayelab.tdd.arithmetic.doublestack.original;
 
 import junit.framework.TestCase;
 
 import static java.util.Arrays.asList;
+
+import fayelab.tdd.arithmetic.doublestack.original.DoubleStackProcessor;
 
 public class DoubleStackProcessorTest extends TestCase
 {
