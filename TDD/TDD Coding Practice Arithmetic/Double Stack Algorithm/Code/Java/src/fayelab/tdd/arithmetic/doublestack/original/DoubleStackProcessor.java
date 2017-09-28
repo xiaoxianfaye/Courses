@@ -113,9 +113,9 @@ public class DoubleStackProcessor
         return operands[--idxOfOperands];
     }
 
-    private void pushOperator(char c)
+    private void pushOperator(char operator)
     {
-        operators[idxOfOperators++] = c;
+        operators[idxOfOperators++] = operator;
     }
 
     private char popOperator()
