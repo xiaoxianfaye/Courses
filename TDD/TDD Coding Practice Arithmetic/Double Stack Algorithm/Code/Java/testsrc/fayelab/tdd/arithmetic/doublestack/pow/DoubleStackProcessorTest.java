@@ -4,8 +4,6 @@ import junit.framework.TestCase;
 
 import static java.util.Arrays.asList;
 
-import java.util.Arrays;
-
 public class DoubleStackProcessorTest extends TestCase
 {
     private DoubleStackProcessor dsp;
@@ -16,29 +14,12 @@ public class DoubleStackProcessorTest extends TestCase
         dsp = new DoubleStackProcessor();
     }
     
-    public void test_num_2()
-    {        
-        dsp.process2("12");
-        
-        assertEquals(asList(12), dsp.dumpOperandStack());
-        assertEquals(asList(), dsp.dumpOperatorStack2());
-    }
-    
     public void test_num()
     {        
         dsp.process("12");
         
         assertEquals(asList(12), dsp.dumpOperandStack());
         assertEquals(asList(), dsp.dumpOperatorStack());
-    }
-    
-    public void test_num_plus_2()
-    {        
-        dsp.process2("12");
-        dsp.process2("+"); //not operator char but string
-        
-        assertEquals(asList(12), dsp.dumpOperandStack());
-        assertEquals(asList('+'), dsp.dumpOperatorStack2());
     }
     
     public void test_num_plus()
@@ -50,126 +31,148 @@ public class DoubleStackProcessorTest extends TestCase
         assertEquals(asList("+"), dsp.dumpOperatorStack());
     }
     
-    public void test_num_plus_num_plus_2()
+    public void test_num_plus_num_plus()
     {        
-        dsp.process2("12");
-        dsp.process2("+");
-        dsp.process2("34");
-        dsp.process2("+");
+        dsp.process("12");
+        dsp.process("+");
+        dsp.process("34");
+        dsp.process("+");
         
         assertEquals(asList(46), dsp.dumpOperandStack());
-        assertEquals(asList('+'), dsp.dumpOperatorStack2());
+        assertEquals(asList("+"), dsp.dumpOperatorStack());
     }
     
-    public void test_num_plus_num_multiple_2()
+    public void test_num_plus_num_multiply()
     {        
-        dsp.process2("12");
-        dsp.process2("+");
-        dsp.process2("34");
-        dsp.process2("*");
+        dsp.process("12");
+        dsp.process("+");
+        dsp.process("34");
+        dsp.process("*");
         
         assertEquals(asList(12, 34), dsp.dumpOperandStack());
-        assertEquals(asList('+', '*'), dsp.dumpOperatorStack2());
+        assertEquals(asList("+", "*"), dsp.dumpOperatorStack());
     }
     
-    public void test_num_multiply_num_multiply_2()
+    public void test_num_multiply_num_multiply()
     {
-        dsp.process2("12");
-        dsp.process2("*");
-        dsp.process2("10");
-        dsp.process2("*");
+        dsp.process("12");
+        dsp.process("*");
+        dsp.process("10");
+        dsp.process("*");
         
-        assertEquals(Arrays.asList(120), dsp.dumpOperandStack());
-        assertEquals(Arrays.asList('*'), dsp.dumpOperatorStack2());
+        assertEquals(asList(120), dsp.dumpOperandStack());
+        assertEquals(asList("*"), dsp.dumpOperatorStack());
     }
     
-    public void test_num_multiply_num_plus_2()
+    public void test_num_multiply_num_plus()
     {
-        dsp.process2("12");
-        dsp.process2("*");
-        dsp.process2("10");
-        dsp.process2("+");
+        dsp.process("12");
+        dsp.process("*");
+        dsp.process("10");
+        dsp.process("+");
         
-        assertEquals(Arrays.asList(120), dsp.dumpOperandStack());
-        assertEquals(Arrays.asList('+'), dsp.dumpOperatorStack2());
+        assertEquals(asList(120), dsp.dumpOperandStack());
+        assertEquals(asList("+"), dsp.dumpOperatorStack());
     }
     
-    public void test_num_plus_num_subtract_2()
+    public void test_num_plus_num_subtract()
     {
-        dsp.process2("12");
-        dsp.process2("+");
-        dsp.process2("34");
-        dsp.process2("-");
+        dsp.process("12");
+        dsp.process("+");
+        dsp.process("34");
+        dsp.process("-");
         
-        assertEquals(Arrays.asList(46), dsp.dumpOperandStack());
-        assertEquals(Arrays.asList('-'), dsp.dumpOperatorStack2());
+        assertEquals(asList(46), dsp.dumpOperandStack());
+        assertEquals(asList("-"), dsp.dumpOperatorStack());
     }
     
-    public void test_num_subtract_num_plus_2()
+    public void test_num_subtract_num_plus()
     {
-        dsp.process2("34");
-        dsp.process2("-");
-        dsp.process2("12");
-        dsp.process2("+");
+        dsp.process("34");
+        dsp.process("-");
+        dsp.process("12");
+        dsp.process("+");
         
-        assertEquals(Arrays.asList(22), dsp.dumpOperandStack());
-        assertEquals(Arrays.asList('+'), dsp.dumpOperatorStack2());
+        assertEquals(asList(22), dsp.dumpOperandStack());
+        assertEquals(asList("+"), dsp.dumpOperatorStack());
     }
     
-    public void test_num_subtract_num_divide_2()
+    public void test_num_subtract_num_divide()
     {
-        dsp.process2("34");
-        dsp.process2("-");
-        dsp.process2("12");
-        dsp.process2("/");
+        dsp.process("34");
+        dsp.process("-");
+        dsp.process("12");
+        dsp.process("/");
         
-        assertEquals(Arrays.asList(34, 12), dsp.dumpOperandStack());
-        assertEquals(Arrays.asList('-', '/'), dsp.dumpOperatorStack2());
+        assertEquals(asList(34, 12), dsp.dumpOperandStack());
+        assertEquals(asList("-", "/"), dsp.dumpOperatorStack());
     }
     
-    public void test_num_divide_num_plus_2()
+    public void test_num_divide_num_plus()
     {
-        dsp.process2("24");
-        dsp.process2("/");
-        dsp.process2("12");
-        dsp.process2("+");
+        dsp.process("24");
+        dsp.process("/");
+        dsp.process("12");
+        dsp.process("+");
         
-        assertEquals(Arrays.asList(2), dsp.dumpOperandStack());
-        assertEquals(Arrays.asList('+'), dsp.dumpOperatorStack2());
+        assertEquals(asList(2), dsp.dumpOperandStack());
+        assertEquals(asList("+"), dsp.dumpOperatorStack());
     }
     
-    public void test_num_plus_num_rem_2()
+    public void test_num_plus_num_rem()
     {
-        dsp.process2("12");
-        dsp.process2("+");
-        dsp.process2("34");
-        dsp.process2("%");
+        dsp.process("12");
+        dsp.process("+");
+        dsp.process("34");
+        dsp.process("%");
         
-        assertEquals(Arrays.asList(12, 34), dsp.dumpOperandStack());
-        assertEquals(Arrays.asList('+', '%'), dsp.dumpOperatorStack2());
+        assertEquals(asList(12, 34), dsp.dumpOperandStack());
+        assertEquals(asList("+", "%"), dsp.dumpOperatorStack());
     }
     
-    public void test_num_rem_num_plus_2()
+    public void test_num_rem_num_plus()
     {
-        dsp.process2("34");
-        dsp.process2("%");
-        dsp.process2("12");
-        dsp.process2("+");
+        dsp.process("34");
+        dsp.process("%");
+        dsp.process("12");
+        dsp.process("+");
                 
         assertEquals(asList(10), dsp.dumpOperandStack());
-        assertEquals(asList('+'), dsp.dumpOperatorStack2());
+        assertEquals(asList("+"), dsp.dumpOperatorStack());
     }
     
-    public void test_num_plus_num_multiply_num_plus_2()
+    public void test_num_plus_num_multiply_num_plus()
     {
-        dsp.process2("12");
-        dsp.process2("+");
-        dsp.process2("10");
-        dsp.process2("*");
-        dsp.process2("34");
-        dsp.process2("+");
+        dsp.process("12");
+        dsp.process("+");
+        dsp.process("10");
+        dsp.process("*");
+        dsp.process("34");
+        dsp.process("+");
         
-        assertEquals(Arrays.asList(352), dsp.dumpOperandStack());
-        assertEquals(Arrays.asList('+'), dsp.dumpOperatorStack2());
+        assertEquals(asList(352), dsp.dumpOperandStack());
+        assertEquals(asList("+"), dsp.dumpOperatorStack());
+    }
+    
+    public void test_num_multiply_num_pow()
+    {
+        dsp.process("12");
+        dsp.process("*");
+        dsp.process("2");
+        dsp.process("**");
+        
+        assertEquals(asList(12, 2), dsp.dumpOperandStack());
+        assertEquals(asList("*", "**"), dsp.dumpOperatorStack());
+    }
+    
+    public void test_num_pow_num_multiply()
+    {
+        dsp.process("10");
+        dsp.process("**");
+        dsp.process("3");
+        dsp.process("*");
+        
+        assertEquals(asList(1000), dsp.dumpOperandStack());
+        assertEquals(asList("*"), dsp.dumpOperatorStack());
     }
 }

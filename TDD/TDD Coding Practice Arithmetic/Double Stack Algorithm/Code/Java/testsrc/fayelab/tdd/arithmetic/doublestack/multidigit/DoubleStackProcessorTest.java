@@ -4,8 +4,6 @@ import junit.framework.TestCase;
 
 import static java.util.Arrays.asList;
 
-import java.util.Arrays;
-
 public class DoubleStackProcessorTest extends TestCase
 {
     private DoubleStackProcessor dsp;
@@ -44,7 +42,7 @@ public class DoubleStackProcessorTest extends TestCase
         assertEquals(asList('+'), dsp.dumpOperatorStack());
     }
     
-    public void test_num_plus_num_multiple()
+    public void test_num_plus_num_multiply()
     {        
         dsp.process("12");
         dsp.process("+");
@@ -62,8 +60,8 @@ public class DoubleStackProcessorTest extends TestCase
         dsp.process("10");
         dsp.process("*");
         
-        assertEquals(Arrays.asList(120), dsp.dumpOperandStack());
-        assertEquals(Arrays.asList('*'), dsp.dumpOperatorStack());
+        assertEquals(asList(120), dsp.dumpOperandStack());
+        assertEquals(asList('*'), dsp.dumpOperatorStack());
     }
     
     public void test_num_multiply_num_plus()
@@ -73,8 +71,8 @@ public class DoubleStackProcessorTest extends TestCase
         dsp.process("10");
         dsp.process("+");
         
-        assertEquals(Arrays.asList(120), dsp.dumpOperandStack());
-        assertEquals(Arrays.asList('+'), dsp.dumpOperatorStack());
+        assertEquals(asList(120), dsp.dumpOperandStack());
+        assertEquals(asList('+'), dsp.dumpOperatorStack());
     }
     
     public void test_num_plus_num_subtract()
@@ -84,8 +82,8 @@ public class DoubleStackProcessorTest extends TestCase
         dsp.process("34");
         dsp.process("-");
         
-        assertEquals(Arrays.asList(46), dsp.dumpOperandStack());
-        assertEquals(Arrays.asList('-'), dsp.dumpOperatorStack());
+        assertEquals(asList(46), dsp.dumpOperandStack());
+        assertEquals(asList('-'), dsp.dumpOperatorStack());
     }
     
     public void test_num_subtract_num_plus()
@@ -95,8 +93,8 @@ public class DoubleStackProcessorTest extends TestCase
         dsp.process("12");
         dsp.process("+");
         
-        assertEquals(Arrays.asList(22), dsp.dumpOperandStack());
-        assertEquals(Arrays.asList('+'), dsp.dumpOperatorStack());
+        assertEquals(asList(22), dsp.dumpOperandStack());
+        assertEquals(asList('+'), dsp.dumpOperatorStack());
     }
     
     public void test_num_subtract_num_divide()
@@ -106,8 +104,8 @@ public class DoubleStackProcessorTest extends TestCase
         dsp.process("12");
         dsp.process("/");
         
-        assertEquals(Arrays.asList(34, 12), dsp.dumpOperandStack());
-        assertEquals(Arrays.asList('-', '/'), dsp.dumpOperatorStack());
+        assertEquals(asList(34, 12), dsp.dumpOperandStack());
+        assertEquals(asList('-', '/'), dsp.dumpOperatorStack());
     }
     
     public void test_num_divide_num_plus()
@@ -117,8 +115,8 @@ public class DoubleStackProcessorTest extends TestCase
         dsp.process("12");
         dsp.process("+");
         
-        assertEquals(Arrays.asList(2), dsp.dumpOperandStack());
-        assertEquals(Arrays.asList('+'), dsp.dumpOperatorStack());
+        assertEquals(asList(2), dsp.dumpOperandStack());
+        assertEquals(asList('+'), dsp.dumpOperatorStack());
     }
     
     public void test_num_plus_num_rem()
@@ -128,8 +126,8 @@ public class DoubleStackProcessorTest extends TestCase
         dsp.process("34");
         dsp.process("%");
         
-        assertEquals(Arrays.asList(12, 34), dsp.dumpOperandStack());
-        assertEquals(Arrays.asList('+', '%'), dsp.dumpOperatorStack());
+        assertEquals(asList(12, 34), dsp.dumpOperandStack());
+        assertEquals(asList('+', '%'), dsp.dumpOperatorStack());
     }
     
     public void test_num_rem_num_plus()
@@ -152,7 +150,7 @@ public class DoubleStackProcessorTest extends TestCase
         dsp.process("34");
         dsp.process("+");
         
-        assertEquals(Arrays.asList(352), dsp.dumpOperandStack());
-        assertEquals(Arrays.asList('+'), dsp.dumpOperatorStack());
+        assertEquals(asList(352), dsp.dumpOperandStack());
+        assertEquals(asList('+'), dsp.dumpOperatorStack());
     }
 }

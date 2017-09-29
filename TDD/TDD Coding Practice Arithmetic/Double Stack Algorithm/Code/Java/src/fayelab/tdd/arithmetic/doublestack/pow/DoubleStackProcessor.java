@@ -13,18 +13,6 @@ public class DoubleStackProcessor
     private static final int OPERAND_STACK_MAX_SIZE = 3;
     private static final int OPERATOR_STACK_MAX_SIZE = 2;
     
-    private static Map<Character, BiFunction<Integer, Integer, Integer>> operatorAndFuncMap2= null;
-        
-    static
-    {
-        operatorAndFuncMap2 = new HashMap<>();
-        operatorAndFuncMap2.put('+', (x, y) -> x + y);
-        operatorAndFuncMap2.put('-', (x, y) -> x - y);
-        operatorAndFuncMap2.put('*', (x, y) -> x * y);
-        operatorAndFuncMap2.put('/', (x, y) -> x / y);
-        operatorAndFuncMap2.put('%', (x, y) -> x % y);
-    }
-    
     private static Map<String, BiFunction<Integer, Integer, Integer>> operatorAndFuncMap= null;
     
     static
@@ -35,18 +23,7 @@ public class DoubleStackProcessor
         operatorAndFuncMap.put("*", (x, y) -> x * y);
         operatorAndFuncMap.put("/", (x, y) -> x / y);
         operatorAndFuncMap.put("%", (x, y) -> x % y);
-    }
-    
-    private static Map<Character, Integer> operatorAndPriorityMap2 = null;
-    
-    static
-    {
-        operatorAndPriorityMap2 = new HashMap<>();
-        operatorAndPriorityMap2.put('+', 1);
-        operatorAndPriorityMap2.put('-', 1);
-        operatorAndPriorityMap2.put('*', 2);
-        operatorAndPriorityMap2.put('/', 2);
-        operatorAndPriorityMap2.put('%', 2);
+        operatorAndFuncMap.put("**", (x, y) -> IntStream.range(0, y).map(i -> x).reduce(1, (m, n) -> m * n));
     }
     
     private static Map<String, Integer> operatorAndPriorityMap = null;
@@ -59,6 +36,7 @@ public class DoubleStackProcessor
         operatorAndPriorityMap.put("*", 2);
         operatorAndPriorityMap.put("/", 2);
         operatorAndPriorityMap.put("%", 2);
+        operatorAndPriorityMap.put("**", 3);
     }
         
     private int[] operands = new int[OPERAND_STACK_MAX_SIZE];
@@ -79,33 +57,9 @@ public class DoubleStackProcessor
         }
     }
 
-    public void process2(String item)
-    {
-        if(allDigits(item))
-        {
-            processOperand(item);
-        }
-        else
-        {
-            processOperator2(item);
-        }
-    }
-
     private void processOperand(String item)
     {
         pushOperand(toInt(item));
-    }
-
-    private void processOperator2(String item)
-    {
-        char curChar = toChar(item);
-        
-        while(notEmptyOperatorStack() && notPriorTo2(curChar, topOperator2()))
-        {
-            calcOnce2();
-        }
-        
-        pushOperator2(curChar);
     }
 
     private void processOperator(String item)
@@ -117,7 +71,7 @@ public class DoubleStackProcessor
         
         pushOperator(item);
     }
-
+    
     public int result()
     {
         calc();
@@ -128,7 +82,7 @@ public class DoubleStackProcessor
     {
         while(notEmptyOperatorStack())
         {
-            calcOnce2();
+            calcOnce();
         }
     }
     
@@ -136,20 +90,10 @@ public class DoubleStackProcessor
     {
         return priority(operator1) <= priority(operator2);
     }
-
-    private boolean notPriorTo2(char operator1, char operator2)
-    {
-        return priority2(operator1) <= priority2(operator2);
-    }
     
     private int priority(String operator)
     {
         return operatorAndPriorityMap.get(operator);
-    }
-
-    private int priority2(char operator)
-    {
-        return operatorAndPriorityMap2.get(operator);
     }
     
     private void calcOnce()
@@ -159,23 +103,10 @@ public class DoubleStackProcessor
         String operator = popOperator();
         pushOperand(apply(operator, lOperand, rOperand));
     }
-
-    private void calcOnce2()
-    {
-        int rOperand = popOperand();
-        int lOperand = popOperand();
-        char operator = popOperator2();
-        pushOperand(apply2(operator, lOperand, rOperand));
-    }
     
     private int apply(String operator, int lOperand, int rOperand)
     {
         return operatorAndFuncMap.get(operator).apply(lOperand, rOperand);
-    }
-
-    private int apply2(char operator, int lOperand, int rOperand)
-    {
-        return operatorAndFuncMap2.get(operator).apply(lOperand, rOperand);
     }
 
     void pushOperand(int operand)
@@ -192,30 +123,15 @@ public class DoubleStackProcessor
     {
         operators[idxOfOperators++] = operator;
     }
-
-    private void pushOperator2(char c)
-    {
-        operators2[idxOfOperators++] = c;
-    }
     
     private String popOperator()
     {
         return operators[--idxOfOperators];
     }
     
-    private char popOperator2()
-    {
-        return operators2[--idxOfOperators];
-    }
-    
     private String topOperator()
     {
         return operators[idxOfOperators - 1];
-    }
-
-    private char topOperator2()
-    {
-        return operators2[idxOfOperators - 1];
     }
     
     private boolean allDigits(String str)
@@ -231,11 +147,6 @@ public class DoubleStackProcessor
     private int toInt(String str)
     {
         return Integer.parseInt(str);
-    }
-
-    private char toChar(String oneCharStr)
-    {
-        return oneCharStr.charAt(0);
     }
 
     int getOperandStackSize()

@@ -19,48 +19,61 @@ public class Expression
     public int eval()
     {
         StringBuffer digitBuffer = new StringBuffer();
+        StringBuffer operatorBuffer = new StringBuffer();
         
         while(ctx.exprNotEnd())
         {
             char c = ctx.nextChar();
             if('(' == c)
             {
+                //else operatorBuffer.length() == 0 when operator followed by left parenthesis
+                processOperator(operatorBuffer);
                 dsp.pushOperand(new Expression(ctx).eval());
             }
             else if(')' == c)
             {
-                if(digitBuffer.length() != 0)
-                {
-                    dsp.process2(digitBuffer.toString());
-                } //else digitBuffer.length() == 0 when right parenthesis followed by right parenthesis
-                
+                //else digitBuffer.length() == 0 when right parenthesis followed by right parenthesis
+                processOperand(digitBuffer);
                 return dsp.result();
             }
             else
             {
                 if(isDigit(c))
                 {
+                    //else operatorBuffer.length() == 0 when operator followed by digit
+                    processOperator(operatorBuffer);
                     digitBuffer.append(c);
                 }
                 else
                 {
-                    if(digitBuffer.length() != 0)
-                    {
-                        dsp.process2(digitBuffer.toString());
-                        digitBuffer = new StringBuffer();
-                    } //else digitBuffer.length() == 0 when right parenthesis followed by an operator
-                    
-                    dsp.process2(String.valueOf(c));
+                    //else digitBuffer.length() == 0 when right parenthesis followed by an operator
+                    processOperand(digitBuffer);
+                    operatorBuffer.append(c);
                 }
             }
         }
         
+        //else digitBuffer.length() == 0 when expr ends with right parenthesis
+        processOperand(digitBuffer);
+        return dsp.result();
+    }
+
+    private void processOperand(StringBuffer digitBuffer)
+    {
         if(digitBuffer.length() != 0)
         {
-            dsp.process2(digitBuffer.toString());
-        } //else digitBuffer.length() == 0 when expr ends with right parenthesis
-        
-        return dsp.result();
+            dsp.process(digitBuffer.toString());
+            digitBuffer.delete(0, digitBuffer.length());
+        } 
+    }
+
+    private void processOperator(StringBuffer operatorBuffer)
+    {
+        if(operatorBuffer.length() != 0)
+        {
+            dsp.process(operatorBuffer.toString());
+            operatorBuffer.delete(0, operatorBuffer.length());
+        } 
     }
 
     private boolean isDigit(char c)

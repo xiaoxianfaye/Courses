@@ -3,7 +3,7 @@ package fayelab.tdd.arithmetic.doublestack.pow;
 import junit.framework.TestCase;
 
 public class ExpressionTest extends TestCase
-{
+{    
     public void test_num()
     {
         Expression expr = new Expression("12");
@@ -59,5 +59,17 @@ public class ExpressionTest extends TestCase
         
         Expression expr5 = new Expression("(100-(1920-1900))*2/(24-(12+10))/2");
         assertEquals(40, expr5.eval());
+    }
+    
+    public void test_expr_with_pow()
+    {
+        Expression expr = new Expression("2**3");
+        assertEquals(8, expr.eval());
+    }
+    
+    public void test_expr_with_operator_followed_by_left_parenthesis()
+    {
+        Expression expr = new Expression("2**(1+2)");
+        assertEquals(8, expr.eval());
     }
 }
