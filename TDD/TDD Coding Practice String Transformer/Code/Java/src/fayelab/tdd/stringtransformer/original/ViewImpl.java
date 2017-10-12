@@ -1,4 +1,4 @@
-package fayelab.tdd.stringtransformer;
+package fayelab.tdd.stringtransformer.original;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -7,21 +7,80 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
-public class ViewImpl extends JFrame
+public class ViewImpl extends JFrame implements View
 {
+    private Presenter presenter;
+    
     public ViewImpl()
     {
         this.initUI();
+    }
+    
+    @Override
+    public void setPresenter(Presenter presenter)
+    {
+        this.presenter = presenter;
+    }
+    
+    @Override
+    public void presentAvailableTransIds(List<String> transIds)
+    {
+        lstAvailableTransformers.setListData(transIds.toArray(new String[] {}));
+    }
+
+    @Override
+    public String getSelectedAvailableTransId()
+    {
+        return lstAvailableTransformers.getSelectedValue();
+    }
+
+    @Override
+    public void presentChainTransIds(List<String> transIds)
+    {
+        lstTransformerChain.setListData(transIds.toArray(new String[] {}));
+    }
+
+    @Override
+    public String getSelectedChainTransId()
+    {
+        return lstTransformerChain.getSelectedValue();
+    }
+
+    @Override
+    public String getSourceStr()
+    {
+        return txtSourceStr.getText();
+    }
+
+    @Override
+    public void presentResultStr(String str)
+    {
+        txtResultStr.setText(str);
+    }
+
+    @Override
+    public void onEmptySourceStrInput()
+    {
+        JOptionPane.showMessageDialog(this, "Enter a source string, please.");
+        txtSourceStr.requestFocus();
+    }
+
+    @Override
+    public void onEmptyChainInput()
+    {
+        JOptionPane.showMessageDialog(this, "Specify the transformer chain, please.");
     }
     
     private void initUI()
@@ -149,22 +208,22 @@ public class ViewImpl extends JFrame
     
     private void btnAdd_actionPerformed(ActionEvent e)
     {
-        
+        presenter.addTransformer();
     }
 
     private void btnRemove_actionPerformed(ActionEvent e)
     {
-        
+        presenter.removeTransformer();
     }
 
     private void btnRemoveAll_actionPerformed(ActionEvent e)
     {
-        
+        presenter.removeAllTransformers();
     }
 
     private void btnApply_actionPerformed(ActionEvent e)
     {
-        
+        presenter.applyTransformerChain();
     }
 
     private void btnExit_actionPerformed(ActionEvent e)
@@ -182,8 +241,12 @@ public class ViewImpl extends JFrame
     
     public static void main(String[] args)
     {
-        ViewImpl impl = new ViewImpl();
-        centerShow(impl);
+        ViewImpl viewImpl = new ViewImpl();
+        BusinessLogic businessLogicImpl = new BusinessLogicImpl();
+        Presenter presenter = new Presenter(viewImpl, businessLogicImpl);
+        presenter.init();
+        
+        centerShow(viewImpl);
     }
     
     private JPanel pnParent = new JPanel();
