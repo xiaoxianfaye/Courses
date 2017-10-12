@@ -12,7 +12,7 @@ public class DoubleStackProcessor
     private static final int OPERAND_STACK_MAX_SIZE = 3;
     private static final int OPERATOR_STACK_MAX_SIZE = 2;
     
-    private static Map<Character, BiFunction<Integer, Integer, Integer>> operatorAndFuncMap= null;
+    private static Map<Character, BiFunction<Integer, Integer, Integer>> operatorAndFuncMap = null;
     
     static
     {
