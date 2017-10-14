@@ -1,4 +1,4 @@
-package fayelab.ddd.fbw.original.pred;
+package fayelab.ddd.fbw.original.predication;
 
 public interface Predication
 {

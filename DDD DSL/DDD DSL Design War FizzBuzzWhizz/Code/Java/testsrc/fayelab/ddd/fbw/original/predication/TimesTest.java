@@ -1,5 +1,7 @@
-package fayelab.ddd.fbw.original.pred;
+package fayelab.ddd.fbw.original.predication;
 
+import fayelab.ddd.fbw.original.predication.Predication;
+import fayelab.ddd.fbw.original.predication.Times;
 import junit.framework.TestCase;
 
 public class TimesTest extends TestCase
