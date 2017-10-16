@@ -1,6 +1,12 @@
 package fayelab.ddd.fbw.eight.combination.rule;
 
+import static fayelab.ddd.fbw.eight.combination.ListTool.combinate;
+import static fayelab.ddd.fbw.eight.combination.ListTool.flatten;
 import static fayelab.ddd.fbw.eight.combination.SpecTool.*;
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
+
+import java.util.List;
 
 import fayelab.ddd.fbw.eight.combination.action.ToFizz;
 import fayelab.ddd.fbw.eight.combination.predication.Times;
@@ -86,18 +92,14 @@ public class RuleTest extends TestCase
         Rule r1_7 = atom(times(7), toWhizz());
         Rule r1_8 = atom(times(8), toHazz());
         
-        Rule r2 = or(and4(r1_3, r1_5, r1_7, r1_8),
-                     and3(r1_3, r1_5, r1_7),
-                     and3(r1_3, r1_5, r1_8),
-                     and3(r1_3, r1_7, r1_8),
-                     and3(r1_5, r1_7, r1_8),
-                     and(r1_3, r1_5),
-                     and(r1_3, r1_7),
-                     and(r1_3, r1_8),
-                     and(r1_5, r1_7),
-                     and(r1_5, r1_8),
-                     and(r1_7, r1_8));
+        List<Rule> atomRules = asList(r1_3, r1_5, r1_7, r1_8);
         
+        List<List<Rule>> combs = flatten(asList(combinate(atomRules, 4),
+                                                combinate(atomRules, 3),
+                                                combinate(atomRules, 2)));
+
+        Rule r2 = or(combs.stream().map(rules -> and(rules)).collect(toList()));
+                
         checkResult(true, "FizzBuzzWhizzHazz", r2.apply(840));
         checkResult(false, "", r2.apply(841));
         checkResult(true, "FizzBuzzWhizz", r2.apply(105));

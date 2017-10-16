@@ -1,7 +1,6 @@
 package fayelab.ddd.fbw.eight.combination;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import fayelab.ddd.fbw.eight.combination.action.Action;
@@ -18,6 +17,13 @@ import fayelab.ddd.fbw.eight.combination.rule.And;
 import fayelab.ddd.fbw.eight.combination.rule.Atom;
 import fayelab.ddd.fbw.eight.combination.rule.Or;
 import fayelab.ddd.fbw.eight.combination.rule.Rule;
+
+import static java.util.stream.Collectors.toList;
+
+import java.util.ArrayList;
+
+import static java.util.Arrays.asList;
+import static fayelab.ddd.fbw.eight.combination.ListTool.*;
 
 public class SpecTool
 {
@@ -73,33 +79,41 @@ public class SpecTool
     
     public static Rule or(Rule...rules)
     {
-        return or(Stream.of(rules).collect(Collectors.toList()));
+        return or(Stream.of(rules).collect(toList()));
     }
     
-    private static Rule or(List<Rule> rules)
+    public static Rule or(List<Rule> rules)
     {
         if(rules.size() == 1)
         {
             return rules.get(0);
         }
         
-        Rule firstRule = rules.remove(0);
-        return or(firstRule, or(rules));
+        List<Rule> newRules = new ArrayList<>(rules);
+        Rule firstRule = newRules.remove(0);
+        return or(firstRule, or(newRules));
     }
 
     public static Rule and(Rule rule1, Rule rule2)
     {
         return new And(rule1, rule2);
     }
-
-    public static Rule and3(Rule rule1, Rule rule2, Rule rule3)
+    
+    public static Rule and(Rule...rules)
     {
-        return and(rule1, and(rule2, rule3));
+        return and(Stream.of(rules).collect(toList()));
     }
     
-    public static Rule and4(Rule rule1, Rule rule2, Rule rule3, Rule rule4)
+    public static Rule and(List<Rule> rules)
     {
-        return and(rule1, and3(rule2, rule3, rule4));
+        if(rules.size() == 1)
+        {
+            return rules.get(0);
+        }
+        
+        List<Rule> newRules = new ArrayList<>(rules);
+        Rule firstRule = newRules.remove(0);
+        return and(firstRule, or(newRules));
     }
 
     public static Rule spec()
@@ -108,19 +122,16 @@ public class SpecTool
         Rule r1_5 = atom(times(5), toBuzz());
         Rule r1_7 = atom(times(7), toWhizz());
         Rule r1_8 = atom(times(8), toHazz());
+        
+        List<Rule> atomRules = asList(r1_3, r1_5, r1_7, r1_8);
     
-        Rule r1 = or(r1_3, r1_5, r1_7, r1_8);
-        Rule r2 = or(and4(r1_3, r1_5, r1_7, r1_8),
-                     and3(r1_3, r1_5, r1_7),
-                     and3(r1_3, r1_5, r1_8),
-                     and3(r1_3, r1_7, r1_8),
-                     and3(r1_5, r1_7, r1_8),
-                     and(r1_3, r1_5),
-                     and(r1_3, r1_7),
-                     and(r1_3, r1_8),
-                     and(r1_5, r1_7),
-                     and(r1_5, r1_8),
-                     and(r1_7, r1_8));
+        Rule r1 = or(atomRules);
+        
+        List<List<Rule>> combs = flatten(asList(combinate(atomRules, 4),
+                                          combinate(atomRules, 3),
+                                          combinate(atomRules, 2)));
+        
+        Rule r2 = or(combs.stream().map(rules -> and(rules)).collect(toList()));
         Rule r3 = atom(contains(3), toFizz());
         Rule rd = atom(alwaysTrue(), toStr());
         
