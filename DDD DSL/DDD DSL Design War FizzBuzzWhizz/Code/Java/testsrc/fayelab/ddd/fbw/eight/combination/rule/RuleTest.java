@@ -94,11 +94,11 @@ public class RuleTest extends TestCase
         
         List<Rule> atomRules = asList(r1_3, r1_5, r1_7, r1_8);
         
-        List<List<Rule>> combs = flatten(asList(combinate(atomRules, 4),
-                                                combinate(atomRules, 3),
-                                                combinate(atomRules, 2)));
+        List<List<Rule>> lstOfRules = flatten(asList(combinate(atomRules, 4),
+                                                     combinate(atomRules, 3),
+                                                     combinate(atomRules, 2)));
 
-        Rule r2 = or(combs.stream().map(rules -> and(rules)).collect(toList()));
+        Rule r2 = or(lstOfRules.stream().map(rules -> and(rules)).collect(toList()));
                 
         checkResult(true, "FizzBuzzWhizzHazz", r2.apply(840));
         checkResult(false, "", r2.apply(841));

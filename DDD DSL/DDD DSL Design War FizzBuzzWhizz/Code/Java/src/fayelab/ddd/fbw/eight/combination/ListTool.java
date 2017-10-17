@@ -42,11 +42,11 @@ public class ListTool
                                          ArrayList::addAll);
     }
     
-    private static <T> List<T> addHead(T head, List<T> list)
+    private static <T> List<T> addHead(T head, List<T> lst)
     {
         List<T> result = new ArrayList<>();
         result.add(head);
-        result.addAll(list);
+        result.addAll(lst);
         return result;
     }
 

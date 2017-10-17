@@ -113,7 +113,7 @@ public class SpecTool
         
         List<Rule> newRules = new ArrayList<>(rules);
         Rule firstRule = newRules.remove(0);
-        return and(firstRule, or(newRules));
+        return and(firstRule, and(newRules));
     }
 
     public static Rule spec()
@@ -127,11 +127,11 @@ public class SpecTool
     
         Rule r1 = or(atomRules);
         
-        List<List<Rule>> combs = flatten(asList(combinate(atomRules, 4),
-                                          combinate(atomRules, 3),
-                                          combinate(atomRules, 2)));
-        
-        Rule r2 = or(combs.stream().map(rules -> and(rules)).collect(toList()));
+        List<List<Rule>> lstOfRules = flatten(asList(combinate(atomRules, 4),
+                                                     combinate(atomRules, 3),
+                                                     combinate(atomRules, 2)));
+        Rule r2 = or(lstOfRules.stream().map(rules -> and(rules)).collect(toList()));
+
         Rule r3 = atom(contains(3), toFizz());
         Rule rd = atom(alwaysTrue(), toStr());
         
