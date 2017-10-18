@@ -10,6 +10,12 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import fayelab.ddd.layout.component.Button;
+import fayelab.ddd.layout.component.Component;
+import fayelab.ddd.layout.component.TextField;
+
+import static fayelab.ddd.layout.LayoutTool.*;
+
 public class TestFrm extends JFrame
 {
     private static final long serialVersionUID = 1L;
@@ -73,12 +79,37 @@ public class TestFrm extends JFrame
         this.setLocation((screenSize.width - frmWidth) / 2, (screenSize.height - frmHeight) / 2);
         this.setVisible(true);
     }
+    
+    private void test_component()
+    {
+        button().title("Button").at(0, 0, 200, 60).in(container);
+    }
+    
+    private void test_beside()
+    {
+        beside(textField(), button().title("Btn"), 0.8f).at(0, 0, 300, 60).in(container);
+    }
+    
+    private void test_above()
+    {
+        above(textField(), button().title("Button"), 0.5f).at(0, 0, 300, 60).in(container);
+    }
+    
+    private void test_beside_above()
+    {
+        above(beside(textField(), button().title("Btn1"), 0.8f), 
+              button().title("Btn2"), 0.5f).at(0, 0, 300, 60).in(container);        
+    }
 
     public static void main(String[] args)
     {
         TestFrm frm = new TestFrm();
         
         //Test Cases
+//        frm.test_component();
+//        frm.test_beside();
+//        frm.test_above();
+        frm.test_beside_above();
         
         frm.centerShow();
     }
