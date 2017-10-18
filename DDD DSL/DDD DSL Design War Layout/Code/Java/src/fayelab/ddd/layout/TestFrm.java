@@ -100,6 +100,11 @@ public class TestFrm extends JFrame
         above(beside(textField(), button().title("Btn1"), 0.8f), 
               button().title("Btn2"), 0.5f).at(0, 0, 300, 60).in(container);        
     }
+    
+    private void test_empty()
+    {        
+        beside(empty(), button().title("Button"), 0.5f).at(0, 0, 300, 60).in(container);
+    }
 
     public static void main(String[] args)
     {
@@ -109,7 +114,8 @@ public class TestFrm extends JFrame
 //        frm.test_component();
 //        frm.test_beside();
 //        frm.test_above();
-        frm.test_beside_above();
+//        frm.test_beside_above();
+        frm.test_empty();
         
         frm.centerShow();
     }
