@@ -1,4 +1,6 @@
-package fayelab.ddd.layout;
+package fayelab.ddd.layout.globalparamconf;
+
+import static fayelab.ddd.layout.globalparamconf.LayoutTool.*;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -12,12 +14,10 @@ import java.util.stream.IntStream;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import fayelab.ddd.layout.component.BaseComponent;
-import fayelab.ddd.layout.component.Button;
-import fayelab.ddd.layout.component.Component;
-import fayelab.ddd.layout.component.TextField;
-
-import static fayelab.ddd.layout.LayoutTool.*;
+import fayelab.ddd.layout.globalparamconf.component.BaseComponent;
+import fayelab.ddd.layout.globalparamconf.component.Button;
+import fayelab.ddd.layout.globalparamconf.component.Component;
+import fayelab.ddd.layout.globalparamconf.component.TextField;
 
 public class TestFrm extends JFrame
 {
@@ -168,14 +168,31 @@ public class TestFrm extends JFrame
               blockWithMargin(operButtons, 4, 4, 0.02f, 0.02f), 0.3f).at(0, 0, 545, 325).in(container);
     }
     
-    private void test_homework()
+    private void test_global_param_conf()
     {
-//        above(above(beside(textField(), button().title("Btn1"), 0.7), 
-//                    beside(textField(), button().title("Btn2"), 0.7), 
-//                    0.5f),
-//              )
+        Component param1Cmps = beside(center(label().title("Parameter 1"), 0.2f, 0.1f), 
+                                      center(beside(textField(), empty(), 0.9f), 0.0f, 0.3f), 
+                                      0.4f);
+        Component param2Cmps = beside(center(label().title("Parameter 2"), 0.2f, 0.1f), 
+                                      center(beside(textField(), empty(), 0.9f), 0.0f, 0.3f), 
+                                      0.4f);
+        Component param3Cmps = beside(center(label().title("Parameter 3"), 0.2f, 0.1f), 
+                                      center(beside(textField(), empty(), 0.9f), 0.0f, 0.3f), 
+                                      0.4f);
+        Component centerCmps = vSeq(param1Cmps, param2Cmps, param3Cmps);
+        
+        Component setBtn = beside(empty(), button().title("Set"), 0.1f);
+        Component closeBtn = beside(empty(), button().title("Close"), 0.1f);
+        Component btns = beside(empty(),
+                                beside(center(beside(setBtn, closeBtn, 0.5f), 0.0f, 0.1f),
+                                       empty(),
+                                       0.9f),
+                                0.4f);
+        Component southCmps = above(empty(), btns, 0.3f);
+        
+        above(centerCmps, southCmps, 0.8f).at(0, 0, 545, 320).in(container);        
     }
-
+    
     public static void main(String[] args)
     {
         TestFrm frm = new TestFrm();
@@ -193,7 +210,7 @@ public class TestFrm extends JFrame
 //        frm.test_blockWithMargin();
 //        frm.test_minicalc_without_margin();
 //        frm.test_minicalc_with_margin();
-        frm.test_homework();
+        frm.test_global_param_conf();
         
         frm.centerShow();
     }

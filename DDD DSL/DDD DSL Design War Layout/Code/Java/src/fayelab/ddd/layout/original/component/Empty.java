@@ -1,4 +1,4 @@
-package fayelab.ddd.layout.component;
+package fayelab.ddd.layout.original.component;
 
 import java.awt.Container;
 
