@@ -6,10 +6,13 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import fayelab.ddd.layout.component.BaseComponent;
 import fayelab.ddd.layout.component.Button;
 import fayelab.ddd.layout.component.Component;
 import fayelab.ddd.layout.component.TextField;
@@ -105,6 +108,73 @@ public class TestFrm extends JFrame
     {        
         beside(empty(), button().title("Button"), 0.5f).at(0, 0, 300, 60).in(container);
     }
+    
+    private void test_center()
+    {
+        center(button().title("Center"), 0.2f, 0.1f).at(0, 0, 300, 60).in(container);
+    }
+    
+    private void test_hSeq()
+    {
+        hSeq(button().title("1"), button().title("2"), button().title("3")).at(0, 0, 300, 60).in(container);
+    }
+    
+    private void test_vSeq()
+    {
+        vSeq(button().title("1"), button().title("2"), button().title("3")).at(0, 0, 150, 200).in(container);
+    }
+    
+    private void test_block()
+    {
+        Component[] cmps = IntStream.rangeClosed(1, 11)
+                                    .mapToObj(i -> button().title(String.valueOf(i)))
+                                    .collect(Collectors.toList())
+                                    .toArray(new Component[]{});
+                
+        block(cmps, 4, 3).at(0, 0, 545, 325).in(container);
+    }
+    
+    private void test_blockWithMargin()
+    {
+        Component[] cmps = IntStream.rangeClosed(1, 11)
+                                    .mapToObj(i -> button().title(String.valueOf(i)))
+                                    .collect(Collectors.toList())
+                                    .toArray(new Component[]{});
+                
+        blockWithMargin(cmps, 4, 3, 0.1f, 0.1f).at(0, 0, 545, 325).in(container);
+    }
+
+    private void test_minicalc_without_margin()
+    {
+        Component[] operButtons = new Component[] {
+                button().title("0"), button().title("1"), button().title("2"), button().title("+"),
+                button().title("3"), button().title("4"), button().title("5"), button().title("-"),
+                button().title("6"), button().title("7"), button().title("8"), button().title("*"),
+                button().title("9"), button().title("="), button().title("%"), button().title("/")};
+
+        above(above(textField(), beside(button().title("Backspace"), button().title("C"), 0.5f), 0.5f), 
+              block(operButtons, 4, 4), 0.3f).at(0, 0, 545, 325).in(container);
+    }
+    
+    private void test_minicalc_with_margin()
+    {
+        Component[] operButtons = new Component[]{
+                button().title("0"), button().title("1"), button().title("2"), button().title("+"),
+                button().title("3"), button().title("4"), button().title("5"), button().title("-"),
+                button().title("6"), button().title("7"), button().title("8"), button().title("*"),
+                button().title("9"), button().title("="), button().title("%"), button().title("/")};
+
+        above(above(textField(), beside(button().title("Backspace"), button().title("C"), 0.5f), 0.5f), 
+              blockWithMargin(operButtons, 4, 4, 0.02f, 0.02f), 0.3f).at(0, 0, 545, 325).in(container);
+    }
+    
+    private void test_homework()
+    {
+//        above(above(beside(textField(), button().title("Btn1"), 0.7), 
+//                    beside(textField(), button().title("Btn2"), 0.7), 
+//                    0.5f),
+//              )
+    }
 
     public static void main(String[] args)
     {
@@ -115,7 +185,15 @@ public class TestFrm extends JFrame
 //        frm.test_beside();
 //        frm.test_above();
 //        frm.test_beside_above();
-        frm.test_empty();
+//        frm.test_empty();
+//        frm.test_center();
+//        frm.test_hSeq();
+//        frm.test_vSeq();
+//        frm.test_block();
+//        frm.test_blockWithMargin();
+//        frm.test_minicalc_without_margin();
+//        frm.test_minicalc_with_margin();
+        frm.test_homework();
         
         frm.centerShow();
     }
