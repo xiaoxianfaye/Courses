@@ -173,16 +173,16 @@ public class TestFrm extends JFrame
         TestFrm frm = new TestFrm();
         
         //Test Cases
-        frm.test_component();
-        frm.test_beside();
-        frm.test_above();
-        frm.test_beside_above();
-        frm.test_empty();
-        frm.test_center();
-        frm.test_hSeq();
-        frm.test_vSeq();
-        frm.test_block();
-        frm.test_blockWithMargin();
+//        frm.test_component();
+//        frm.test_beside();
+//        frm.test_above();
+//        frm.test_beside_above();
+//        frm.test_empty();
+//        frm.test_center();
+//        frm.test_hSeq();
+//        frm.test_vSeq();
+//        frm.test_block();
+//        frm.test_blockWithMargin();
         frm.test_minicalc_without_margin();
 //        frm.test_minicalc_with_margin();
         

@@ -90,16 +90,19 @@ public class LayoutTool
     public static Component block(Component[] cmps, int rowNum, int colNum)
     {
         Collection<List<Component>> normalizedCmpList = normalize(rowNum, colNum, cmps);
-        List<Component> rows = normalizedCmpList.stream().map(rowCmps -> hSeq(array(rowCmps))).collect(toList());
+        List<Component> rows = normalizedCmpList.stream()
+                                                .map(rowCmps -> hSeq(array(rowCmps)))
+                                                .collect(toList());
         return vSeq(array(rows));
     }
     
-    public static Component blockWithMargin(Component[] cmps, int rowNum, int colNum, float hRatio, float vRatio)
+    public static Component blockWithMargin(Component[] cmps, int rowNum, int colNum, 
+            float hRatio, float vRatio)
     {
         List<Component> cmpList = list(cmps);
-        
-        List<Component> centeredCmpList = cmpList.stream().map(cmp -> center(cmp, hRatio, vRatio)).collect(toList());
-        
+        List<Component> centeredCmpList = cmpList.stream()
+                                                 .map(cmp -> center(cmp, hRatio, vRatio))
+                                                 .collect(toList());
         return block(array(centeredCmpList), rowNum, colNum);
     }
 
