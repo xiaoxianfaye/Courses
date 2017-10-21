@@ -62,4 +62,12 @@ public class TriangleCounterTest extends TestCase
     {
         assertEquals(24, count("abcdefghijk", "abc", "adef", "aghi", "ajk", "bdgj", "cehj", "cfik"));
     }
+    
+    public void test_count_ui_2()
+    {
+        assertEquals(72, count("abcdefghijklmnopqrstu", 
+                               "abcd", "agmnps", "ahkqrt", "aiju", 
+                               "defghi", "donlkj", "dstu",
+                               "uqlmfb", "urpoec"));
+    }
 }
