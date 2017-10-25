@@ -1,6 +1,7 @@
 package fayelab.ddd.fbw.eight.combination;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 import fayelab.ddd.fbw.eight.combination.action.Action;
@@ -84,14 +85,7 @@ public class SpecTool
     
     public static Rule or(List<Rule> rules)
     {
-        if(rules.size() == 1)
-        {
-            return rules.get(0);
-        }
-        
-        List<Rule> newRules = new ArrayList<>(rules);
-        Rule firstRule = newRules.remove(0);
-        return or(firstRule, or(newRules));
+        return combine(rules, (rule1, rule2) -> or(rule1, rule2));
     }
 
     public static Rule and(Rule rule1, Rule rule2)
@@ -106,6 +100,11 @@ public class SpecTool
     
     public static Rule and(List<Rule> rules)
     {
+        return combine(rules, (rule1, rule2) -> and(rule1, rule2));
+    }
+    
+    private static Rule combine(List<Rule> rules, BiFunction<Rule, Rule, Rule> biCombine)
+    {
         if(rules.size() == 1)
         {
             return rules.get(0);
@@ -113,7 +112,7 @@ public class SpecTool
         
         List<Rule> newRules = new ArrayList<>(rules);
         Rule firstRule = newRules.remove(0);
-        return and(firstRule, and(newRules));
+        return biCombine.apply(firstRule, combine(newRules, biCombine));
     }
 
     public static Rule spec()
