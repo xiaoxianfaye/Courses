@@ -183,8 +183,8 @@ public class TestFrm extends JFrame
 //        frm.test_vSeq();
 //        frm.test_block();
 //        frm.test_blockWithMargin();
-        frm.test_minicalc_without_margin();
-//        frm.test_minicalc_with_margin();
+//        frm.test_minicalc_without_margin();
+        frm.test_minicalc_with_margin();
         
         frm.centerShow();
     }

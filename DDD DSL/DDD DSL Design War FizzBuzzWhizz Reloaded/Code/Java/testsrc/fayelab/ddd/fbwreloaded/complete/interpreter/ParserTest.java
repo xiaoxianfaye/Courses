@@ -3,20 +3,26 @@ package fayelab.ddd.fbwreloaded.complete.interpreter;
 import junit.framework.TestCase;
 
 import static fayelab.ddd.fbwreloaded.complete.interpreter.Parser.*;
+import static java.util.Arrays.asList;
 
 public class ParserTest extends TestCase
 {
-    public void test_nonBlank_line()
+    public void test_isNotBlank()
     {
-//        assertFalse(nonBlankLine(""));
-//        assertFalse(nonBlankLine(" "));
-//        assertFalse(nonBlankLine("  "));
-//        assertTrue(nonBlankLine("  123  "));
+        assertFalse(isNotBlank(""));
+        assertFalse(isNotBlank(" "));
+        assertFalse(isNotBlank("  "));
+        assertTrue(isNotBlank("  123  "));
     }
     
-    public void test_normalize_line()
+    public void test_normalize()
     {
-//        assertEquals("spec  or r3 r2 r1 rd" 
+        assertEquals("spec or r3 r2 r1 rd", normalize(" spec  or r3 r2 r1  rd  "));
+    }
+    
+    public void test_tokenize()
+    {
+        assertEquals(asList("spec", "or", "r3", "r2", "r1", "rd"), tokenize("spec or r3 r2 r1 rd"));
     }
     
 //    public void test_parse_atom()

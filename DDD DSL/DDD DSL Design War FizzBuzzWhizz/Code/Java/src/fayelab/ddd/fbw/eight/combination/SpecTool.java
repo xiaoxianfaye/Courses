@@ -2,7 +2,6 @@ package fayelab.ddd.fbw.eight.combination;
 
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.stream.Stream;
 
 import fayelab.ddd.fbw.eight.combination.action.Action;
 import fayelab.ddd.fbw.eight.combination.action.ToBuzz;
@@ -80,7 +79,7 @@ public class SpecTool
     
     public static Rule or(Rule...rules)
     {
-        return or(Stream.of(rules).collect(toList()));
+        return or(asList(rules));
     }
     
     public static Rule or(List<Rule> rules)
@@ -95,7 +94,7 @@ public class SpecTool
     
     public static Rule and(Rule...rules)
     {
-        return and(Stream.of(rules).collect(toList()));
+        return and(asList(rules));
     }
     
     public static Rule and(List<Rule> rules)

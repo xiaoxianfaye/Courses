@@ -1,10 +1,26 @@
 package fayelab.ddd.fbwreloaded.complete.interpreter;
 
+import static java.util.Arrays.asList;
+
+import java.util.List;
+
 public class Parser
 {
-    static boolean nonEmpty(String str)
+    private static final String DELIMETER = " ";
+
+    static boolean isNotBlank(String line)
     {
-        return !str.trim().isEmpty();
+        return !line.trim().isEmpty();
+    }
+    
+    static String normalize(String line)
+    {
+        return line.trim().replaceAll(" +", DELIMETER);
+    }
+    
+    static List<String> tokenize(String normalizedLine)
+    {        
+        return asList(normalizedLine.split(DELIMETER));
     }
     
 //    static void parseRuleTokens(List<String> ruleTokens, Map<String, Rule> nameMappingRule)

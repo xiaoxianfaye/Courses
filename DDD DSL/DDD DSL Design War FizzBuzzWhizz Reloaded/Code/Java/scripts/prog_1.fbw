@@ -15,4 +15,5 @@ r3 atom contains 3 to_fizz
 
 rd atom always_true to_str
 
-spec  or r3 r2 r1 rd 
+ spec  or r3 r2 r1  rd  
+ 

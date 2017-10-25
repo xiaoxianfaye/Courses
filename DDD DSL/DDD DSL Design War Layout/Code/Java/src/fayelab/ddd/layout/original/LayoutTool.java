@@ -3,7 +3,6 @@ package fayelab.ddd.layout.original;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import fayelab.ddd.layout.original.component.Button;
 import fayelab.ddd.layout.original.component.Component;
@@ -77,8 +76,9 @@ public class LayoutTool
         }
         
         float ratio = 1.0f / cmpList.size();
-        Component firstCmp = cmpList.remove(0);
-        return positionLayout.apply(firstCmp, seq(positionLayout, array(cmpList)), ratio);
+        Component firstCmp = cmpList.get(0);
+        Component[] restCmps = array(cmpList.subList(1, cmpList.size()));
+        return positionLayout.apply(firstCmp, seq(positionLayout, restCmps), ratio);
     }
     
     @FunctionalInterface
@@ -128,7 +128,7 @@ public class LayoutTool
     
     private static List<Component> list(Component[] cmps)
     {
-        return Stream.of(cmps).collect(toList());
+        return asList(cmps);
     }
     
     private static Component[] array(List<Component> cmps)

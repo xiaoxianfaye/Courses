@@ -3,12 +3,12 @@ package fayelab.ddd.fbwreloaded.complete.interpreter;
 import static fayelab.ddd.fbwreloaded.complete.interpreter.Action.Type.*;
 import static fayelab.ddd.fbwreloaded.complete.interpreter.Predication.Type.*;
 import static fayelab.ddd.fbwreloaded.complete.interpreter.Rule.Type.*;
-import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.stream.Stream;
+
+import static java.util.Arrays.asList;
 
 public class SpecTool
 {
@@ -61,7 +61,7 @@ public class SpecTool
     
     public static Rule or(Rule...rules)
     {
-        return or(Stream.of(rules).collect(toList()));
+        return or(asList(rules));
     }
     
     public static Rule or(List<Rule> rules)
@@ -76,7 +76,7 @@ public class SpecTool
     
     public static Rule and(Rule...rules)
     {
-        return and(Stream.of(rules).collect(toList()));
+        return and(asList(rules));
     }
     
     public static Rule and(List<Rule> rules)
