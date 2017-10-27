@@ -15,10 +15,10 @@ public class RuleEqualityTool
             {
                 case ATOM:
                     return equalAtom((Atom)rule1.getData(), (Atom)rule2.getData());
-                case AND:
-                    return equalAnd((And)rule1.getData(), (And)rule2.getData());
                 case OR:
                     return equalOr((Or)rule1.getData(), (Or)rule2.getData());
+                case AND:
+                    return equalAnd((And)rule1.getData(), (And)rule2.getData());
                 default:
                     return false;
             }

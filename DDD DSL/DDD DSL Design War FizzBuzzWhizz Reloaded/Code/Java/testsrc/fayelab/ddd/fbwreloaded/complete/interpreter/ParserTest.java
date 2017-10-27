@@ -15,6 +15,26 @@ import static fayelab.ddd.fbwreloaded.complete.interpreter.RuleEqualityTool.equa
 
 public class ParserTest extends TestCase
 {
+    private static final List<String> SPEC_DESC = asList(
+            "r1_3 atom times 3 to_fizz",
+            "r1_5 atom times 5 to_buzz",
+            "r1_7 atom times 7 to_whizz",
+            "",
+            "r1 or r1_3 r1_5 r1_7",
+            "",
+            "r1_357 and r1_3 r1_5 r1_7",
+            "r1_35 and r1_3 r1_5",
+            "r1_37 and r1_3 r1_7",
+            "r1_57 and r1_5 r1_7",
+            "",
+            "r2 or r1_357 r1_35 r1_37 r1_57",
+            "",
+            "r3 atom contains 3 to_fizz",
+            "",
+            "rd atom always_true to_str",
+            "  ",
+            " spec  or r3 r2 r1  rd  ");
+    
     private static final List<List<String>> SPEC_TOKENS = asList(
             asList("r1_3", "atom", "times", "3", "to_fizz"),
             asList("r1_5", "atom", "times", "5", "to_buzz"),
@@ -49,27 +69,7 @@ public class ParserTest extends TestCase
     
     public void test_tokenize()
     {
-        List<String> ruleDescs = asList(
-                "r1_3 atom times 3 to_fizz",
-                "r1_5 atom times 5 to_buzz",
-                "r1_7 atom times 7 to_whizz",
-                "",
-                "r1 or r1_3 r1_5 r1_7",
-                "",
-                "r1_357 and r1_3 r1_5 r1_7",
-                "r1_35 and r1_3 r1_5",
-                "r1_37 and r1_3 r1_7",
-                "r1_57 and r1_5 r1_7",
-                "",
-                "r2 or r1_357 r1_35 r1_37 r1_57",
-                "",
-                "r3 atom contains 3 to_fizz",
-                "",
-                "rd atom always_true to_str",
-                "  ",
-                " spec  or r3 r2 r1  rd  ");
-        
-        assertEquals(SPEC_TOKENS, tokenize(ruleDescs));
+        assertEquals(SPEC_TOKENS, tokenize(SPEC_DESC));
     }
     
     public void test_parseAtom()
@@ -91,10 +91,54 @@ public class ParserTest extends TestCase
                    parseAnd(asList("and", "r1_357", "r1_3", "r1_5", "r1_7"), ruleNameAndRuleMap)));
     }
     
-    public void test_parseRuleTokens()
+    public void test_parseRuleTokens_atom()
     {
         Map<String, Rule> actual = new HashMap<>();
+        parseRuleTokens(asList("r1_3", "atom", "times", "3", "to_fizz"), actual);
+
+        Map<String, Rule> expected = new HashMap<>(); 
+        expected.put("r1_3", r1_3);
         
+        assertMap(expected, actual);
+    }
+    
+    public void test_parseRuleTokens_or()
+    {   
+        Map<String, Rule> actual = new HashMap<>();
+        parseRuleTokens(asList("r1_3", "atom", "times", "3", "to_fizz"), actual);
+        parseRuleTokens(asList("r1_5", "atom", "times", "5", "to_buzz"), actual);
+        parseRuleTokens(asList("r1_7", "atom", "times", "7", "to_whizz"), actual);
+        parseRuleTokens(asList("r1", "or", "r1_3", "r1_5", "r1_7"), actual);
+     
+        Map<String, Rule> expected = new HashMap<>(); 
+        expected.put("r1_3", r1_3);
+        expected.put("r1_5", r1_5);
+        expected.put("r1_7", r1_7);
+        expected.put("r1", or(r1_3, r1_5, r1_7));
+        
+        assertMap(expected, actual);
+    }
+    
+    public void test_parseRuleTokens_and()
+    {
+        Map<String, Rule> actual = new HashMap<>();
+        parseRuleTokens(asList("r1_3", "atom", "times", "3", "to_fizz"), actual);
+        parseRuleTokens(asList("r1_5", "atom", "times", "5", "to_buzz"), actual);
+        parseRuleTokens(asList("r1_7", "atom", "times", "7", "to_whizz"), actual);
+        parseRuleTokens(asList("r1_357", "and", "r1_3", "r1_5", "r1_7"), actual);
+        
+        Map<String, Rule> expected = new HashMap<>(); 
+        expected.put("r1_3", r1_3);
+        expected.put("r1_5", r1_5);
+        expected.put("r1_7", r1_7);
+        expected.put("r1_357", and(r1_3, r1_5, r1_7));
+        
+        assertMap(expected, actual);
+    }
+    
+    public void test_parseRuleTokens_spec()
+    {
+        Map<String, Rule> actual = new HashMap<>();
         SPEC_TOKENS.stream().forEach(ruleTokens -> parseRuleTokens(ruleTokens, actual));
 
         Map<String, Rule> expected = new HashMap<>(); 
@@ -102,7 +146,8 @@ public class ParserTest extends TestCase
         expected.put("r1_5", r1_5);
         expected.put("r1_7", r1_7);
         
-        expected.put("r1", or(r1_3, r1_5, r1_7));
+        Rule r1 = or(r1_3, r1_5, r1_7);
+        expected.put("r1", r1);
         
         Rule r1_357 = and(r1_3, r1_5, r1_7);
         expected.put("r1_357", r1_357);
@@ -113,26 +158,31 @@ public class ParserTest extends TestCase
         Rule r1_57 = and(r1_5, r1_7);
         expected.put("r1_57", r1_57);
         
-        expected.put("r2", or(r1_357, r1_35, r1_37, r1_57));
+        Rule r2 = or(r1_357, r1_35, r1_37, r1_57);
+        expected.put("r2", r2);
         
         Rule r3 = atom(contains(3), toFizz());
         expected.put("r3", r3);
+        
         Rule rd = atom(alwaysTrue(), toStr());
         expected.put("rd", rd);
         
-        expected.put("spec", rd);
+        Rule spec = or(r3, r2, r1, rd);
+        expected.put("spec", spec);
         
         assertMap(expected, actual);
     }
 
     public void test_parseTokens()
-    {        
-//        List<List<String>> spec1 = asList(
-//                asList("r1_3", "atom", "times", "3", "to_fizz"),);
-//        
-//        assertEquals(SpecTool.spec(), parseTokens(SPEC_TOKENS));
+    {
+        assertTrue(equal(spec(), parseTokens(SPEC_TOKENS)));
     }
     
+    public void test_parse()
+    {
+        assertTrue(equal(spec(), parse(SPEC_DESC)));
+    }
+
     private void assertMap(Map<String, Rule> expected, Map<String, Rule> actual)
     {
         assertEquals(expected.keySet(), actual.keySet());

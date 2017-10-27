@@ -8,8 +8,13 @@ import java.util.function.Supplier;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 
+import static fayelab.ddd.fbwreloaded.complete.interpreter.RuleDescTool.desc;
 import static fayelab.ddd.fbwreloaded.complete.interpreter.SpecTool.*;
 
 public class Parser
@@ -37,6 +42,38 @@ public class Parser
         actionTypeAndFuncMap.put("to_str", () -> toStr());
     }
     
+    private static Map<String, BiFunction<List<String>, Map<String, Rule>, Rule>> ruleTypeAndFuncMap = null;
+    
+    static
+    {
+        ruleTypeAndFuncMap = new HashMap<>();
+        ruleTypeAndFuncMap.put("atom", (ruleTokens, ruleNameAndRuleMap) -> parseAtom(ruleTokens));
+        ruleTypeAndFuncMap.put("or", (ruleTokens, ruleNameAndRuleMap) -> parseOr(ruleTokens, ruleNameAndRuleMap));
+        ruleTypeAndFuncMap.put("and", (ruleTokens, ruleNameAndRuleMap) -> parseAnd(ruleTokens, ruleNameAndRuleMap));
+    }
+    
+    public static Rule parse(String progFileName)
+    {
+        Rule rule = null;
+
+        try
+        {
+            Path progFilePath = FileSystems.getDefault().getPath("scripts", progFileName);
+            rule = parse(Files.readAllLines(progFilePath));
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        return rule;
+    }
+    
+    static Rule parse(List<String> ruleDescs)
+    {
+        return parseTokens(tokenize(ruleDescs));
+    }
+    
     static List<List<String>> tokenize(List<String> ruleDescs)
     {        
         return ruleDescs.stream().filter(line -> isNotBlank(line))
@@ -52,6 +89,13 @@ public class Parser
     static String normalize(String line)
     {
         return line.trim().replaceAll(" +", DELIMETER);
+    }
+    
+    static Rule parseTokens(List<List<String>> tokens)
+    {
+        Map<String, Rule> ruleNameAndRules = new HashMap<>();
+        tokens.stream().forEach(ruleTokens -> parseRuleTokens(ruleTokens, ruleNameAndRules));
+        return ruleNameAndRules.get("spec");
     }
 
     static Rule parseAtom(List<String> ruleTokens)
@@ -111,20 +155,7 @@ public class Parser
         String ruleName = extractRuleName(ruleTokens);
         String ruleType = extractRuleType(ruleTokens);
         
-        Rule rule = null;
-        if("atom".equals(ruleType))
-        {
-            rule = parseAtom(ruleTokens);
-        }
-        else if("or".equals(ruleType))
-        {
-            rule = parseOr(ruleTokens, ruleNameAndRuleMap);
-        }
-        else
-        {
-            rule = parseAnd(ruleTokens, ruleNameAndRuleMap);
-        }
-        
+        Rule rule = ruleTypeAndFuncMap.get(ruleType).apply(ruleTokens, ruleNameAndRuleMap);
         ruleNameAndRuleMap.putIfAbsent(ruleName, rule);
     }
 
@@ -138,18 +169,25 @@ public class Parser
         return ruleTokens.get(1);
     }
     
-//    static Rule parseTokens(List<List<String>> tokens)
-//    {
-//        Map<String, Rule> nameAndRules = new HashMap<>();
-//        tokens.stream().forEach(ruleTokens -> parseRuleTokens(ruleTokens, nameAndRules));
-//        return nameAndRules.get("spec");
-//    }
-    
-    
-
-//    static void parseRuleTokens(List<String> ruleTokens, Map<String, Rule> nameAndRules)
-//    {
-//        // TODO Auto-generated method stub
-//        return;
-//    }
+    public static void main(String[] args)
+    {
+        String expected = "{or, {atom, contains_3, to_fizz}, "
+                             + "{or, {or, {and, {atom, times_3, to_fizz}, "
+                                             + "{and, {atom, times_5, to_buzz}, "
+                                                   + "{atom, times_7, to_whizz}}}, "
+                                       + "{or, {and, {atom, times_3, to_fizz}, "
+                                                  + "{atom, times_5, to_buzz}}, "
+                                            + "{or, {and, {atom, times_3, to_fizz}, "
+                                                       + "{atom, times_7, to_whizz}}, "
+                                                 + "{and, {atom, times_5, to_buzz}, "
+                                                       + "{atom, times_7, to_whizz}}}}}, "
+                                  + "{or, {or, {atom, times_3, to_fizz}, "
+                                            + "{or, {atom, times_5, to_buzz}, "
+                                                 + "{atom, times_7, to_whizz}}}, "
+                                       + "{atom, always_true, to_str}}}}";
+        String actual = RuleDescTool.desc(parse("prog_1.fbw"));
+        
+        System.out.println(expected.equals(actual));
+        System.out.println(actual);
+    }
 }

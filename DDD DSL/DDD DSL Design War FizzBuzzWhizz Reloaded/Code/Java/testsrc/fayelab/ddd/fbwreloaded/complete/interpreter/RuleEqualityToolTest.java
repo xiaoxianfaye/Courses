@@ -37,8 +37,12 @@ public class RuleEqualityToolTest extends TestCase
         Or or_35_2 = new Or(r1_3, r1_5);
         Or or_37 = new Or(r1_3, r1_7);
         
+        Or or_357_1 = new Or(r1_3, or(r1_5, r1_7));
+        Or or_357_2 = new Or(or(r1_3, r1_5), r1_7);
+        
         assertTrue(equalOr(or_35_1, or_35_2));
         assertFalse(equalOr(or_35_1, or_37));
+        assertFalse(equalOr(or_357_1, or_357_2));
     }
     
     public void test_equal_and()
@@ -51,8 +55,12 @@ public class RuleEqualityToolTest extends TestCase
         And and_35_2 = new And(r1_3, r1_5);
         And and_37 = new And(r1_3, r1_7);
         
+        And and_357_1 = new And(r1_3, and(r1_5, r1_7));
+        And and_357_2 = new And(and(r1_3, r1_5), r1_7);
+        
         assertTrue(equalAnd(and_35_1, and_35_2));
         assertFalse(equalAnd(and_35_1, and_37));
+        assertFalse(equalAnd(and_357_1, and_357_2));
     }
     
     public void test_equal()
