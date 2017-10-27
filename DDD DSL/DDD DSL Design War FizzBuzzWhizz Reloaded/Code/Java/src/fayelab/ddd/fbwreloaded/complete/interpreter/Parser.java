@@ -1,21 +1,18 @@
 package fayelab.ddd.fbwreloaded.complete.interpreter;
 
-import java.util.List;
-import java.util.Map;
-import java.util.function.BiFunction;
-import java.util.function.Supplier;
-
-import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.toList;
-
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
-import static fayelab.ddd.fbwreloaded.complete.interpreter.RuleDescTool.desc;
 import static fayelab.ddd.fbwreloaded.complete.interpreter.SpecTool.*;
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
 
 public class Parser
 {

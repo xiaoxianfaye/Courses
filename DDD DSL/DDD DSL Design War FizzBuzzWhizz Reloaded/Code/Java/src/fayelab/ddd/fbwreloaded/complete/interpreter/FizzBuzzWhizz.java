@@ -24,8 +24,8 @@ public class FizzBuzzWhizz
     
     private static void runSpec(Rule spec)
     {
-        IntStream.rangeClosed(1, 100)
-        .mapToObj(n -> asList(String.valueOf(n), (String)interpret(spec, n).get()));
+//        IntStream.rangeClosed(1, 100)
+//        .mapToObj(n -> asList(String.valueOf(n), (String)interpret(spec, n).get()));
         
 //        asList(String.valueOf(n), interpret(spec, n).get())
 
