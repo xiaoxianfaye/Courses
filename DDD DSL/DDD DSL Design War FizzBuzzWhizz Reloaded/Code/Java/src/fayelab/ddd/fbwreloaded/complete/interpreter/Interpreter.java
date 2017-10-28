@@ -79,7 +79,7 @@ public class Interpreter
         Optional<String> result2 = applyRule(and.getRule2(), n);
         if(!result2.isPresent())
         {
-            return result2;
+            return Optional.empty();
         }
         
         return Optional.of(result1.get() + result2.get());

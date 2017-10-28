@@ -1,4 +1,4 @@
-package fayelab.ddd.fbwreloaded.complete.compiler.functional;
+package fayelab.ddd.fbwreloaded.complete.compiler.oo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -88,13 +88,13 @@ public class Compiler
             Optional<String> result1 = compile(and.getRule1()).apply(n);
             if(!result1.isPresent())
             {
-                return Optional.empty();
+                return result1;
             }
             
             Optional<String> result2 = compile(and.getRule2()).apply(n);
             if(!result2.isPresent())
             {
-                return Optional.empty();
+                return result2;
             }
             
             return Optional.of(result1.get() + result2.get());
