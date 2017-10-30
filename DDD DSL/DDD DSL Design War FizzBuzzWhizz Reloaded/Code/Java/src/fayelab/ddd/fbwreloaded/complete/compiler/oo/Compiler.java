@@ -2,14 +2,16 @@ package fayelab.ddd.fbwreloaded.complete.compiler.oo;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
+
+import fayelab.ddd.fbwreloaded.complete.compiler.oo.compiled.action.*;
+import fayelab.ddd.fbwreloaded.complete.compiler.oo.compiled.predication.*;
+import fayelab.ddd.fbwreloaded.complete.compiler.oo.compiled.rule.*;
 
 public class Compiler
 {
-    private static Map<Predication.Type, Function<Integer, Predicate<Integer>>> predicationTypeAndFuncMap;
+    private static Map<Predication.Type, Function<Integer, OOPredication>> predicationTypeAndFuncMap;
     
     static
     {
@@ -19,7 +21,7 @@ public class Compiler
         predicationTypeAndFuncMap.put(Predication.Type.ALWAYSTRUE, any -> alwaysTrue());
     }
     
-    private static Map<Action.Type, Supplier<Function<Integer, String>>> actionTypeAndFuncMap;
+    private static Map<Action.Type, Supplier<OOAction>> actionTypeAndFuncMap;
     
     static
     {
@@ -30,7 +32,7 @@ public class Compiler
         actionTypeAndFuncMap.put(Action.Type.TOSTR, () -> toStr());
     }
     
-    private static Map<Rule.Type, Function<Rule, Function<Integer, Optional<String>>>> ruleTypeAndFuncMap;
+    private static Map<Rule.Type, Function<Rule, OORule>> ruleTypeAndFuncMap;
     
     static
     {
@@ -40,104 +42,68 @@ public class Compiler
         ruleTypeAndFuncMap.put(Rule.Type.AND, rule -> compileAnd((And)rule.getData()));
     }
     
-    public static Function<Integer, Optional<String>> compile(Rule rule)
+    public static OORule compile(Rule rule)
     {
         return ruleTypeAndFuncMap.get(rule.getType()).apply(rule);
     }
     
-    static Predicate<Integer> compilePredication(Predication predication)
+    static OOPredication compilePredication(Predication predication)
     {
         return predicationTypeAndFuncMap.get(predication.getType()).apply(predication.getParam());
     }
     
-    static Function<Integer, String> compileAction(Action action)
+    static OOAction compileAction(Action action)
     {
         return actionTypeAndFuncMap.get(action.getType()).get();
     }
     
-    static Function<Integer, Optional<String>> compileAtom(Atom atom)
+    static OOAtom compileAtom(Atom atom)
     {
-        return n -> {
-            Predicate<Integer> predication = compilePredication(atom.getPredication());
-            Function<Integer, String> action = compileAction(atom.getAction());
-            if(predication.test(n))
-            {
-                return Optional.of(action.apply(n));
-            }
-            
-            return Optional.empty();
-        };
+        return new OOAtom(compilePredication(atom.getPredication()), compileAction(atom.getAction()));
     }
 
-    static Function<Integer, Optional<String>> compileOr(Or or)
+    static OOOr compileOr(Or or)
     {
-        return n -> {
-            Optional<String> result1 = compile(or.getRule1()).apply(n);
-            if(result1.isPresent())
-            {
-                return result1;
-            }
-            
-            return compile(or.getRule2()).apply(n);
-        };
+        return new OOOr(compile(or.getRule1()), compile(or.getRule2()));
     }
 
-    static Function<Integer, Optional<String>> compileAnd(And and)
+    static OORule compileAnd(And and)
     {
-        return n -> {
-            Optional<String> result1 = compile(and.getRule1()).apply(n);
-            if(!result1.isPresent())
-            {
-                return result1;
-            }
-            
-            Optional<String> result2 = compile(and.getRule2()).apply(n);
-            if(!result2.isPresent())
-            {
-                return result2;
-            }
-            
-            return Optional.of(result1.get() + result2.get());
-        };
+        return new OOAnd(compile(and.getRule1()), compile(and.getRule2()));
     }
     
-    private static Predicate<Integer> times(int base)
+    private static OOPredication times(int base)
     {
-        return n -> n % base == 0;
+        return new OOTimes(base);
     }
 
-    private static Predicate<Integer> contains(int digit)
+    private static OOPredication contains(int digit)
     {
-        return n -> {
-            int p1 = n % 10;
-            int p2 = (n / 10) % 10;
-            int p3 = (n / 10 / 10) % 10;
-            return p1 == digit || p2 == digit || p3 == digit;
-        };
+        return new OOContains(digit);
     }
 
-    private static Predicate<Integer> alwaysTrue()
+    private static OOPredication alwaysTrue()
     {
-        return n -> true;
+        return new OOAlwaysTrue();
     }
     
-    private static Function<Integer, String> toFizz()
+    private static OOAction toFizz()
     {
-        return n -> "Fizz";
+        return new OOToFizz();
     }
     
-    private static Function<Integer, String> toBuzz()
+    private static OOAction toBuzz()
     {
-        return n -> "Buzz";
+        return new OOToBuzz();
     }
     
-    private static Function<Integer, String> toWhizz()
+    private static OOAction toWhizz()
     {
-        return n -> "Whizz";
+        return new OOToWhizz();
     }
     
-    private static Function<Integer, String> toStr()
+    private static OOAction toStr()
     {
-        return n -> String.valueOf(n);
+        return new OOToStr();
     }
 }
