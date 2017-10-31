@@ -96,13 +96,13 @@ public class FizzBuzzWhizz
             Optional<String> result1 = rule1.apply(n);
             if(!result1.isPresent())
             {
-                return result1;
+                return Optional.empty();
             }
             
             Optional<String> result2 = rule2.apply(n);
             if(!result2.isPresent())
             {
-                return result2;
+                return Optional.empty();
             }
             
             return Optional.of(result1.get() + result2.get());
@@ -136,8 +136,8 @@ public class FizzBuzzWhizz
     public void run()
     {
         List<String> results = IntStream.rangeClosed(1, 100)
-                                                  .mapToObj(n -> spec().apply(n).get())
-                                                  .collect(Collectors.toList());
+                                        .mapToObj(n -> spec().apply(n).get())
+                                        .collect(Collectors.toList());
         output(results);
     }
     
