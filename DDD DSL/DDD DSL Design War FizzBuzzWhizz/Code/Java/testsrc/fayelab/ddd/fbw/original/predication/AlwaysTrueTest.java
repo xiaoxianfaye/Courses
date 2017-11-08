@@ -8,10 +8,12 @@ public class AlwaysTrueTest extends TestCase
 {
     public void test_alwaysTrue()
     {
-        Predication pred = new AlwaysTrue();
-        assertTrue(pred.predicate(4));
+        Predication alwaysTrue = new AlwaysTrue();
+        assertTrue(alwaysTrue.predicate(1));
+        assertTrue(alwaysTrue.predicate(3));
+        assertTrue(alwaysTrue.predicate(5));
         
-        Predication pred2 = alwaysTrue();
-        assertTrue(pred2.predicate(4));
+        Predication alwaysTrue_t = alwaysTrue();
+        assertTrue(alwaysTrue_t.predicate(1));
     }
 }

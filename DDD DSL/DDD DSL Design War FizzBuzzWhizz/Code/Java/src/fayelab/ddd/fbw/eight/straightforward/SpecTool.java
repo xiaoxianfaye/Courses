@@ -61,7 +61,7 @@ public class SpecTool
         return new ToHazz();
     }
     
-    public static Atom atom(Predication predication, Action action)
+    public static Rule atom(Predication predication, Action action)
     {
         return new Atom(predication, action);
     }

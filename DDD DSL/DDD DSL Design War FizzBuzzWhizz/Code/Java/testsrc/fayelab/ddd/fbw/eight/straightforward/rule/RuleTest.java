@@ -1,13 +1,10 @@
 package fayelab.ddd.fbw.eight.straightforward.rule;
 
-import static fayelab.ddd.fbw.eight.straightforward.SpecTool.*;
-
 import fayelab.ddd.fbw.eight.straightforward.action.ToFizz;
 import fayelab.ddd.fbw.eight.straightforward.predication.Times;
-import fayelab.ddd.fbw.eight.straightforward.rule.Atom;
-import fayelab.ddd.fbw.eight.straightforward.rule.Result;
-import fayelab.ddd.fbw.eight.straightforward.rule.Rule;
 import junit.framework.TestCase;
+
+import static fayelab.ddd.fbw.eight.straightforward.SpecTool.*;
 
 public class RuleTest extends TestCase
 {
@@ -51,6 +48,7 @@ public class RuleTest extends TestCase
         Rule or_35 = or(r1_3, r1_5);
         checkResult(true, "Fizz", or_35.apply(6));
         checkResult(true, "Buzz", or_35.apply(10));
+        checkResult(true, "Fizz", or_35.apply(15));
         checkResult(false, "", or_35.apply(7));
     }
 
@@ -75,6 +73,8 @@ public class RuleTest extends TestCase
         Rule r1_5 = atom(times(5), toBuzz());
         
         Rule and_35 = and(r1_3, r1_5);
+        checkResult(false, "", and_35.apply(3));
+        checkResult(false, "", and_35.apply(5));
         checkResult(true, "FizzBuzz", and_35.apply(15));
         checkResult(false, "", and_35.apply(16));
     }
@@ -98,15 +98,19 @@ public class RuleTest extends TestCase
                      and(r1_5, r1_8),
                      and(r1_7, r1_8));
         
-        checkResult(true, "FizzBuzzWhizzHazz", r2.apply(840));
+        checkResult(false, "", r2.apply(3));
+        checkResult(false, "", r2.apply(5));
+        checkResult(false, "", r2.apply(7));
+        checkResult(false, "", r2.apply(8));
+        checkResult(true, "FizzBuzzWhizzHazz", r2.apply(3*5*7*8));
         checkResult(false, "", r2.apply(841));
-        checkResult(true, "FizzBuzzWhizz", r2.apply(105));
+        checkResult(true, "FizzBuzzWhizz", r2.apply(3*5*7));
         checkResult(false, "", r2.apply(104));
-        checkResult(true, "FizzBuzzHazz", r2.apply(120));
+        checkResult(true, "FizzBuzzHazz", r2.apply(3*5*8));
         checkResult(false, "", r2.apply(121));
-        checkResult(true, "FizzWhizzHazz", r2.apply(168));
+        checkResult(true, "FizzWhizzHazz", r2.apply(3*7*8));
         checkResult(false, "", r2.apply(167));
-        checkResult(true, "BuzzWhizzHazz", r2.apply(280));
+        checkResult(true, "BuzzWhizzHazz", r2.apply(5*7*8));
         checkResult(false, "", r2.apply(281));
         checkResult(true, "FizzBuzz", r2.apply(15));
         checkResult(false, "", r2.apply(14));
@@ -134,7 +138,8 @@ public class RuleTest extends TestCase
     public void test_default_rule()
     {
         Rule rd = atom(alwaysTrue(), toStr());
-        checkResult(true, "4", rd.apply(4));
+        checkResult(true, "1", rd.apply(1));
+        checkResult(true, "3", rd.apply(3));
     }
     
     public void test_spec()
@@ -142,11 +147,11 @@ public class RuleTest extends TestCase
         Rule spec = spec();
                 
         checkResult(true, "Fizz", spec.apply(35));
-        checkResult(true, "FizzBuzzWhizzHazz", spec.apply(840));
-        checkResult(true, "FizzBuzzWhizz", spec.apply(105));
-        checkResult(true, "FizzBuzzHazz", spec.apply(120));
-        checkResult(true, "FizzWhizzHazz", spec.apply(168));
-        checkResult(true, "BuzzWhizzHazz", spec.apply(280));
+        checkResult(true, "FizzBuzzWhizzHazz", spec.apply(3*5*7*8));
+        checkResult(true, "FizzBuzzWhizz", spec.apply(3*5*7));
+        checkResult(true, "FizzBuzzHazz", spec.apply(3*5*8));
+        checkResult(true, "FizzWhizzHazz", spec.apply(3*7*8));
+        checkResult(true, "BuzzWhizzHazz", spec.apply(5*7*8));
         checkResult(true, "FizzBuzz", spec.apply(15));
         checkResult(true, "FizzWhizz", spec.apply(21));
         checkResult(true, "FizzHazz", spec.apply(24));

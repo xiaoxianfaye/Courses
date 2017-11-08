@@ -1,4 +1,4 @@
-package fayelab.ddd.fbw.original;
+package fayelab.ddd.fbw.original.action;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -9,9 +9,10 @@ public class AllTests
     {
         TestSuite suite = new TestSuite(AllTests.class.getName());
         //$JUnit-BEGIN$
-        suite.addTest(fayelab.ddd.fbw.original.action.AllTests.suite());
-        suite.addTest(fayelab.ddd.fbw.original.predication.AllTests.suite());
-        suite.addTest(fayelab.ddd.fbw.original.rule.AllTests.suite());
+        suite.addTestSuite(ToFizzTest.class);
+        suite.addTestSuite(ToBuzzTest.class);
+        suite.addTestSuite(ToWhizzTest.class);
+        suite.addTestSuite(ToStrTest.class);
         //$JUnit-END$
         return suite;
     }

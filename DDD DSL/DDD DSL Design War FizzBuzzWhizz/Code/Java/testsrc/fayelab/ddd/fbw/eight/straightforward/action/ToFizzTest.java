@@ -6,7 +6,7 @@ public class ToFizzTest extends TestCase
 {
     public void test_toFizz()
     {
-        Action action = new ToFizz();
-        assertEquals("Fizz", action.act(3));
+        Action toFizz = new ToFizz();
+        assertEquals("Fizz", toFizz.act(3));
     }
 }

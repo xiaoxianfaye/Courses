@@ -8,10 +8,10 @@ public class ToHazzTest extends TestCase
 {
     public void test_toHazz()
     {
-        Action action = new ToHazz();
-        assertEquals("Hazz", action.act(8));
+        Action toHazz = new ToHazz();
+        assertEquals("Hazz", toHazz.act(8));
         
-        Action action2 = toHazz();
-        assertEquals("Hazz", action2.act(8));
+        Action toHazz_t = toHazz();
+        assertEquals("Hazz", toHazz_t.act(8));
     }
 }

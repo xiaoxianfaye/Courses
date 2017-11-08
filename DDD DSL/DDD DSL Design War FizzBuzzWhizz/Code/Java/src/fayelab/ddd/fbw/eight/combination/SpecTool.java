@@ -1,5 +1,6 @@
 package fayelab.ddd.fbw.eight.combination;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -18,12 +19,9 @@ import fayelab.ddd.fbw.eight.combination.rule.Atom;
 import fayelab.ddd.fbw.eight.combination.rule.Or;
 import fayelab.ddd.fbw.eight.combination.rule.Rule;
 
-import static java.util.stream.Collectors.toList;
-
-import java.util.ArrayList;
-
-import static java.util.Arrays.asList;
 import static fayelab.ddd.fbw.eight.combination.ListTool.*;
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
 
 public class SpecTool
 {
@@ -67,7 +65,7 @@ public class SpecTool
         return new ToHazz();
     }
     
-    public static Atom atom(Predication predication, Action action)
+    public static Rule atom(Predication predication, Action action)
     {
         return new Atom(predication, action);
     }

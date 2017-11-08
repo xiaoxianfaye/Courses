@@ -6,7 +6,7 @@ public class ToWhizzTest extends TestCase
 {
     public void test_toWhizz()
     {
-        Action action = new ToWhizz();
-        assertEquals("Whizz", action.act(7));
+        Action toWhizz = new ToWhizz();
+        assertEquals("Whizz", toWhizz.act(7));
     }
 }
