@@ -15,10 +15,10 @@ public class Interpreter
         {
             case ATOM:
                 return applyAtom((Atom)rule.getData(), n);
+            case OR:
+                return applyOr((Or)rule.getData(), n);    
             case AND:
                 return applyAnd((And)rule.getData(), n);
-            case OR:
-                return applyOr((Or)rule.getData(), n);                
             default:
                 return Optional.empty();
         }
@@ -65,6 +65,17 @@ public class Interpreter
                 return "";
         }
     }
+    
+    private static Optional<String> applyOr(Or or, int n)
+    {
+        Optional<String> result1 = applyRule(or.getRule1(), n);
+        if(result1.isPresent())
+        {
+            return result1;
+        }
+        
+        return applyRule(or.getRule2(), n);
+    }
 
     private static Optional<String> applyAnd(And and, int n)
     {
@@ -81,17 +92,6 @@ public class Interpreter
         }
         
         return Optional.of(result1.get() + result2.get());
-    }
-    
-    private static Optional<String> applyOr(Or or, int n)
-    {
-        Optional<String> result1 = applyRule(or.getRule1(), n);
-        if(result1.isPresent())
-        {
-            return result1;
-        }
-        
-        return applyRule(or.getRule2(), n);
     }
     
     private static boolean times(int base, int n)

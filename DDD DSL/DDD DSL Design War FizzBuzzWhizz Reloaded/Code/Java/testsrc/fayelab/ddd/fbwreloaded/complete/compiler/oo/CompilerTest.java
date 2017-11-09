@@ -72,6 +72,7 @@ public class CompilerTest extends TestCase
         OORule o_or_35 = compileOr((Or)or_35.getData());
         assertEquals("Fizz", o_or_35.apply(6).get());
         assertEquals("Buzz", o_or_35.apply(10).get());
+        assertEquals("Fizz", o_or_35.apply(15).get());
         assertEquals(Optional.empty(), o_or_35.apply(7));
         
         Rule or_357 = or(r1_3, r1_5, r1_7);
@@ -86,12 +87,14 @@ public class CompilerTest extends TestCase
     {
         Rule and_35 = and(r1_3, r1_5);
         OORule o_and_35 = compileAnd((And)and_35.getData());
+        assertEquals(Optional.empty(), o_and_35.apply(3));
+        assertEquals(Optional.empty(), o_and_35.apply(5));
         assertEquals("FizzBuzz", o_and_35.apply(15).get());
         assertEquals(Optional.empty(), o_and_35.apply(16));
         
         Rule and_357 = and(r1_3, r1_5, r1_7);
         OORule o_and_357 = compileAnd((And)and_357.getData());
-        assertEquals("FizzBuzzWhizz", o_and_357.apply(105).get());
+        assertEquals("FizzBuzzWhizz", o_and_357.apply(3*5*7).get());
         assertEquals(Optional.empty(), o_and_357.apply(104));
     }
     

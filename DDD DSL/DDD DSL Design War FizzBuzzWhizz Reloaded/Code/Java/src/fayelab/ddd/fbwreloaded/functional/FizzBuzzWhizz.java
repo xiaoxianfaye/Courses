@@ -135,15 +135,16 @@ public class FizzBuzzWhizz
     
     public void run()
     {
-        List<String> results = IntStream.rangeClosed(1, 100)
-                                        .mapToObj(n -> spec().apply(n).get())
-                                        .collect(Collectors.toList());
+        Function<Integer, Optional<String>> spec = spec();   
+        List<Optional<String>> results = IntStream.rangeClosed(1, 100)
+                                                  .mapToObj(spec::apply)
+                                                  .collect(Collectors.toList());
         output(results);
     }
     
-    private void output(List<String> results)
+    private void output(List<Optional<String>> results)
     {
-        results.stream().forEach(System.out::println);
+        results.stream().map(Optional::get).forEach(System.out::println);
     }
 
     public static void main(String[] args)

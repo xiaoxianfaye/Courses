@@ -105,6 +105,7 @@ public class FizzBuzzWhizzTest extends TestCase
         Function<Integer, Optional<String>> or_35 = or(r1_3, r1_5);
         assertEquals("Fizz", or_35.apply(6).get());
         assertEquals("Buzz", or_35.apply(10).get());
+        assertEquals("Fizz", or_35.apply(15).get());
         assertEquals(Optional.empty(), or_35.apply(7));
         
         Function<Integer, Optional<String>> or_357 = or3(r1_3, r1_5, r1_7);
@@ -127,6 +128,8 @@ public class FizzBuzzWhizzTest extends TestCase
         Function<Integer, Optional<String>> r1_7 = atom(times(7), toWhizz());
         
         Function<Integer, Optional<String>> and_35 = and(r1_3, r1_5);
+        assertEquals(Optional.empty(), and_35.apply(3));
+        assertEquals(Optional.empty(), and_35.apply(5));
         assertEquals("FizzBuzz", and_35.apply(15).get());
         assertEquals(Optional.empty(), and_35.apply(16));
         
@@ -139,7 +142,7 @@ public class FizzBuzzWhizzTest extends TestCase
         assertEquals(Optional.empty(), and_37.apply(36));
         
         Function<Integer, Optional<String>> and_357 = and3(r1_3, r1_5, r1_7);
-        assertEquals("FizzBuzzWhizz", and_357.apply(105).get());
+        assertEquals("FizzBuzzWhizz", and_357.apply(3*5*7).get());
         assertEquals(Optional.empty(), and_357.apply(104));
     }
     

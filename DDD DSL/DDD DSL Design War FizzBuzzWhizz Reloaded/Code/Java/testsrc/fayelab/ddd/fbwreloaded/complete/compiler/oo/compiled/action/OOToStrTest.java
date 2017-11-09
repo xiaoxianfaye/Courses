@@ -6,7 +6,8 @@ public class OOToStrTest extends TestCase
 {
     public void test_toStr()
     {
-        OOAction action = new OOToStr();
-        assertEquals("4", action.act(4));
+        OOAction toStr = new OOToStr();
+        assertEquals("1", toStr.act(1));
+        assertEquals("10", toStr.act(10));
     }
 }

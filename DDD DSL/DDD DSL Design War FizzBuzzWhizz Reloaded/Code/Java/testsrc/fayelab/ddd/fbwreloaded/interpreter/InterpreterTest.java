@@ -33,29 +33,6 @@ public class InterpreterTest extends TestCase
         assertEquals("6", interpret(rd, 6).get());
     }
     
-    public void test_and()
-    {
-        Rule r1_3 = atom(times(3), toFizz());
-        Rule r1_5 = atom(times(5), toBuzz());
-        Rule r1_7 = atom(times(7), toWhizz());
-        
-        Rule and_35 = and(r1_3, r1_5);
-        assertEquals("FizzBuzz", interpret(and_35, 15).get());
-        assertEquals(Optional.empty(), interpret(and_35, 16));
-        
-        Rule and_37 = and(r1_3, r1_7);
-        assertEquals("FizzWhizz", interpret(and_37, 21).get());
-        assertEquals(Optional.empty(), interpret(and_37, 22));
-        
-        Rule and_57 = and(r1_5, r1_7);
-        assertEquals("BuzzWhizz", interpret(and_57, 35).get());
-        assertEquals(Optional.empty(), interpret(and_57, 36));
-                
-        Rule and_357 = and3(r1_3, r1_5, r1_7);
-        assertEquals("FizzBuzzWhizz", interpret(and_357, 105).get());
-        assertEquals(Optional.empty(), interpret(and_357, 104));
-    }
-    
     public void test_or()
     {
         Rule r1_3 = atom(times(3), toFizz());
@@ -67,6 +44,7 @@ public class InterpreterTest extends TestCase
         Rule or_35 = or(r1_3, r1_5);
         assertEquals("Fizz", interpret(or_35, 6).get());
         assertEquals("Buzz", interpret(or_35, 10).get());
+        assertEquals("Fizz", interpret(or_35, 15).get());
         assertEquals(Optional.empty(), interpret(or_35, 7));
         
         Rule or_357 = or3(r1_3, r1_5, r1_7);
@@ -81,5 +59,30 @@ public class InterpreterTest extends TestCase
         assertEquals("Buzz", interpret(or_357d, 10).get());
         assertEquals("Whizz", interpret(or_357d, 14).get());
         assertEquals("13", interpret(or_357d, 13).get());
+    }
+    
+    public void test_and()
+    {
+        Rule r1_3 = atom(times(3), toFizz());
+        Rule r1_5 = atom(times(5), toBuzz());
+        Rule r1_7 = atom(times(7), toWhizz());
+        
+        Rule and_35 = and(r1_3, r1_5);
+        assertEquals(Optional.empty(), interpret(and_35, 3));
+        assertEquals(Optional.empty(), interpret(and_35, 5));
+        assertEquals("FizzBuzz", interpret(and_35, 15).get());
+        assertEquals(Optional.empty(), interpret(and_35, 16));
+        
+        Rule and_37 = and(r1_3, r1_7);
+        assertEquals("FizzWhizz", interpret(and_37, 21).get());
+        assertEquals(Optional.empty(), interpret(and_37, 22));
+        
+        Rule and_57 = and(r1_5, r1_7);
+        assertEquals("BuzzWhizz", interpret(and_57, 35).get());
+        assertEquals(Optional.empty(), interpret(and_57, 36));
+                
+        Rule and_357 = and3(r1_3, r1_5, r1_7);
+        assertEquals("FizzBuzzWhizz", interpret(and_357, 3*5*7).get());
+        assertEquals(Optional.empty(), interpret(and_357, 104));
     }
 }

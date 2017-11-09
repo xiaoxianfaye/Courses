@@ -6,7 +6,7 @@ public class OOToBuzzTest extends TestCase
 {
     public void test_toBuzz()
     {
-        OOAction action = new OOToBuzz();
-        assertEquals("Buzz", action.act(5));
+        OOAction toBuzz = new OOToBuzz();
+        assertEquals("Buzz", toBuzz.act(5));
     }
 }

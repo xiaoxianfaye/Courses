@@ -1,6 +1,5 @@
 package fayelab.ddd.fbwreloaded.complete.compiler.oo;
 
-import fayelab.ddd.fbwreloaded.complete.compiler.oo.compiled.AllCompiledOOTests;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -10,7 +9,7 @@ public class AllTests
     {
         TestSuite suite = new TestSuite(AllTests.class.getName());
         //$JUnit-BEGIN$
-        suite.addTest(AllCompiledOOTests.suite());
+        suite.addTest(fayelab.ddd.fbwreloaded.complete.compiler.oo.compiled.AllTests.suite());
         suite.addTestSuite(CompilerTest.class);
         suite.addTestSuite(ParserTest.class);
         suite.addTestSuite(RuleDescToolTest.class);

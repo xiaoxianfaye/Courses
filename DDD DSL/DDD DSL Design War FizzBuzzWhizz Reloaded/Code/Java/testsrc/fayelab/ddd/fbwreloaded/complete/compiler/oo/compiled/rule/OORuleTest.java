@@ -38,6 +38,7 @@ public class OORuleTest extends TestCase
         OORule or_35 = new OOOr(r1_3, r1_5);
         assertEquals(Optional.of("Fizz"), or_35.apply(6));
         assertEquals(Optional.of("Buzz"), or_35.apply(10));
+        assertEquals(Optional.of("Fizz"), or_35.apply(15));
         assertEquals(Optional.empty(), or_35.apply(7));
     }
 
@@ -60,6 +61,8 @@ public class OORuleTest extends TestCase
         OORule r1_5 = new OOAtom(new OOTimes(5), new OOToBuzz());
         
         OORule and_35 = new OOAnd(r1_3, r1_5);
+        assertEquals(Optional.empty(), and_35.apply(3));
+        assertEquals(Optional.empty(), and_35.apply(5));
         assertEquals(Optional.of("FizzBuzz"), and_35.apply(15));
         assertEquals(Optional.empty(), and_35.apply(16));
     }
@@ -74,7 +77,10 @@ public class OORuleTest extends TestCase
                              new OOOr(new OOAnd(r1_3, r1_5),
                                       new OOOr(new OOAnd(r1_3, r1_7),
                                                new OOAnd(r1_5, r1_7))));
-        assertEquals(Optional.of("FizzBuzzWhizz"), r2.apply(105));
+        assertEquals(Optional.empty(), r2.apply(3));
+        assertEquals(Optional.empty(), r2.apply(5));
+        assertEquals(Optional.empty(), r2.apply(7));
+        assertEquals(Optional.of("FizzBuzzWhizz"), r2.apply(3*5*7));
         assertEquals(Optional.empty(), r2.apply(104));
         assertEquals(Optional.of("FizzBuzz"), r2.apply(15));
         assertEquals(Optional.empty(),  r2.apply(14));
@@ -96,6 +102,7 @@ public class OORuleTest extends TestCase
     public void test_default_rule()
     {
         OORule rd = new OOAtom(new OOAlwaysTrue(), new OOToStr());
-        assertEquals(Optional.of("4"), rd.apply(4));
+        assertEquals(Optional.of("1"), rd.apply(1));
+        assertEquals(Optional.of("3"), rd.apply(3));
     }
 }

@@ -6,7 +6,7 @@ public class ToBuzzTest extends TestCase
 {
     public void test_toBuzz()
     {
-        Action action = new ToBuzz();
-        assertEquals("Buzz", action.act(5));
+        Action toBuzz = new ToBuzz();
+        assertEquals("Buzz", toBuzz.act(5));
     }
 }

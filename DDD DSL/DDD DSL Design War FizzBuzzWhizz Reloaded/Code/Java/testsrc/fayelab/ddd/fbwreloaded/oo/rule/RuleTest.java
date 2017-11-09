@@ -41,6 +41,7 @@ public class RuleTest extends TestCase
         Rule or_35 = or(r1_3, r1_5);
         checkResult(true, "Fizz", or_35.apply(6));
         checkResult(true, "Buzz", or_35.apply(10));
+        checkResult(true, "Fizz", or_35.apply(15));
         checkResult(false, "", or_35.apply(7));
     }
 
@@ -63,6 +64,8 @@ public class RuleTest extends TestCase
         Rule r1_5 = atom(times(5), toBuzz());
         
         Rule and_35 = and(r1_3, r1_5);
+        checkResult(false, "", and_35.apply(3));
+        checkResult(false, "", and_35.apply(5));
         checkResult(true, "FizzBuzz", and_35.apply(15));
         checkResult(false, "", and_35.apply(16));
     }
@@ -77,7 +80,10 @@ public class RuleTest extends TestCase
                       and(r1_3, r1_5),
                       and(r1_3, r1_7),
                       and(r1_5, r1_7));
-        checkResult(true, "FizzBuzzWhizz", r2.apply(105));
+        checkResult(false, "", r2.apply(3));
+        checkResult(false, "", r2.apply(5));
+        checkResult(false, "", r2.apply(7));
+        checkResult(true, "FizzBuzzWhizz", r2.apply(3*5*7));
         checkResult(false, "", r2.apply(104));
         checkResult(true, "FizzBuzz", r2.apply(15));
         checkResult(false, "", r2.apply(14));
@@ -99,7 +105,8 @@ public class RuleTest extends TestCase
     public void test_default_rule()
     {
         Rule rd = atom(alwaysTrue(), toStr());
-        checkResult(true, "4", rd.apply(4));
+        checkResult(true, "1", rd.apply(1));
+        checkResult(true, "3", rd.apply(3));
     }
     
     public void test_spec()

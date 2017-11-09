@@ -6,7 +6,9 @@ public class OOAlwaysTrueTest extends TestCase
 {
     public void test_alwaysTrue()
     {
-        OOPredication pred = new OOAlwaysTrue();
-        assertTrue(pred.predicate(4));
+        OOPredication alwaysTrue = new OOAlwaysTrue();
+        assertTrue(alwaysTrue.predicate(1));
+        assertTrue(alwaysTrue.predicate(3));
+        assertTrue(alwaysTrue.predicate(5));
     }
 }

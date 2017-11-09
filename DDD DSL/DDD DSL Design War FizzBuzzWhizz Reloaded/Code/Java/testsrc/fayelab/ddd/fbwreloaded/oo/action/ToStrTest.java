@@ -8,10 +8,11 @@ public class ToStrTest extends TestCase
 {
     public void test_toStr()
     {
-        Action action = new ToStr();
-        assertEquals("4", action.act(4));
+        Action toStr = new ToStr();
+        assertEquals("1", toStr.act(1));
+        assertEquals("10", toStr.act(10));
         
-        Action action2 = toStr();
-        assertEquals("4", action2.act(4));
+        Action toStr_t = toStr();
+        assertEquals("1", toStr_t.act(1));
     }
 }

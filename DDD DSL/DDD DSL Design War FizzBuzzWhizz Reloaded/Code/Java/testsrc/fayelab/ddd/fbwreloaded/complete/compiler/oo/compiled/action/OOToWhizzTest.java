@@ -6,7 +6,7 @@ public class OOToWhizzTest extends TestCase
 {
     public void test_toWhizz()
     {
-        OOAction action = new OOToWhizz();
-        assertEquals("Whizz", action.act(7));
+        OOAction toWhizz = new OOToWhizz();
+        assertEquals("Whizz", toWhizz.act(7));
     }
 }
