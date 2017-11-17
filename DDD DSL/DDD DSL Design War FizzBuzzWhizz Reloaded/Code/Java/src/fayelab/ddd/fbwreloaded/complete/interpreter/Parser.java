@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static fayelab.ddd.fbwreloaded.complete.interpreter.SpecTool.*;
@@ -18,14 +19,14 @@ public class Parser
 {
     private static final String DELIMETER = " ";
     
-    private static Map<String, BiFunction<String, String, Predication>> predicationTypeAndFuncMap = null;
+    private static Map<String, Function<String, Predication>> predicationTypeAndFuncMap = null;
     
     static
     {
         predicationTypeAndFuncMap = new HashMap<>();
-        predicationTypeAndFuncMap.put("times", (type, param) -> times(Integer.parseInt(param)));
-        predicationTypeAndFuncMap.put("contains", (type, param) -> contains(Integer.parseInt(param)));
-        predicationTypeAndFuncMap.put("always_true", (type, param) -> alwaysTrue());
+        predicationTypeAndFuncMap.put("times", param -> times(Integer.parseInt(param)));
+        predicationTypeAndFuncMap.put("contains", param -> contains(Integer.parseInt(param)));
+        predicationTypeAndFuncMap.put("always_true", param -> alwaysTrue());
     }
     
     private static Map<String, Supplier<Action>> actionTypeAndFuncMap = null;
@@ -33,10 +34,10 @@ public class Parser
     static
     {
         actionTypeAndFuncMap = new HashMap<>();
-        actionTypeAndFuncMap.put("to_fizz", () -> toFizz());
-        actionTypeAndFuncMap.put("to_buzz", () -> toBuzz());
-        actionTypeAndFuncMap.put("to_whizz", () -> toWhizz());
-        actionTypeAndFuncMap.put("to_str", () -> toStr());
+        actionTypeAndFuncMap.put("to_fizz", SpecTool::toFizz);
+        actionTypeAndFuncMap.put("to_buzz", SpecTool::toBuzz);
+        actionTypeAndFuncMap.put("to_whizz", SpecTool::toWhizz);
+        actionTypeAndFuncMap.put("to_str", SpecTool::toStr);
     }
     
     private static Map<String, BiFunction<List<String>, Map<String, Rule>, Rule>> ruleTypeAndFuncMap = null;
@@ -45,8 +46,8 @@ public class Parser
     {
         ruleTypeAndFuncMap = new HashMap<>();
         ruleTypeAndFuncMap.put("atom", (ruleTokens, ruleNameAndRuleMap) -> parseAtom(ruleTokens));
-        ruleTypeAndFuncMap.put("or", (ruleTokens, ruleNameAndRuleMap) -> parseOr(ruleTokens, ruleNameAndRuleMap));
-        ruleTypeAndFuncMap.put("and", (ruleTokens, ruleNameAndRuleMap) -> parseAnd(ruleTokens, ruleNameAndRuleMap));
+        ruleTypeAndFuncMap.put("or", Parser::parseOr);
+        ruleTypeAndFuncMap.put("and", Parser::parseAnd);
     }
     
     public static Rule parse(String progFileName)
@@ -73,9 +74,10 @@ public class Parser
     
     static List<List<String>> tokenize(List<String> ruleDescs)
     {        
-        return ruleDescs.stream().filter(line -> isNotBlank(line))
-                             .map(line -> asList(normalize(line).split(DELIMETER)))
-                             .collect(toList());
+        return ruleDescs.stream()
+                        .filter(line -> isNotBlank(line))
+                        .map(line -> asList(normalize(line).split(DELIMETER)))
+                        .collect(toList());
     }
 
     static boolean isNotBlank(String line)
@@ -121,7 +123,7 @@ public class Parser
     
     private static Predication parsePredication(String predicationType, String predicationParam)
     {
-        return predicationTypeAndFuncMap.get(predicationType).apply(predicationType, predicationParam);
+        return predicationTypeAndFuncMap.get(predicationType).apply(predicationParam);
     }
 
     private static Action parseAction(String actionType)
@@ -143,7 +145,8 @@ public class Parser
     {
         List<Rule> refRules = ruleTokens.subList(2, ruleTokens.size())
                                         .stream()
-                                        .map(name -> ruleNameAndRuleMap.get(name)).collect(toList());
+                                        .map(ruleNameAndRuleMap::get)
+                                        .collect(toList());
         return refRules;
     }
     

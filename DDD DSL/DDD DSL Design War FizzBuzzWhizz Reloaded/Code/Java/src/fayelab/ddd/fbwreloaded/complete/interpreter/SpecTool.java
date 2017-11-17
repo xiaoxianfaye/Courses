@@ -4,7 +4,6 @@ import static fayelab.ddd.fbwreloaded.complete.interpreter.Action.Type.*;
 import static fayelab.ddd.fbwreloaded.complete.interpreter.Predication.Type.*;
 import static fayelab.ddd.fbwreloaded.complete.interpreter.Rule.Type.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -66,7 +65,7 @@ public class SpecTool
     
     public static Rule or(List<Rule> rules)
     {
-        return combine(rules, (rule1, rule2) -> or(rule1, rule2));
+        return combine(rules, SpecTool::or);
     }
     
     public static Rule and(Rule rule1, Rule rule2)
@@ -81,7 +80,7 @@ public class SpecTool
     
     public static Rule and(List<Rule> rules)
     {
-        return combine(rules, (rule1, rule2) -> and(rule1, rule2));
+        return combine(rules, SpecTool::and);
     }
     
     private static Rule combine(List<Rule> rules, BiFunction<Rule, Rule, Rule> biCombine)
@@ -90,10 +89,8 @@ public class SpecTool
         {
             return rules.get(0);
         }
-        
-        List<Rule> newRules = new ArrayList<>(rules);
-        Rule firstRule = newRules.remove(0);
-        return biCombine.apply(firstRule, combine(newRules, biCombine));
+          
+        return biCombine.apply(rules.get(0), combine(rules.subList(1, rules.size()), biCombine));
     }
     
     public static Rule spec()

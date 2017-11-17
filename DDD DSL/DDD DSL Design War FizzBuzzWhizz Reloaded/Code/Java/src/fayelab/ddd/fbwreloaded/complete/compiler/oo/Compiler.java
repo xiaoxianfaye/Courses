@@ -16,8 +16,8 @@ public class Compiler
     static
     {
         predicationTypeAndFuncMap = new HashMap<>();
-        predicationTypeAndFuncMap.put(Predication.Type.TIMES, base -> times(base));
-        predicationTypeAndFuncMap.put(Predication.Type.CONTAINS, digit -> contains(digit));
+        predicationTypeAndFuncMap.put(Predication.Type.TIMES, Compiler::times);
+        predicationTypeAndFuncMap.put(Predication.Type.CONTAINS, Compiler::contains);
         predicationTypeAndFuncMap.put(Predication.Type.ALWAYSTRUE, any -> alwaysTrue());
     }
     
@@ -26,10 +26,10 @@ public class Compiler
     static
     {
         actionTypeAndFuncMap = new HashMap<>();
-        actionTypeAndFuncMap.put(Action.Type.TOFIZZ, () -> toFizz());
-        actionTypeAndFuncMap.put(Action.Type.TOBUZZ, () -> toBuzz());
-        actionTypeAndFuncMap.put(Action.Type.TOWHIZZ, () -> toWhizz());
-        actionTypeAndFuncMap.put(Action.Type.TOSTR, () -> toStr());
+        actionTypeAndFuncMap.put(Action.Type.TOFIZZ, Compiler::toFizz);
+        actionTypeAndFuncMap.put(Action.Type.TOBUZZ, Compiler::toBuzz);
+        actionTypeAndFuncMap.put(Action.Type.TOWHIZZ, Compiler::toWhizz);
+        actionTypeAndFuncMap.put(Action.Type.TOSTR, Compiler::toStr);
     }
     
     private static Map<Rule.Type, Function<Rule, OORule>> ruleTypeAndFuncMap;
