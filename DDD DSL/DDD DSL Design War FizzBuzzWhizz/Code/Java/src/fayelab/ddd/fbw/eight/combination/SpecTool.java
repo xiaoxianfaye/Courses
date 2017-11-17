@@ -1,8 +1,7 @@
 package fayelab.ddd.fbw.eight.combination;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 
 import fayelab.ddd.fbw.eight.combination.action.Action;
 import fayelab.ddd.fbw.eight.combination.action.ToBuzz;
@@ -19,7 +18,8 @@ import fayelab.ddd.fbw.eight.combination.rule.Atom;
 import fayelab.ddd.fbw.eight.combination.rule.Or;
 import fayelab.ddd.fbw.eight.combination.rule.Rule;
 
-import static fayelab.ddd.fbw.eight.combination.ListTool.*;
+import static fayelab.ddd.fbw.eight.combination.ListTool.combinate;
+import static fayelab.ddd.fbw.eight.combination.ListTool.flatten;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
@@ -82,7 +82,7 @@ public class SpecTool
     
     public static Rule or(List<Rule> rules)
     {
-        return combine(rules, (rule1, rule2) -> or(rule1, rule2));
+        return combine(rules, Or::new);
     }
 
     public static Rule and(Rule rule1, Rule rule2)
@@ -97,19 +97,12 @@ public class SpecTool
     
     public static Rule and(List<Rule> rules)
     {
-        return combine(rules, (rule1, rule2) -> and(rule1, rule2));
+        return combine(rules, And::new);
     }
     
-    private static Rule combine(List<Rule> rules, BiFunction<Rule, Rule, Rule> biCombine)
+    private static Rule combine(List<Rule> rules, BinaryOperator<Rule> biCombine)
     {
-        if(rules.size() == 1)
-        {
-            return rules.get(0);
-        }
-        
-        List<Rule> newRules = new ArrayList<>(rules);
-        Rule firstRule = newRules.remove(0);
-        return biCombine.apply(firstRule, combine(newRules, biCombine));
+        return rules.stream().reduce(biCombine).get();
     }
 
     public static Rule spec()

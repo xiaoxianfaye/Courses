@@ -1,8 +1,6 @@
 package fayelab.ddd.fbw.eight.straightforward;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import fayelab.ddd.fbw.eight.straightforward.action.Action;
 import fayelab.ddd.fbw.eight.straightforward.action.ToBuzz;
@@ -18,6 +16,8 @@ import fayelab.ddd.fbw.eight.straightforward.rule.And;
 import fayelab.ddd.fbw.eight.straightforward.rule.Atom;
 import fayelab.ddd.fbw.eight.straightforward.rule.Or;
 import fayelab.ddd.fbw.eight.straightforward.rule.Rule;
+
+import static java.util.Arrays.asList;
 
 public class SpecTool
 {
@@ -73,18 +73,12 @@ public class SpecTool
     
     public static Rule or(Rule...rules)
     {
-        return or(Stream.of(rules).collect(Collectors.toList()));
+        return or(asList(rules));
     }
     
     private static Rule or(List<Rule> rules)
     {
-        if(rules.size() == 1)
-        {
-            return rules.get(0);
-        }
-        
-        Rule firstRule = rules.remove(0);
-        return or(firstRule, or(rules));
+        return rules.stream().reduce(Or::new).get();
     }
 
     public static Rule and(Rule rule1, Rule rule2)
