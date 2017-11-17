@@ -25,17 +25,17 @@ public class AboveTest extends TestCase
     
     public void test_at()
     {
-        above.at(0, 0, 300, 60);
+        above.at(20, 10, 300, 60);
         
-        checkRect(new int[]{0, 0, 300, 30}, up.getRect());
-        checkRect(new int[]{0, 30, 300, 30}, down.getRect());
+        checkRect(new int[]{20, 10, 300, 30}, up.getRect());
+        checkRect(new int[]{20, 40, 300, 30}, down.getRect());
     }
     
     public void test_in()
     {
         Container container = new Container();
         
-        above.at(0, 0, 300, 60).in(container);
+        above.in(container);
         
         assertSame(container, up.getContainer());
         assertSame(container, down.getContainer());

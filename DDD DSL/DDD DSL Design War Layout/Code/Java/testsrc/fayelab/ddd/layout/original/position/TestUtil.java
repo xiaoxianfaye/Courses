@@ -1,5 +1,7 @@
 package fayelab.ddd.layout.original.position;
 
+import java.util.stream.IntStream;
+
 import static junit.framework.TestCase.*;
 
 public class TestUtil
@@ -10,9 +12,7 @@ public class TestUtil
     {
         assertEquals(expected.length, actual.length);
         
-        for(int i = 0; i < expected.length; i++)
-        {
-            assertTrue(Math.abs(expected[i] - actual[i]) <= TOLERANCE);
-        }
+        assertTrue(IntStream.range(0, expected.length)
+                            .allMatch(idx -> Math.abs(expected[idx] - actual[idx]) <= TOLERANCE));
     }
 }

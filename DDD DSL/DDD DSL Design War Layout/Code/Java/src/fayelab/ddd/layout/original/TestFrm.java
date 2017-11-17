@@ -128,8 +128,7 @@ public class TestFrm extends JFrame
     {
         Component[] cmps = IntStream.rangeClosed(1, 11)
                                     .mapToObj(i -> button().title(String.valueOf(i)))
-                                    .collect(Collectors.toList())
-                                    .toArray(new Component[]{});
+                                    .toArray(Component[]::new);
                 
         block(cmps, 4, 3).at(0, 0, 545, 325).in(container);
     }
@@ -138,8 +137,7 @@ public class TestFrm extends JFrame
     {
         Component[] cmps = IntStream.rangeClosed(1, 11)
                                     .mapToObj(i -> button().title(String.valueOf(i)))
-                                    .collect(Collectors.toList())
-                                    .toArray(new Component[]{});
+                                    .toArray(Component[]::new);
                 
         blockWithMargin(cmps, 4, 3, 0.1f, 0.1f).at(0, 0, 545, 325).in(container);
     }

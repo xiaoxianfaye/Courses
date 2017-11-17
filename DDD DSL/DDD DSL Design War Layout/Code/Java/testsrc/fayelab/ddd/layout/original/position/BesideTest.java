@@ -25,17 +25,17 @@ public class BesideTest extends TestCase
     
     public void test_at()
     {
-        beside.at(0, 0, 300, 60);
+        beside.at(20, 10, 300, 60);
         
-        checkRect(new int[]{0, 0, 240, 60}, left.getRect());
-        checkRect(new int[]{240, 0, 60, 60}, right.getRect());
+        checkRect(new int[]{20, 10, 240, 60}, left.getRect());
+        checkRect(new int[]{260, 10, 60, 60}, right.getRect());
     }
     
     public void test_in()
     {
         Container container = new Container();
         
-        beside.at(0, 0, 300, 60).in(container);
+        beside.in(container);
         
         assertSame(container, left.getContainer());
         assertSame(container, right.getContainer());

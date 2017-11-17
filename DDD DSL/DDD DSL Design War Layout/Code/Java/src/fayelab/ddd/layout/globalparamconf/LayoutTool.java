@@ -1,6 +1,7 @@
 package fayelab.ddd.layout.globalparamconf;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -14,6 +15,9 @@ import fayelab.ddd.layout.globalparamconf.position.Above;
 import fayelab.ddd.layout.globalparamconf.position.Beside;
 
 import static java.util.stream.Collectors.toList;
+
+import java.util.Arrays;
+
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.mapping;
 import static java.util.Arrays.asList;
@@ -65,26 +69,23 @@ public class LayoutTool
     
     public static Component hSeq(Component...cmps)
     {
-        return seq((cmp1, cmp2, ratio) -> beside(cmp1, cmp2, ratio), cmps);
+        return seq(LayoutTool::beside, cmps);
     }
     
     public static Component vSeq(Component...cmps)
     {
-        return seq((cmp1, cmp2, ratio) -> above(cmp1, cmp2, ratio), cmps);
+        return seq(LayoutTool::above, cmps);
     }
     
     private static Component seq(PositionLayout positionLayout, Component...cmps)
     {
-        List<Component> cmpList = list(cmps);
-        
-        if(cmpList.size() == 1)
+        if(cmps.length == 1)
         {
-            return cmpList.get(0);
+            return cmps[0];
         }
         
-        float ratio = 1.0f / cmpList.size();
-        Component firstCmp = cmpList.remove(0);
-        return positionLayout.apply(firstCmp, seq(positionLayout, array(cmpList)), ratio);
+        return positionLayout.apply(cmps[0], 
+                seq(positionLayout, Arrays.copyOfRange(cmps, 1, cmps.length)), 1.0f / cmps.length);
     }
     
     @FunctionalInterface
@@ -96,17 +97,20 @@ public class LayoutTool
     public static Component block(Component[] cmps, int rowNum, int colNum)
     {
         Collection<List<Component>> normalizedCmpList = normalize(rowNum, colNum, cmps);
-        List<Component> rows = normalizedCmpList.stream().map(rowCmps -> hSeq(array(rowCmps))).collect(toList());
-        return vSeq(array(rows));
+        Component[] rows = normalizedCmpList.stream()
+                                            .map(rowCmps -> hSeq(rowCmps.toArray(new Component[]{})))
+                                            .toArray(Component[]::new);
+        return vSeq(rows);
     }
     
-    public static Component blockWithMargin(Component[] cmps, int rowNum, int colNum, float hRatio, float vRatio)
+    public static Component blockWithMargin(Component[] cmps, int rowNum, int colNum, 
+            float hRatio, float vRatio)
     {
-        List<Component> cmpList = list(cmps);
-        
-        List<Component> centeredCmpList = cmpList.stream().map(cmp -> center(cmp, hRatio, vRatio)).collect(toList());
-        
-        return block(array(centeredCmpList), rowNum, colNum);
+        return block(Stream.of(cmps)
+                           .map(cmp -> center(cmp, hRatio, vRatio))
+                           .toArray(Component[]::new), 
+                     rowNum, 
+                     colNum);
     }
 
     private static Collection<List<Component>> normalize(int rowNum, int colNum, Component[] cmps)
@@ -122,20 +126,8 @@ public class LayoutTool
   
     private static List<Component> padding(int rowNum, int colNum, Component[] cmps)
     {
-        List<Component> cmpList = list(cmps);
-      
-        int paddingNum = rowNum * colNum - cmpList.size();
-        IntStream.range(0, paddingNum).forEach(i -> cmpList.add(empty()));
-        return cmpList;
-    }
-    
-    private static List<Component> list(Component[] cmps)
-    {
-        return Stream.of(cmps).collect(toList());
-    }
-    
-    private static Component[] array(List<Component> cmps)
-    {
-        return cmps.toArray(new Component[]{});
+        int paddingNum = rowNum * colNum - cmps.length;
+        return Stream.concat(Stream.of(cmps), Collections.nCopies(paddingNum, empty()).stream())
+                     .collect(toList());
     }
 }

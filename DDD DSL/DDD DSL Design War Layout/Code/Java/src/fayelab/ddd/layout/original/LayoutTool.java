@@ -1,8 +1,10 @@
 package fayelab.ddd.layout.original;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import fayelab.ddd.layout.original.component.Button;
 import fayelab.ddd.layout.original.component.Component;
@@ -12,6 +14,9 @@ import fayelab.ddd.layout.original.position.Above;
 import fayelab.ddd.layout.original.position.Beside;
 
 import static java.util.stream.Collectors.toList;
+
+import java.util.Arrays;
+
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.mapping;
 import static java.util.Arrays.asList;
@@ -58,27 +63,23 @@ public class LayoutTool
     
     public static Component hSeq(Component...cmps)
     {
-        return seq((cmp1, cmp2, ratio) -> beside(cmp1, cmp2, ratio), cmps);
+        return seq(LayoutTool::beside, cmps);
     }
     
     public static Component vSeq(Component...cmps)
     {
-        return seq((cmp1, cmp2, ratio) -> above(cmp1, cmp2, ratio), cmps);
+        return seq(LayoutTool::above, cmps);
     }
     
     private static Component seq(PositionLayout positionLayout, Component...cmps)
     {
-        List<Component> cmpList = list(cmps);
-        
-        if(cmpList.size() == 1)
+        if(cmps.length == 1)
         {
-            return cmpList.get(0);
+            return cmps[0];
         }
         
-        float ratio = 1.0f / cmpList.size();
-        Component firstCmp = cmpList.get(0);
-        Component[] restCmps = array(cmpList.subList(1, cmpList.size()));
-        return positionLayout.apply(firstCmp, seq(positionLayout, restCmps), ratio);
+        return positionLayout.apply(cmps[0], 
+                seq(positionLayout, Arrays.copyOfRange(cmps, 1, cmps.length)), 1.0f / cmps.length);
     }
     
     @FunctionalInterface
@@ -90,20 +91,20 @@ public class LayoutTool
     public static Component block(Component[] cmps, int rowNum, int colNum)
     {
         Collection<List<Component>> normalizedCmpList = normalize(rowNum, colNum, cmps);
-        List<Component> rows = normalizedCmpList.stream()
-                                                .map(rowCmps -> hSeq(array(rowCmps)))
-                                                .collect(toList());
-        return vSeq(array(rows));
+        Component[] rows = normalizedCmpList.stream()
+                                            .map(rowCmps -> hSeq(rowCmps.toArray(new Component[]{})))
+                                            .toArray(Component[]::new);
+        return vSeq(rows);
     }
     
     public static Component blockWithMargin(Component[] cmps, int rowNum, int colNum, 
             float hRatio, float vRatio)
     {
-        List<Component> cmpList = list(cmps);
-        List<Component> centeredCmpList = cmpList.stream()
-                                                 .map(cmp -> center(cmp, hRatio, vRatio))
-                                                 .collect(toList());
-        return block(array(centeredCmpList), rowNum, colNum);
+        return block(Stream.of(cmps)
+                           .map(cmp -> center(cmp, hRatio, vRatio))
+                           .toArray(Component[]::new), 
+                     rowNum, 
+                     colNum);
     }
 
     private static Collection<List<Component>> normalize(int rowNum, int colNum, Component[] cmps)
@@ -111,28 +112,16 @@ public class LayoutTool
         List<Component> cmpList = padding(rowNum, colNum, cmps);
       
         return IntStream.range(0, cmpList.size())
-                       .mapToObj(idx -> asList(idx, cmpList.get(idx)))
-                       .collect(groupingBy(idxAndCmp -> (Integer)idxAndCmp.get(0) / colNum, 
-                                mapping(idxAndCmp -> (Component)idxAndCmp.get(1), toList())))
-                       .values();
+                        .mapToObj(idx -> asList(idx, cmpList.get(idx)))
+                        .collect(groupingBy(idxAndCmp -> (Integer)idxAndCmp.get(0) / colNum, 
+                                            mapping(idxAndCmp -> (Component)idxAndCmp.get(1), toList())))
+                        .values();
     }
   
     private static List<Component> padding(int rowNum, int colNum, Component[] cmps)
     {
-        List<Component> cmpList = list(cmps);
-      
-        int paddingNum = rowNum * colNum - cmpList.size();
-        IntStream.range(0, paddingNum).forEach(i -> cmpList.add(empty()));
-        return cmpList;
-    }
-    
-    private static List<Component> list(Component[] cmps)
-    {
-        return asList(cmps);
-    }
-    
-    private static Component[] array(List<Component> cmps)
-    {
-        return cmps.toArray(new Component[]{});
+        int paddingNum = rowNum * colNum - cmps.length;
+        return Stream.concat(Stream.of(cmps), Collections.nCopies(paddingNum, empty()).stream())
+                     .collect(toList());
     }
 }
