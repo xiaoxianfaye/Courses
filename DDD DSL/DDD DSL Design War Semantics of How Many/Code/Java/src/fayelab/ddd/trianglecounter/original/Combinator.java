@@ -11,11 +11,6 @@ public class Combinator
 {
     public static <T> List<List<T>> combinate(List<T> lst, int n)
     {
-        if(n < 1 || n > lst.size())
-        {
-            return asList();
-        }
-        
         if(n == 1)
         {
             return lst.stream().map(ele -> asList(ele)).collect(toList());
@@ -37,9 +32,8 @@ public class Combinator
     
     private static <T> List<T> addHead(T head, List<T> lst)
     {
-        List<T> result = new ArrayList<>();
-        result.add(head);
-        result.addAll(lst);
+        List<T> result = new ArrayList<>(lst);
+        result.add(0, head);
         return result;
     }
 
