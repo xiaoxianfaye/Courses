@@ -18,6 +18,14 @@ class DoubleStackProcessor(object):
         else:
             self.process_operator(c)
 
+    def result(self):
+        self.calc()
+        return self.pop_operand()
+
+    def calc(self):
+        while self.not_empty_operatorstack():
+            self.calc_once()
+
     def process_operand(self, c):
         self.push_operand(int(c))
 
