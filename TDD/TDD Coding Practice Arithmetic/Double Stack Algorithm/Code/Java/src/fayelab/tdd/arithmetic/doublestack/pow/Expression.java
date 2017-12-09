@@ -60,20 +60,21 @@ public class Expression
 
     private void processOperand(StringBuffer digitBuffer)
     {
-        if(digitBuffer.length() != 0)
-        {
-            dsp.process(digitBuffer.toString());
-            digitBuffer.delete(0, digitBuffer.length());
-        } 
+        processOperElement(digitBuffer); 
     }
 
     private void processOperator(StringBuffer operatorBuffer)
     {
-        if(operatorBuffer.length() != 0)
+        processOperElement(operatorBuffer); 
+    }
+    
+    private void processOperElement(StringBuffer buffer)
+    {
+        if(buffer.length() != 0)
         {
-            dsp.process(operatorBuffer.toString());
-            operatorBuffer.delete(0, operatorBuffer.length());
-        } 
+            dsp.process(buffer.toString());
+            buffer.delete(0, buffer.length());
+        }
     }
 
     private boolean isDigit(char c)
