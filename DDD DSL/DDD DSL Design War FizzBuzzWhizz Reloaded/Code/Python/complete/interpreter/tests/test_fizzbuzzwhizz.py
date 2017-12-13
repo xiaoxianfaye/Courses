@@ -39,13 +39,19 @@ class TestFizzBuzzWhizz(unittest.TestCase):
         self.assertEquals((True, 'Fizz'), apply_rule(or_35, 15))
         self.assertEquals((False, ''), apply_rule(or_35, 7))
 
-        or_357 = OR3(r1_3, r1_5, r1_7)
+        or_357 = ORN(r1_3, r1_5, r1_7)
         self.assertEquals((True, 'Fizz'), apply_rule(or_357, 6))
         self.assertEquals((True, 'Buzz'), apply_rule(or_357, 10))
         self.assertEquals((True, 'Whizz'), apply_rule(or_357, 14))
         self.assertEquals((False, ''), apply_rule(or_357, 13))
 
-        or_357d = OR4(r1_3, r1_5, r1_7, rd)
+        or_357d = ORN(r1_3, r1_5, r1_7, rd)
+        self.assertEquals((True, 'Fizz'), apply_rule(or_357d, 6))
+        self.assertEquals((True, 'Buzz'), apply_rule(or_357d, 10))
+        self.assertEquals((True, 'Whizz'), apply_rule(or_357d, 14))
+        self.assertEquals((True, '13'), apply_rule(or_357d, 13))
+
+        or_357d = ORN(r1_3, r1_5, r1_7, rd)
         self.assertEquals((True, 'Fizz'), apply_rule(or_357d, 6))
         self.assertEquals((True, 'Buzz'), apply_rule(or_357d, 10))
         self.assertEquals((True, 'Whizz'), apply_rule(or_357d, 14))
@@ -70,7 +76,7 @@ class TestFizzBuzzWhizz(unittest.TestCase):
         self.assertEquals((True, 'BuzzWhizz'), apply_rule(and_57, 35))
         self.assertEquals((False, ''), apply_rule(and_57, 36))
 
-        and_357 = AND3(r1_3, r1_5, r1_7)
+        and_357 = ANDN(r1_3, r1_5, r1_7)
         self.assertEquals((True, 'FizzBuzzWhizz'), apply_rule(and_357, 3*5*7))
         self.assertEquals((False, ''), apply_rule(and_357, 104))
     
@@ -81,4 +87,3 @@ class TestFizzBuzzWhizz(unittest.TestCase):
         self.assertEquals((True, 'BuzzWhizz'), apply_rule(s, 70))
         self.assertEquals((True, 'Fizz'), apply_rule(s, 9))
         self.assertEquals((True, '1'), apply_rule(s, 1))
-        
