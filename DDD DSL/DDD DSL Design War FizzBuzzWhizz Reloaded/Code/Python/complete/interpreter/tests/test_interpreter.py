@@ -1,8 +1,9 @@
 import unittest
 
-from fizzbuzzwhizz import *
+from rule import *
+from interpreter import *
 
-class TestFizzBuzzWhizz(unittest.TestCase):
+class TestInterpreter(unittest.TestCase):
     def test_atom(self):
         r1_3 = atom(times(3), tofizz())
         self.assertEquals((True, 'Fizz'), apply_rule(r1_3, 6))
@@ -87,3 +88,4 @@ class TestFizzBuzzWhizz(unittest.TestCase):
         self.assertEquals((True, 'BuzzWhizz'), apply_rule(s, 70))
         self.assertEquals((True, 'Fizz'), apply_rule(s, 9))
         self.assertEquals((True, '1'), apply_rule(s, 1))
+        

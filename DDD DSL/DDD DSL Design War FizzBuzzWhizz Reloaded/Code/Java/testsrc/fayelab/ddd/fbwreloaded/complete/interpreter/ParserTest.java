@@ -82,13 +82,13 @@ public class ParserTest extends TestCase
     public void test_parseOr()
     {
         assertTrue(equal(or(r1_3, r1_5, r1_7), 
-                   parseOr(asList("or", "r1", "r1_3", "r1_5", "r1_7"), ruleNameAndRuleMap)));
+                   parseOr(asList("r1", "or", "r1_3", "r1_5", "r1_7"), ruleNameAndRuleMap)));
     }
     
     public void test_parseAnd()
     {
         assertTrue(equal(and(r1_3, r1_5, r1_7), 
-                   parseAnd(asList("and", "r1_357", "r1_3", "r1_5", "r1_7"), ruleNameAndRuleMap)));
+                   parseAnd(asList("r1_357", "and", "r1_3", "r1_5", "r1_7"), ruleNameAndRuleMap)));
     }
     
     public void test_parseRuleTokens_atom()
