@@ -2,8 +2,8 @@ import copy
 
 class DoubleStackProcessor(object):
     operator_func_map = {'+':lambda x, y: x + y,
-                         '*':lambda x, y: x * y,
                          '-':lambda x, y: x - y,
+                         '*':lambda x, y: x * y,
                          '/':lambda x, y: x / y,
                          '%':lambda x, y: x % y}
 
@@ -70,7 +70,10 @@ class DoubleStackProcessor(object):
         return self.operatorstack[-1]
 
     def _dump_operandstack(self):
-        return copy.copy(self.operandstack)
+        return self._dump_stack(self.operandstack)
 
     def _dump_operatorstack(self):
-        return copy.copy(self.operatorstack)
+        return self._dump_stack(self.operatorstack)
+
+    def _dump_stack(self, stack):
+        return copy.copy(stack)

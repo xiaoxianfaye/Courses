@@ -16,9 +16,9 @@ class TestExpression(unittest.TestCase):
         self.assertEquals(7, expr.eval())
 
     def test_expr_context(self):
-        expr = Expression("", Context("3", 0))
+        expr = Expression(None, Context("3", 0))
         self.assertEquals(3, expr.eval())
-        
+
     def test_expr_has_parentheses(self):
         expr = Expression("2*(1+2)")
         self.assertEquals(6, expr.eval())
@@ -26,9 +26,9 @@ class TestExpression(unittest.TestCase):
     def test_expr_final(self):
         expr = Expression("((1+2)+1)*2")
         self.assertEquals(8, expr.eval())
-        
+
         expr = Expression("(1+(1+2))*2")
         self.assertEquals(8, expr.eval())
-                
+
         expr = Expression("(2-(1-2))*3+(2-(2+1))*3")
         self.assertEquals(6, expr.eval())

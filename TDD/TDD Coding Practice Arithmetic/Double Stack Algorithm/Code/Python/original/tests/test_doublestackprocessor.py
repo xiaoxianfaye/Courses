@@ -22,7 +22,7 @@ class TestDoubleStackProcessor(unittest.TestCase):
         self.dsp.process('3')
         self.dsp.process('+')
         self.dsp.process('2')
-        self.dsp.process('+')        
+        self.dsp.process('+')
 
         self.assertEquals([5], self.dsp._dump_operandstack())
         self.assertEquals(['+'], self.dsp._dump_operatorstack())
@@ -31,7 +31,7 @@ class TestDoubleStackProcessor(unittest.TestCase):
         self.dsp.process('3')
         self.dsp.process('+')
         self.dsp.process('2')
-        self.dsp.process('*')        
+        self.dsp.process('*')
 
         self.assertEquals([3, 2], self.dsp._dump_operandstack())
         self.assertEquals(['+', '*'], self.dsp._dump_operatorstack())
@@ -41,7 +41,7 @@ class TestDoubleStackProcessor(unittest.TestCase):
         self.dsp.process('*')
         self.dsp.process('2')
         self.dsp.process('*')
-        
+
         self.assertEquals([6], self.dsp._dump_operandstack())
         self.assertEquals(['*'], self.dsp._dump_operatorstack())
 
@@ -50,7 +50,7 @@ class TestDoubleStackProcessor(unittest.TestCase):
         self.dsp.process('*')
         self.dsp.process('2')
         self.dsp.process('+')
-        
+
         self.assertEquals([6], self.dsp._dump_operandstack())
         self.assertEquals(['+'], self.dsp._dump_operatorstack())
 
@@ -61,7 +61,7 @@ class TestDoubleStackProcessor(unittest.TestCase):
         self.dsp.process('*')
         self.dsp.process('3')
         self.dsp.process('+')
-        
+
         self.assertEquals([9], self.dsp._dump_operandstack())
         self.assertEquals(['+'], self.dsp._dump_operatorstack())
 
@@ -70,7 +70,7 @@ class TestDoubleStackProcessor(unittest.TestCase):
         self.dsp.process('+')
         self.dsp.process('2')
         self.dsp.process('-')
-        
+
         self.assertEquals([5], self.dsp._dump_operandstack())
         self.assertEquals(['-'], self.dsp._dump_operatorstack())
 
@@ -79,17 +79,16 @@ class TestDoubleStackProcessor(unittest.TestCase):
         self.dsp.process('-')
         self.dsp.process('2')
         self.dsp.process('+')
-        
+
         self.assertEquals([1], self.dsp._dump_operandstack())
         self.assertEquals(['+'], self.dsp._dump_operatorstack())
-
 
     def test_num_subtract_num_divide(self):
         self.dsp.process('4')
         self.dsp.process('-')
         self.dsp.process('2')
         self.dsp.process('/')
-        
+
         self.assertEquals([4, 2], self.dsp._dump_operandstack())
         self.assertEquals(['-', '/'], self.dsp._dump_operatorstack())
 
@@ -98,6 +97,6 @@ class TestDoubleStackProcessor(unittest.TestCase):
         self.dsp.process('/')
         self.dsp.process('2')
         self.dsp.process('+')
-        
+
         self.assertEquals([2], self.dsp._dump_operandstack())
         self.assertEquals(['+'], self.dsp._dump_operatorstack())
