@@ -127,7 +127,6 @@ class TestParser(unittest.TestCase):
         spec = ORN(r3, r2, r1, rd)
         expected_rule_map['spec'] = spec
         
-        self.maxDiff = None
         self.assertEquals(expected_rule_map, rule_map)
 
     def test_parse_tokens(self):
