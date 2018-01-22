@@ -1,14 +1,14 @@
-from Tkinter import Button, Entry, Label
+from Tkinter import Button, Entry
 
 import copy
 
 def rectangle(left, top, width, height):
     return {'left':left, 'top':top, 'width':width, 'height':height}
 
-def button(text):
+def _AT_IN(cmp):
     def AT(_rectangle):
         def IN(_container):
-            cmp = Button(_container, text=text)
+            cmp.master = _container
             _container.create_window(int(_rectangle['left'] + _rectangle['width'] * 0.5),
                                      int(_rectangle['top'] + _rectangle['height'] * 0.5),
                                      width = _rectangle['width'],
@@ -16,30 +16,12 @@ def button(text):
                                      window = cmp)
         return IN
     return AT
+
+def button(text):
+    return _AT_IN(Button(text=text))
 
 def entry():
-    def AT(_rectangle):
-        def IN(_container):
-            cmp = Entry(_container)
-            _container.create_window(int(_rectangle['left'] + _rectangle['width'] * 0.5),
-                                     int(_rectangle['top'] + _rectangle['height'] * 0.5),
-                                     width = _rectangle['width'],
-                                     height = _rectangle['height'],
-                                     window = cmp)
-        return IN
-    return AT
-
-def label(text):
-    def AT(_rectangle):
-        def IN(_container):
-            cmp = Label(_container, text=text)
-            _container.create_window(int(_rectangle['left'] + _rectangle['width'] * 0.5),
-                                     int(_rectangle['top'] + _rectangle['height'] * 0.5),
-                                     width = _rectangle['width'],
-                                     height = _rectangle['height'],
-                                     window = cmp)
-        return IN
-    return AT
+    return _AT_IN(Entry())
 
 def beside(leftcmp, rightcmp, ratio):
     def AT(_rectangle):
