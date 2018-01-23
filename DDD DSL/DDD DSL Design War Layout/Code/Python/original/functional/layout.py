@@ -11,9 +11,9 @@ def _AT_IN(cmp):
             cmp.master = _container
             _container.create_window(int(_rectangle['left'] + _rectangle['width'] * 0.5),
                                      int(_rectangle['top'] + _rectangle['height'] * 0.5),
-                                     width = _rectangle['width'],
-                                     height = _rectangle['height'],
-                                     window = cmp)
+                                     width=_rectangle['width'],
+                                     height=_rectangle['height'],
+                                     window=cmp)
         return IN
     return AT
 
