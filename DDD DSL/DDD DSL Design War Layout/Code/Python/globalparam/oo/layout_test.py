@@ -62,7 +62,7 @@ class LayoutTest(object):
         btns = [button(text) for text in texts]
 
         above(above(entry(),
-                    beside(button('BackSpace'), button('C'), 0.5), 0.5),
+                    beside(button('Backspace'), button('C'), 0.5), 0.5),
               block(btns, 4, 4), 0.3).AT(0, 0, 600, 400).IN(self.container)
 
     def test_minicalc_margin(self):
@@ -73,18 +73,18 @@ class LayoutTest(object):
         btns = [button(text) for text in texts]
 
         above(above(entry(),
-                    beside(button('BackSpace'), button('C'), 0.5), 0.5),
+                    beside(button('Backspace'), button('C'), 0.5), 0.5),
               blockm(btns, 4, 4, 0.02, 0.02), 0.3).AT(0, 0, 600, 400).IN(self.container)
 
     def test_globalparam(self):
-        param1 = center(beside(LabelCmp('Parameter 1'), beside(empty(), EntryCmp(), 0.1), 0.3), 0.05, 0.3)
-        param2 = center(beside(LabelCmp('Parameter 2'), beside(empty(), EntryCmp(), 0.1), 0.3), 0.05, 0.3)
-        param3 = center(beside(LabelCmp('Parameter 3'), beside(empty(), EntryCmp(), 0.1), 0.3), 0.05, 0.3)
-        params = vseq([param1, param2, param3])
-
+        params = vseq([self._param('Parameter 1', entry()),
+                       self._param('Parameter 2', entry()),
+                       self._param('Parameter 3', entry())])
         btns = beside(empty(), center(beside(button('Set'), beside(empty(), button('Close'), 0.1), 0.5), 0.06, 0.2), 0.2)
-
         above(params, btns, 0.8).AT(0, 0, 600, 400).IN(self.container)
+
+    def _param(self, labeltext, cmp):
+        return center(beside(LabelCmp(labeltext), beside(empty(), cmp, 0.1), 0.3), 0.05, 0.3)
 
     def tests(self):
         # Invoking test cases here

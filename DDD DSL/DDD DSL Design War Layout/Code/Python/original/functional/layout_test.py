@@ -49,7 +49,7 @@ def test_minicalc(container):
     btns = [button(text) for text in texts]
 
     above(above(entry(),
-                beside(button('BackSpace'), button('C'), 0.5), 0.5),
+                beside(button('Backspace'), button('C'), 0.5), 0.5),
           block(btns, 4, 4), 0.3)(rectangle(0, 0, 600, 400))(container)
 
 def test_minicalc_margin(container):
@@ -60,7 +60,7 @@ def test_minicalc_margin(container):
     btns = [button(text) for text in texts]
 
     above(above(entry(),
-                beside(button('BackSpace'), button('C'), 0.5), 0.5),
+                beside(button('Backspace'), button('C'), 0.5), 0.5),
           blockm(btns, 4, 4, 0.02, 0.02), 0.3)(rectangle(0, 0, 600, 400))(container)
 
 def tests(container):

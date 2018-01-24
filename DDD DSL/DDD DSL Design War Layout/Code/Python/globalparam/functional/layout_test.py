@@ -49,7 +49,7 @@ def test_minicalc(container):
     btns = [button(text) for text in texts]
 
     above(above(entry(),
-                beside(button('BackSpace'), button('C'), 0.5), 0.5),
+                beside(button('Backspace'), button('C'), 0.5), 0.5),
           block(btns, 4, 4), 0.3)(rectangle(0, 0, 600, 400))(container)
 
 def test_minicalc_margin(container):
@@ -60,18 +60,18 @@ def test_minicalc_margin(container):
     btns = [button(text) for text in texts]
 
     above(above(entry(),
-                beside(button('BackSpace'), button('C'), 0.5), 0.5),
+                beside(button('Backspace'), button('C'), 0.5), 0.5),
           blockm(btns, 4, 4, 0.02, 0.02), 0.3)(rectangle(0, 0, 600, 400))(container)
 
 def test_globalparam(container):
-    param1 = center(beside(label('Parameter 1'), beside(empty(), entry(), 0.1), 0.3), 0.05, 0.3)
-    param2 = center(beside(label('Parameter 2'), beside(empty(), entry(), 0.1), 0.3), 0.05, 0.3)
-    param3 = center(beside(label('Parameter 3'), beside(empty(), entry(), 0.1), 0.3), 0.05, 0.3)
-    params = vseq([param1, param2, param3])
-
+    params = vseq([_param('Parameter 1', entry()),
+                   _param('Parameter 2', entry()),
+                   _param('Parameter 3', entry())])
     btns = beside(empty(), center(beside(button('Set'), beside(empty(), button('Close'), 0.1), 0.5), 0.06, 0.2), 0.2)
-
     above(params, btns, 0.8)(rectangle(0, 0, 600, 400))(container)
+
+def _param(labeltext, cmp):
+    return center(beside(label(labeltext), beside(empty(), cmp, 0.1), 0.3), 0.05, 0.3)
 
 def tests(container):
     # Invoking test cases here

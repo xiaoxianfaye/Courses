@@ -62,7 +62,7 @@ class LayoutTest(object):
         btns = [button(text) for text in texts]
 
         above(above(entry(),
-                    beside(button('BackSpace'), button('C'), 0.5), 0.5),
+                    beside(button('Backspace'), button('C'), 0.5), 0.5),
               block(btns, 4, 4), 0.3).AT(0, 0, 600, 400).IN(self.container)
 
     def test_minicalc_margin(self):
@@ -73,7 +73,7 @@ class LayoutTest(object):
         btns = [button(text) for text in texts]
 
         above(above(entry(),
-                    beside(button('BackSpace'), button('C'), 0.5), 0.5),
+                    beside(button('Backspace'), button('C'), 0.5), 0.5),
               blockm(btns, 4, 4, 0.02, 0.02), 0.3).AT(0, 0, 600, 400).IN(self.container)
 
     def tests(self):
