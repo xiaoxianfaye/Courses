@@ -16,18 +16,19 @@ public class LayoutTest extends TestCase
     
     private ArrayList<Rectangle> rectangles;
     private ArrayList<Container> containers;
+    private Container container;
 
     protected void setUp()
     {
         this.rectangles = new ArrayList<>();
         this.containers = new ArrayList<>();
+        this.container = new Container();
     }
     
     public void test_beside()
     {
         Function<Rectangle, Consumer<Container>> leftCmp = componentStub();
         Function<Rectangle, Consumer<Container>> rightCmp = componentStub();
-        Container container = new Container();
         
         beside(leftCmp, rightCmp, 0.8f).apply(rectangle(20, 10, 300, 60)).accept(container);
         
@@ -42,7 +43,6 @@ public class LayoutTest extends TestCase
     {
         Function<Rectangle, Consumer<Container>> upCmp = componentStub();
         Function<Rectangle, Consumer<Container>> downCmp = componentStub();
-        Container container = new Container();
         
         above(upCmp, downCmp, 0.5f).apply(rectangle(20, 10, 300, 60)).accept(container);
         
@@ -60,7 +60,7 @@ public class LayoutTest extends TestCase
             return container -> containers.add(container);
         };
     }
-    
+        
     private void checkRectangle(Rectangle expected, Rectangle actual)
     {
         assertEquals((int)expected.getX(), (int)actual.getX(), TOLERANCE);

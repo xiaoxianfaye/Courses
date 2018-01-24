@@ -4,12 +4,19 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.IntStream;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
 import static fayelab.ddd.layout.original.functional.Layout.*;
 
 public class TestFrm extends JFrame
@@ -90,84 +97,86 @@ public class TestFrm extends JFrame
     {
         above(textField(), button("Button"), 0.5f).apply(rectangle(0, 0, 300, 60)).accept(container);
     }
-//    
-//    private void test_beside_above()
-//    {
-//        above(beside(textField(), button().title("Btn1"), 0.8f), 
-//              button().title("Btn2"), 0.5f).at(0, 0, 300, 60).in(container);        
-//    }
-//    
-//    private void test_empty()
-//    {        
-//        beside(empty(), button().title("Button"), 0.5f).at(0, 0, 300, 60).in(container);
-//    }
-//    
-//    private void test_hCenter()
-//    {
-//        hCenter(button().title("Button"), 0.1f).at(0, 0, 545, 325).in(container);
-//    }
-//    
-//    private void test_vCenter()
-//    {
-//        vCenter(button().title("Button"), 0.1f).at(0, 0, 545, 325).in(container);
-//    }
-//    
-//    private void test_center()
-//    {
-//        center(button().title("Center"), 0.2f, 0.1f).at(0, 0, 545, 325).in(container);
-//    }
-//    
-//    private void test_hSeq()
-//    {
-//        hSeq(button().title("1"), button().title("2"), button().title("3")).at(0, 0, 300, 60).in(container);
-//    }
-//    
-//    private void test_vSeq()
-//    {
-//        vSeq(button().title("1"), button().title("2"), button().title("3")).at(0, 0, 150, 200).in(container);
-//    }
-//    
-//    private void test_block()
-//    {
-//        Component[] cmps = IntStream.rangeClosed(1, 11)
-//                                    .mapToObj(i -> button().title(String.valueOf(i)))
-//                                    .toArray(Component[]::new);
-//                
-//        block(cmps, 4, 3).at(0, 0, 545, 325).in(container);
-//    }
-//    
-//    private void test_blockWithMargin()
-//    {
-//        Component[] cmps = IntStream.rangeClosed(1, 11)
-//                                    .mapToObj(i -> button().title(String.valueOf(i)))
-//                                    .toArray(Component[]::new);
-//                
-//        blockWithMargin(cmps, 4, 3, 0.1f, 0.1f).at(0, 0, 545, 325).in(container);
-//    }
-//
-//    private void test_minicalc_without_margin()
-//    {
-//        Component[] operButtons = new Component[] {
-//                button().title("0"), button().title("1"), button().title("2"), button().title("+"),
-//                button().title("3"), button().title("4"), button().title("5"), button().title("-"),
-//                button().title("6"), button().title("7"), button().title("8"), button().title("*"),
-//                button().title("9"), button().title("="), button().title("%"), button().title("/")};
-//
-//        above(above(textField(), beside(button().title("Backspace"), button().title("C"), 0.5f), 0.5f), 
-//              block(operButtons, 4, 4), 0.3f).at(0, 0, 545, 325).in(container);
-//    }
-//    
-//    private void test_minicalc_with_margin()
-//    {
-//        Component[] operButtons = new Component[]{
-//                button().title("0"), button().title("1"), button().title("2"), button().title("+"),
-//                button().title("3"), button().title("4"), button().title("5"), button().title("-"),
-//                button().title("6"), button().title("7"), button().title("8"), button().title("*"),
-//                button().title("9"), button().title("="), button().title("%"), button().title("/")};
-//
-//        above(above(textField(), beside(button().title("Backspace"), button().title("C"), 0.5f), 0.5f), 
-//              blockWithMargin(operButtons, 4, 4, 0.02f, 0.02f), 0.3f).at(0, 0, 545, 325).in(container);
-//    }
+    
+    private void test_beside_above()
+    {
+        above(beside(textField(), button("Btn1"), 0.8f), 
+                button("Btn2"), 0.5f).apply(rectangle(0, 0, 300, 60)).accept(container);    
+    }
+    
+    private void test_empty()
+    {        
+        beside(empty(), button("Button"), 0.5f).apply(rectangle(0, 0, 300, 60)).accept(container);
+    }
+    
+    private void test_hCenter()
+    {
+        hCenter(button("Button"), 0.1f).apply(rectangle(0, 0, 545, 325)).accept(container);
+    }
+    
+    private void test_vCenter()
+    {
+        vCenter(button("Button"), 0.1f).apply(rectangle(0, 0, 545, 325)).accept(container);
+    }
+    
+    private void test_center()
+    {
+        center(button("Center"), 0.2f, 0.1f).apply(rectangle(0, 0, 545, 325)).accept(container);
+    }
+    
+    private void test_hSeq()
+    {
+        hSeq(asList(button("1"), button("2"), button("3"))).apply(rectangle(0, 0, 300, 60)).accept(container);
+    }
+    
+    private void test_vSeq()
+    {
+        vSeq(asList(button("1"), button("2"), button("3"))).apply(rectangle(0, 0, 150, 200)).accept(container);
+    }
+    
+    private void test_block()
+    {
+        List<Function<Rectangle, Consumer<Container>>> cmps = 
+                IntStream.rangeClosed(1, 11)
+                         .mapToObj(i -> button(String.valueOf(i)))
+                         .collect(toList());
+                
+        block(cmps, 4, 3).apply(rectangle(0, 0, 545, 325)).accept(container);
+    }
+    
+    private void test_blockm()
+    {
+        List<Function<Rectangle, Consumer<Container>>> cmps = 
+                IntStream.rangeClosed(1, 11)
+                         .mapToObj(i -> button(String.valueOf(i)))
+                         .collect(toList());
+                
+        blockm(cmps, 4, 3, 0.1f, 0.1f).apply(rectangle(0, 0, 545, 325)).accept(container);
+    }
+    
+    private void test_minicalc()
+    {
+        List<String> texts = asList("0", "1", "2", "+",
+                "3", "4", "5", "-",
+                "6", "7", "8", "*",
+                "9", "=", "%", "/");
+        List<Function<Rectangle, Consumer<Container>>> btns = texts.stream().map(text -> button(text)).collect(toList());
+
+        above(above(textField(), beside(button("Backspace"), button("C"), 0.5f), 0.5f), 
+        block(btns, 4, 4), 0.3f).apply(rectangle(0, 0, 545, 325)).accept(container);
+    }
+    
+    private void test_minicalc_margin()
+    {
+        List<String> texts = asList("0", "1", "2", "+",
+                                    "3", "4", "5", "-",
+                                    "6", "7", "8", "*",
+                                    "9", "=", "%", "/");
+        List<Function<Rectangle, Consumer<Container>>> btns = texts.stream().map(text -> button(text)).collect(toList());
+        
+        above(above(textField(), beside(button("Backspace"), button("C"), 0.5f), 0.5f), 
+              blockm(btns, 4, 4, 0.02f, 0.02f), 0.3f).apply(rectangle(0, 0, 545, 325)).accept(container);
+    }
 
     public static void main(String[] args)
     {
@@ -176,7 +185,7 @@ public class TestFrm extends JFrame
         //Test Cases
 //        frm.test_component();
 //        frm.test_beside();
-        frm.test_above();
+//        frm.test_above();
 //        frm.test_beside_above();
 //        frm.test_empty();
 //        frm.test_hCenter();
@@ -185,9 +194,9 @@ public class TestFrm extends JFrame
 //        frm.test_hSeq();
 //        frm.test_vSeq();
 //        frm.test_block();
-//        frm.test_blockWithMargin();
-//        frm.test_minicalc_without_margin();
-//        frm.test_minicalc_with_margin();
+//        frm.test_blockm();
+//        frm.test_minicalc();
+        frm.test_minicalc_margin();
         
         frm.centerShow();
     }

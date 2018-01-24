@@ -143,16 +143,16 @@ public class TestFrm extends JFrame
         block(cmps, 4, 3).at(0, 0, 545, 325).in(container);
     }
     
-    private void test_blockWithMargin()
+    private void test_blockm()
     {
         Component[] cmps = IntStream.rangeClosed(1, 11)
                                     .mapToObj(i -> button().title(String.valueOf(i)))
                                     .toArray(Component[]::new);
                 
-        blockWithMargin(cmps, 4, 3, 0.1f, 0.1f).at(0, 0, 545, 325).in(container);
+        blockm(cmps, 4, 3, 0.1f, 0.1f).at(0, 0, 545, 325).in(container);
     }
 
-    private void test_minicalc_without_margin()
+    private void test_minicalc()
     {
         Component[] operButtons = new Component[] {
                 button().title("0"), button().title("1"), button().title("2"), button().title("+"),
@@ -164,7 +164,7 @@ public class TestFrm extends JFrame
               block(operButtons, 4, 4), 0.3f).at(0, 0, 545, 325).in(container);
     }
     
-    private void test_minicalc_with_margin()
+    private void test_minicalc_margin()
     {
         Component[] operButtons = new Component[]{
                 button().title("0"), button().title("1"), button().title("2"), button().title("+"),
@@ -173,10 +173,10 @@ public class TestFrm extends JFrame
                 button().title("9"), button().title("="), button().title("%"), button().title("/")};
 
         above(above(textField(), beside(button().title("Backspace"), button().title("C"), 0.5f), 0.5f), 
-              blockWithMargin(operButtons, 4, 4, 0.02f, 0.02f), 0.3f).at(0, 0, 545, 325).in(container);
+              blockm(operButtons, 4, 4, 0.02f, 0.02f), 0.3f).at(0, 0, 545, 325).in(container);
     }
     
-    private void test_global_param()
+    private void test_globalparam()
     {
         Component param1Cmps = center(beside(label().title("Parameter 1"), 
                                              beside(empty(), textField(), 0.1f), 0.3f), 0.05f, 0.3f);
@@ -209,10 +209,10 @@ public class TestFrm extends JFrame
 //        frm.test_hSeq();
 //        frm.test_vSeq();
 //        frm.test_block();
-//        frm.test_blockWithMargin();
-//        frm.test_minicalc_without_margin();
-//        frm.test_minicalc_with_margin();
-        frm.test_global_param();
+//        frm.test_blockm();
+//        frm.test_minicalc();
+//        frm.test_minicalc_margin();
+        frm.test_globalparam();
         
         frm.centerShow();
     }

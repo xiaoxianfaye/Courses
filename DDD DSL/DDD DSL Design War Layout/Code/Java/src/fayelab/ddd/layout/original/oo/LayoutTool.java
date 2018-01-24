@@ -49,7 +49,7 @@ public class LayoutTool
     }
     
     @FunctionalInterface
-    interface PositionLayout
+    private interface PosLayout
     {
         Component apply(Component cmp1, Component cmp2, float ratio);
     }
@@ -64,9 +64,9 @@ public class LayoutTool
         return xCenter(LayoutTool::above, cmp, ratio);
     }
     
-    private static Component xCenter(PositionLayout positionLayout, Component cmp, float ratio)
+    private static Component xCenter(PosLayout posLayout, Component cmp, float ratio)
     {
-        return positionLayout.apply(empty(), positionLayout.apply(cmp, empty(), (1 - 2 * ratio) / (1 - ratio)), ratio);
+        return posLayout.apply(empty(), posLayout.apply(cmp, empty(), (1 - 2 * ratio) / (1 - ratio)), ratio);
     }
     
     public static Component center(Component cmp, float hRatio, float vRatio)
@@ -84,15 +84,15 @@ public class LayoutTool
         return seq(LayoutTool::above, cmps);
     }
     
-    private static Component seq(PositionLayout positionLayout, Component...cmps)
+    private static Component seq(PosLayout posLayout, Component...cmps)
     {
         if(cmps.length == 1)
         {
             return cmps[0];
         }
         
-        return positionLayout.apply(cmps[0], 
-                seq(positionLayout, Arrays.copyOfRange(cmps, 1, cmps.length)), 1.0f / cmps.length);
+        return posLayout.apply(cmps[0], 
+                seq(posLayout, Arrays.copyOfRange(cmps, 1, cmps.length)), 1.0f / cmps.length);
     }
     
     public static Component block(Component[] cmps, int rowNum, int colNum)
@@ -104,7 +104,7 @@ public class LayoutTool
         return vSeq(rows);
     }
     
-    public static Component blockWithMargin(Component[] cmps, int rowNum, int colNum, 
+    public static Component blockm(Component[] cmps, int rowNum, int colNum, 
             float hRatio, float vRatio)
     {
         return block(Stream.of(cmps)
