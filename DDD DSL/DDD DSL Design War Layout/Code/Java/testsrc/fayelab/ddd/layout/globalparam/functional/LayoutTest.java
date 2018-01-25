@@ -8,7 +8,7 @@ import java.util.function.Function;
 
 import junit.framework.TestCase;
 
-import static fayelab.ddd.layout.original.functional.Layout.*;
+import static fayelab.ddd.layout.globalparam.functional.Layout.*;
 
 public class LayoutTest extends TestCase
 {
