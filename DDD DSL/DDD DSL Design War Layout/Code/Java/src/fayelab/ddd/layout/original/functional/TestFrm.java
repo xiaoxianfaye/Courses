@@ -101,7 +101,7 @@ public class TestFrm extends JFrame
     private void test_beside_above()
     {
         above(beside(textField(), button("Btn1"), 0.8f), 
-                button("Btn2"), 0.5f).apply(rectangle(0, 0, 300, 60)).accept(container);    
+              button("Btn2"), 0.5f).apply(rectangle(0, 0, 300, 60)).accept(container);    
     }
     
     private void test_empty()
@@ -153,17 +153,17 @@ public class TestFrm extends JFrame
                 
         blockm(cmps, 4, 3, 0.1f, 0.1f).apply(rectangle(0, 0, 545, 325)).accept(container);
     }
-    
+
     private void test_minicalc()
     {
         List<String> texts = asList("0", "1", "2", "+",
-                "3", "4", "5", "-",
-                "6", "7", "8", "*",
-                "9", "=", "%", "/");
+                                    "3", "4", "5", "-",
+                                    "6", "7", "8", "*",
+                                    "9", "=", "%", "/");
         List<Function<Rectangle, Consumer<Container>>> btns = texts.stream().map(text -> button(text)).collect(toList());
-
+        
         above(above(textField(), beside(button("Backspace"), button("C"), 0.5f), 0.5f), 
-        block(btns, 4, 4), 0.3f).apply(rectangle(0, 0, 545, 325)).accept(container);
+              block(btns, 4, 4), 0.3f).apply(rectangle(0, 0, 545, 325)).accept(container);
     }
     
     private void test_minicalc_margin()
