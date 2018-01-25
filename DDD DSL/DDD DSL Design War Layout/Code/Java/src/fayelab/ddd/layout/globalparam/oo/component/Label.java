@@ -4,14 +4,8 @@ import javax.swing.JLabel;
 
 public class Label extends BaseComponent
 {
-    public Label()
+    public Label(String text)
     {
-        this.awtComponent = new JLabel();
-    }
-    
-    public Component title(String text)
-    {
-        ((JLabel)awtComponent).setText(text);
-        return this;
+        cmp = new JLabel(text);
     }
 }

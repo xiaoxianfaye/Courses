@@ -1,23 +1,21 @@
 package fayelab.ddd.layout.globalparam.oo;
-
-import static fayelab.ddd.layout.globalparam.oo.LayoutTool.*;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
-import java.util.stream.Collectors;
+import java.util.List;
 import java.util.stream.IntStream;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import fayelab.ddd.layout.globalparam.oo.component.BaseComponent;
-import fayelab.ddd.layout.globalparam.oo.component.Button;
 import fayelab.ddd.layout.globalparam.oo.component.Component;
-import fayelab.ddd.layout.globalparam.oo.component.TextField;
+
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
+import static fayelab.ddd.layout.globalparam.oo.LayoutTool.*;
 
 public class TestFrm extends JFrame
 {
@@ -85,112 +83,114 @@ public class TestFrm extends JFrame
     
     private void test_component()
     {
-        button().title("Button").at(0, 0, 200, 60).in(container);
+        button("Button").at(0, 0, 200, 60).in(container);
     }
     
     private void test_beside()
     {
-        beside(textField(), button().title("Btn"), 0.8f).at(0, 0, 300, 60).in(container);
+        beside(textField(), button("Btn"), 0.8f).at(0, 0, 300, 60).in(container);
     }
     
     private void test_above()
     {
-        above(textField(), button().title("Button"), 0.5f).at(0, 0, 300, 60).in(container);
+        above(textField(), button("Button"), 0.5f).at(0, 0, 300, 60).in(container);
     }
     
     private void test_beside_above()
     {
-        above(beside(textField(), button().title("Btn1"), 0.8f), 
-              button().title("Btn2"), 0.5f).at(0, 0, 300, 60).in(container);        
+        above(beside(textField(), button("Btn1"), 0.8f), 
+              button("Btn2"), 0.5f).at(0, 0, 300, 60).in(container);        
     }
     
     private void test_empty()
     {        
-        beside(empty(), button().title("Button"), 0.5f).at(0, 0, 300, 60).in(container);
+        beside(empty(), button("Button"), 0.5f).at(0, 0, 300, 60).in(container);
     }
     
     private void test_hCenter()
     {
-        hCenter(button().title("Button"), 0.1f).at(0, 0, 545, 325).in(container);
+        hCenter(button("Button"), 0.1f).at(0, 0, 545, 325).in(container);
     }
     
     private void test_vCenter()
     {
-        vCenter(button().title("Button"), 0.1f).at(0, 0, 545, 325).in(container);
+        vCenter(button("Button"), 0.1f).at(0, 0, 545, 325).in(container);
     }
     
     private void test_center()
     {
-        center(button().title("Center"), 0.2f, 0.1f).at(0, 0, 545, 325).in(container);
+        center(button("Center"), 0.2f, 0.1f).at(0, 0, 545, 325).in(container);
     }
     
     private void test_hSeq()
     {
-        hSeq(button().title("1"), button().title("2"), button().title("3")).at(0, 0, 300, 60).in(container);
+        hSeq(asList(button("1"), button("2"), button("3"))).at(0, 0, 300, 60).in(container);
     }
     
     private void test_vSeq()
     {
-        vSeq(button().title("1"), button().title("2"), button().title("3")).at(0, 0, 150, 200).in(container);
+        vSeq(asList(button("1"), button("2"), button("3"))).at(0, 0, 150, 200).in(container);
     }
     
     private void test_block()
     {
-        Component[] cmps = IntStream.rangeClosed(1, 11)
-                                    .mapToObj(i -> button().title(String.valueOf(i)))
-                                    .toArray(Component[]::new);
-                
+        List<Component> cmps = IntStream.rangeClosed(1, 11)
+                                        .mapToObj(i -> button(String.valueOf(i)))
+                                        .collect(toList());
+
         block(cmps, 4, 3).at(0, 0, 545, 325).in(container);
     }
     
     private void test_blockm()
     {
-        Component[] cmps = IntStream.rangeClosed(1, 11)
-                                    .mapToObj(i -> button().title(String.valueOf(i)))
-                                    .toArray(Component[]::new);
+        List<Component> cmps = IntStream.rangeClosed(1, 11)
+                                        .mapToObj(i -> button(String.valueOf(i)))
+                                        .collect(toList());
                 
         blockm(cmps, 4, 3, 0.1f, 0.1f).at(0, 0, 545, 325).in(container);
     }
 
     private void test_minicalc()
     {
-        Component[] operButtons = new Component[] {
-                button().title("0"), button().title("1"), button().title("2"), button().title("+"),
-                button().title("3"), button().title("4"), button().title("5"), button().title("-"),
-                button().title("6"), button().title("7"), button().title("8"), button().title("*"),
-                button().title("9"), button().title("="), button().title("%"), button().title("/")};
+        List<String> texts = asList("0", "1", "2", "+",
+                                    "3", "4", "5", "-",
+                                    "6", "7", "8", "*",
+                                    "9", "=", "%", "/");
+        List<Component> btns = texts.stream().map(text -> button(text)).collect(toList());
 
-        above(above(textField(), beside(button().title("Backspace"), button().title("C"), 0.5f), 0.5f), 
-              block(operButtons, 4, 4), 0.3f).at(0, 0, 545, 325).in(container);
+        above(above(textField(), beside(button("Backspace"), button("C"), 0.5f), 0.5f), 
+              block(btns, 4, 4), 0.3f).at(0, 0, 545, 325).in(container);
     }
     
     private void test_minicalc_margin()
     {
-        Component[] operButtons = new Component[]{
-                button().title("0"), button().title("1"), button().title("2"), button().title("+"),
-                button().title("3"), button().title("4"), button().title("5"), button().title("-"),
-                button().title("6"), button().title("7"), button().title("8"), button().title("*"),
-                button().title("9"), button().title("="), button().title("%"), button().title("/")};
+        List<String> texts = asList("0", "1", "2", "+",
+                                    "3", "4", "5", "-",
+                                    "6", "7", "8", "*",
+                                    "9", "=", "%", "/");
+        List<Component> btns = texts.stream().map(text -> button(text)).collect(toList());
 
-        above(above(textField(), beside(button().title("Backspace"), button().title("C"), 0.5f), 0.5f), 
-              blockm(operButtons, 4, 4, 0.02f, 0.02f), 0.3f).at(0, 0, 545, 325).in(container);
+        above(above(textField(), beside(button("Backspace"), button("C"), 0.5f), 0.5f), 
+              blockm(btns, 4, 4, 0.02f, 0.02f), 0.3f).at(0, 0, 545, 325).in(container);
     }
     
     private void test_globalparam()
     {
-        Component param1Cmps = center(beside(label().title("Parameter 1"), 
-                                             beside(empty(), textField(), 0.1f), 0.3f), 0.05f, 0.3f);
-        Component param2Cmps = center(beside(label().title("Parameter 2"), 
-                                             beside(empty(), textField(), 0.1f), 0.3f), 0.05f, 0.3f);
-        Component param3Cmps = center(beside(label().title("Parameter 3"), 
-                                             beside(empty(), textField(), 0.1f), 0.3f), 0.05f, 0.3f);
-        Component paramCmps = vSeq(param1Cmps, param2Cmps, param3Cmps);
+        Component params = vSeq(asList(
+                param("Parameter 1", textField()),
+                param("Parameter 2", textField()),
+                param("Parameter 3", textField())));
 
-        Component btnCmps = beside(empty(), 
-                                   center(beside(button().title("Set"), 
-                                                 beside(empty(), button().title("Close"), 0.1f), 0.5f), 0.06f, 0.2f), 0.2f);
+        Component btns = beside(empty(), 
+                                center(beside(button("Set"), 
+                                              beside(empty(), button("Close"), 0.1f), 0.5f), 0.06f, 0.2f), 0.2f);
 
-        above(paramCmps, btnCmps, 0.8f).at(0, 0, 545, 320).in(container);
+        above(params, btns, 0.8f).at(0, 0, 545, 320).in(container);
+    }
+    
+    private Component param(String labelText, Component cmp)
+    {
+        return center(beside(label(labelText), beside(empty(), cmp, 0.1f), 0.3f), 0.05f, 0.3f);
     }
     
     public static void main(String[] args)

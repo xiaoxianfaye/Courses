@@ -4,14 +4,8 @@ import javax.swing.JButton;
 
 public class Button extends BaseComponent
 {
-    public Button()
+    public Button(String text)
     {
-        this.awtComponent = new JButton();
-    }
-    
-    public Component title(String text)
-    {
-        ((JButton)awtComponent).setText(text);
-        return this;
+        cmp = new JButton(text);
     }
 }

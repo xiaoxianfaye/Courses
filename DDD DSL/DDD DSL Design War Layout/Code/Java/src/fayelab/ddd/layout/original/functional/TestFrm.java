@@ -161,7 +161,7 @@ public class TestFrm extends JFrame
                                     "6", "7", "8", "*",
                                     "9", "=", "%", "/");
         List<Function<Rectangle, Consumer<Container>>> btns = texts.stream().map(text -> button(text)).collect(toList());
-        
+
         above(above(textField(), beside(button("Backspace"), button("C"), 0.5f), 0.5f), 
               block(btns, 4, 4), 0.3f).apply(rectangle(0, 0, 545, 325)).accept(container);
     }

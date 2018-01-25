@@ -6,6 +6,6 @@ public class TextField extends BaseComponent
 {    
     public TextField()
     {
-        this.awtComponent = new JTextField();
+        cmp = new JTextField();
     }
 }

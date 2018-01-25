@@ -13,19 +13,14 @@ import fayelab.ddd.layout.original.oo.component.TextField;
 import fayelab.ddd.layout.original.oo.position.Above;
 import fayelab.ddd.layout.original.oo.position.Beside;
 
-import static java.util.stream.Collectors.toList;
-
-import java.util.Arrays;
-
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.mapping;
+import static java.util.stream.Collectors.*;
 import static java.util.Arrays.asList;
 
 public class LayoutTool
 {
-    public static Button button()
+    public static Button button(String text)
     {
-        return new Button();
+        return new Button(text);
     }
 
     public static TextField textField()
@@ -74,61 +69,49 @@ public class LayoutTool
         return vCenter(hCenter(cmp, hRatio), vRatio);
     }
     
-    public static Component hSeq(Component...cmps)
+    public static Component hSeq(List<Component> cmps)
     {
         return seq(LayoutTool::beside, cmps);
     }
     
-    public static Component vSeq(Component...cmps)
+    public static Component vSeq(List<Component> cmps)
     {
         return seq(LayoutTool::above, cmps);
     }
     
-    private static Component seq(PosLayout posLayout, Component...cmps)
+    private static Component seq(PosLayout posLayout, List<Component> cmps)
     {
-        if(cmps.length == 1)
+        if(cmps.size() == 1)
         {
-            return cmps[0];
+            return cmps.get(0);
         }
         
-        return posLayout.apply(cmps[0], 
-                seq(posLayout, Arrays.copyOfRange(cmps, 1, cmps.length)), 1.0f / cmps.length);
+        return posLayout.apply(cmps.get(0), seq(posLayout, cmps.subList(1, cmps.size())), 1.0f / cmps.size());
     }
     
-    public static Component block(Component[] cmps, int rowNum, int colNum)
+    public static Component block(List<Component> cmps, int rowNum, int colNum)
     {
-        Collection<List<Component>> normalizedCmpList = normalize(rowNum, colNum, cmps);
-        Component[] rows = normalizedCmpList.stream()
-                                            .map(rowCmps -> hSeq(rowCmps.toArray(new Component[]{})))
-                                            .toArray(Component[]::new);
-        return vSeq(rows);
-    }
-    
-    public static Component blockm(Component[] cmps, int rowNum, int colNum, 
-            float hRatio, float vRatio)
-    {
-        return block(Stream.of(cmps)
-                           .map(cmp -> center(cmp, hRatio, vRatio))
-                           .toArray(Component[]::new), 
-                     rowNum, 
-                     colNum);
+        return vSeq(normalize(cmps, rowNum, colNum).stream().map(rowCmps -> hSeq(rowCmps)).collect(toList()));
     }
 
-    private static Collection<List<Component>> normalize(int rowNum, int colNum, Component[] cmps)
+    private static Collection<List<Component>> normalize(List<Component> cmps, int rowNum, int colNum)
     {
-        List<Component> cmpList = padding(rowNum, colNum, cmps);
+        List<Component> paddedCmps = padding(cmps, rowNum * colNum - cmps.size());
       
-        return IntStream.range(0, cmpList.size())
-                        .mapToObj(idx -> asList(idx, cmpList.get(idx)))
+        return IntStream.range(0, paddedCmps.size())
+                        .mapToObj(idx -> asList(idx, paddedCmps.get(idx)))
                         .collect(groupingBy(idxAndCmp -> (Integer)idxAndCmp.get(0) / colNum, 
                                             mapping(idxAndCmp -> (Component)idxAndCmp.get(1), toList())))
                         .values();
     }
   
-    private static List<Component> padding(int rowNum, int colNum, Component[] cmps)
+    private static List<Component> padding(List<Component> cmps, int num)
     {
-        int paddingNum = rowNum * colNum - cmps.length;
-        return Stream.concat(Stream.of(cmps), Collections.nCopies(paddingNum, empty()).stream())
-                     .collect(toList());
+        return Stream.concat(cmps.stream(), Collections.nCopies(num, empty()).stream()).collect(toList());
+    }
+    
+    public static Component blockm(List<Component> cmps, int rowNum, int colNum, float hRatio, float vRatio)
+    {
+        return block(cmps.stream().map(cmp -> center(cmp, hRatio, vRatio)).collect(toList()), rowNum, colNum);
     }
 }
