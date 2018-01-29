@@ -101,7 +101,7 @@ public class TestFrm extends JFrame
     private void test_beside_above()
     {
         above(beside(textField(), button("Btn1"), 0.8f), 
-              button("Btn2"), 0.5f).apply(rectangle(0, 0, 300, 60)).accept(container);    
+              button("Btn2"), 0.5f).apply(rectangle(0, 0, 300, 60)).accept(container);
     }
     
     private void test_empty()
