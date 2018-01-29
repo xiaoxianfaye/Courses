@@ -14,7 +14,7 @@ public class BesideTest extends TestCase
     private ComponentStub leftCmp;
     private ComponentStub rightCmp;
     private Component beside;
-    
+
     @Override
     protected void setUp()
     {
@@ -22,7 +22,7 @@ public class BesideTest extends TestCase
         this.rightCmp = new ComponentStub();
         this.beside = new Beside(leftCmp, rightCmp, 0.8f);
     }
-    
+
     public void test_at()
     {
         beside.at(20, 10, 300, 60);
@@ -30,7 +30,7 @@ public class BesideTest extends TestCase
         checkRectangle(new int[]{20, 10, 240, 60}, leftCmp.getRectangle());
         checkRectangle(new int[]{260, 10, 60, 60}, rightCmp.getRectangle());
     }
-    
+
     public void test_in()
     {
         Container container = new Container();
