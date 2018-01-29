@@ -9,16 +9,6 @@ import static fayelab.ddd.trianglecounter.original.TriangleCounter.*;
 
 public class TriangleCounterTest extends TestCase
 {
-    public void test_belong()
-    {
-        List<List<Character>> lines = asList(asList('a', 'c', 'b'), asList('c', 'd'));
-        assertTrue(belong(lines, 'a', 'c', 'b'));
-        assertTrue(belong(lines, 'a', 'c'));
-        assertTrue(belong(lines, 'c', 'b'));
-        assertFalse(belong(lines, 'a', 'd'));
-        assertFalse(belong(lines, 'b', 'd'));
-    }
-    
     public void test_connected()
     {
         List<List<Character>> lines = asList(asList('a', 'c', 'b'), asList('c', 'd'));

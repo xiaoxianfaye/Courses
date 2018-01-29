@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
-import static fayelab.ddd.trianglecounter.original.SetOp.subset;
+import static fayelab.ddd.trianglecounter.original.SetOp.*;
 import static fayelab.ddd.trianglecounter.original.Combinator.combinate;
 
 public class TriangleCounter
@@ -25,19 +25,14 @@ public class TriangleCounter
         return Stream.of(lineDescs).map(TriangleCounter::parsePoints).collect(toList());
     }
     
-    static boolean belong(List<List<Character>> lines, Character...points)
-    {
-        return lines.stream().anyMatch(line -> subset(asList(points), line));
-    }
-    
     static boolean connected(char p1, char p2, List<List<Character>> lines)
     {
-        return belong(lines, p1, p2);
+        return belong(asList(p1, p2), lines);
     }
     
     static boolean onALine(char p1, char p2, char p3, List<List<Character>> lines)
     {
-        return belong(lines, p1, p2, p3);
+        return belong(asList(p1, p2, p3), lines);
     }
     
     static boolean triangle(char p1, char p2, char p3, List<List<Character>> lines)
