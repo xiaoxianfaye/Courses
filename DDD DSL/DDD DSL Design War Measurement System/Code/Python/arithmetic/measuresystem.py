@@ -17,15 +17,14 @@ def _acc_basefactors2(acc, stepfactor):
 def base(quantityvec, basefactors):
     return vecop.dotproduct(quantityvec, basefactors)
 
-def normalize(quantityvec, stepfactors):
-    return vecop.div(quantityvec, stepfactors)
+def equal(quantityvec1, quantityvec2, basefactors):
+    return base(quantityvec1, basefactors) ==  base(quantityvec2, basefactors)
 
-def equal(quantityvec1, quantityvec2, stepfactors):
-    return vecop.equal(normalize(quantityvec1, stepfactors),
-                       normalize(quantityvec2, stepfactors))
+def normalize(quantityvalue, basefactors):
+    return vecop.dotdiv(quantityvalue, basefactors)
 
-def add(quantityvec1, quantityvec2, stepfactors):
-    return normalize(vecop.add(quantityvec1, quantityvec2), stepfactors)
+def add(quantityvec1, quantityvec2, basefactors):
+    return normalize(base(quantityvec1, basefactors) + base(quantityvec2, basefactors), basefactors)
 
-def scale(c, quantityvec, stepfactors):
-    return normalize(vecop.scale(c, quantityvec), stepfactors)
+def scale(c, quantityvec, basefactors):
+    return normalize(c * base(quantityvec, basefactors), basefactors)
