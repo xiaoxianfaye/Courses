@@ -11,8 +11,9 @@ public class VecOpTest extends TestCase
     public void test_equal()
     {
         assertTrue(equal(asList(1, 2, 3), asList(1, 2, 3)));
-        assertFalse(equal(asList(1, 2), asList(1, 2, 3)));
         assertTrue(equal(asList(), asList()));
+        assertFalse(equal(asList(1, 2), asList(1, 2, 3)));
+        assertFalse(equal(asList(1, 3, 4), asList(1, 2, 3)));
     }
     
     public void test_equal_when_validating_failed()
@@ -38,7 +39,7 @@ public class VecOpTest extends TestCase
     {
         try
         {
-            add(asList(1, 2), asList(3, 4, 5));
+            add(asList(1, 2), asList(4, 5, 6));
             assertTrue(false);
         }
         catch(IllegalParametersException e)
@@ -57,7 +58,7 @@ public class VecOpTest extends TestCase
     {
         try
         {
-            dotProduct(asList(1, 2), asList(3, 4, 5));
+            dotProduct(asList(1, 2), asList(4, 5, 6));
             assertTrue(false);
         }
         catch(IllegalParametersException e)
@@ -76,7 +77,7 @@ public class VecOpTest extends TestCase
     {
         try
         {
-            div(asList(1, 2), asList(3, 4, 5));
+            div(asList(1, 2, 3), asList(1, 2));
             assertTrue(false);
         }
         catch(IllegalParametersException e)

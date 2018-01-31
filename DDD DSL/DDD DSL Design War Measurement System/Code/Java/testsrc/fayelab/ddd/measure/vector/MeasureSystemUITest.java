@@ -224,7 +224,6 @@ public class MeasureSystemUITest extends TestCase
     public void test_baseFormat()
     {
         assertEquals("63472 Inch", ui.baseFormat(asList(1, 3, 0, 4)));
-        assertEquals("2 Feet 0 Inch", ui.add("13 Inch", "11 Inch"));
     }
     
     public void test_scale()

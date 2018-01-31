@@ -5,7 +5,6 @@ import junit.framework.TestSuite;
 
 public class AllTests
 {
-
     public static Test suite()
     {
         TestSuite suite = new TestSuite(AllTests.class.getName());
@@ -17,5 +16,4 @@ public class AllTests
         //$JUnit-END$
         return suite;
     }
-
 }

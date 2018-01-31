@@ -59,11 +59,11 @@ public class MeasureSystemUI
     }
 
     @SuppressWarnings("unchecked")
-    List<Integer> parseQuantity(String quantity)
+    List<Integer> parseQuantity(String desc)
     {
-        validateQuantity(quantity);
+        validateQuantity(desc);
         
-        List<List<?>> valuesAndUnits = parseValuesAndUnits(quantity);
+        List<List<?>> valuesAndUnits = parseValuesAndUnits(desc);
 
         List<Integer> values = (List<Integer>)valuesAndUnits.get(0);
         List<Integer> units = (List<Integer>)valuesAndUnits.get(1);
