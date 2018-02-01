@@ -18,7 +18,7 @@ def base(quantityvec, basefactors):
     return vecop.dotproduct(quantityvec, basefactors)
 
 def equal(quantityvec1, quantityvec2, basefactors):
-    return base(quantityvec1, basefactors) ==  base(quantityvec2, basefactors)
+    return base(quantityvec1, basefactors) == base(quantityvec2, basefactors)
 
 def normalize(quantityvalue, basefactors):
     return vecop.dotdiv(quantityvalue, basefactors)
