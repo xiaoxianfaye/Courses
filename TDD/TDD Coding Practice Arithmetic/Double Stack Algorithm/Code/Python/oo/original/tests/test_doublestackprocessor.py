@@ -100,3 +100,30 @@ class TestDoubleStackProcessor(unittest.TestCase):
 
         self.assertEquals([2], self.dsp._dump_operandstack())
         self.assertEquals(['+'], self.dsp._dump_operatorstack())
+
+    def test_result_num(self):
+        self.dsp.process('3')
+
+        self.assertEquals(3, self.dsp.result())
+        self.assertEquals([], self.dsp._dump_operandstack())
+        self.assertEquals([], self.dsp._dump_operatorstack())
+
+    def test_result_calc_once(self):
+        self.dsp.process('1')
+        self.dsp.process('+')
+        self.dsp.process('2')
+
+        self.assertEquals(3, self.dsp.result())
+        self.assertEquals([], self.dsp._dump_operandstack())
+        self.assertEquals([], self.dsp._dump_operatorstack())
+
+    def test_result_calc_twice(self):
+        self.dsp.process('1')
+        self.dsp.process('+')
+        self.dsp.process('2')
+        self.dsp.process('*')
+        self.dsp.process('3')
+
+        self.assertEquals(7, self.dsp.result())
+        self.assertEquals([], self.dsp._dump_operandstack())
+        self.assertEquals([], self.dsp._dump_operatorstack())

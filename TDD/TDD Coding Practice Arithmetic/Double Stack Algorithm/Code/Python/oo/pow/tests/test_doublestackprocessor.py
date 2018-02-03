@@ -119,6 +119,33 @@ class TestDoubleStackProcessor(unittest.TestCase):
         self.assertEquals([352], self.dsp._dump_operandstack())
         self.assertEquals(['+'], self.dsp._dump_operatorstack())
 
+    def test_result_num(self):
+        self.dsp.process('12')
+
+        self.assertEquals(12, self.dsp.result())
+        self.assertEquals([], self.dsp._dump_operandstack())
+        self.assertEquals([], self.dsp._dump_operatorstack())
+
+    def test_result_calc_once(self):
+        self.dsp.process('12')
+        self.dsp.process('+')
+        self.dsp.process('34')
+
+        self.assertEquals(46, self.dsp.result())
+        self.assertEquals([], self.dsp._dump_operandstack())
+        self.assertEquals([], self.dsp._dump_operatorstack())
+
+    def test_result_calc_twice(self):
+        self.dsp.process('12')
+        self.dsp.process('+')
+        self.dsp.process('34')
+        self.dsp.process('*')
+        self.dsp.process('10')
+
+        self.assertEquals(352, self.dsp.result())
+        self.assertEquals([], self.dsp._dump_operandstack())
+        self.assertEquals([], self.dsp._dump_operatorstack())
+
     def test_num_multiply_num_pow(self):
         self.dsp.process('12');
         self.dsp.process('*');

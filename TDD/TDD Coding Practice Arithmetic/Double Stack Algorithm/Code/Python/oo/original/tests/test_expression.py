@@ -7,14 +7,6 @@ class TestExpression(unittest.TestCase):
         expr = Expression("3")
         self.assertEquals(3, expr.eval())
 
-    def test_expr_has_one_operator(self):
-        expr = Expression("1+2")
-        self.assertEquals(3, expr.eval())
-
-    def test_expr_has_multiple_operators(self):
-        expr = Expression("1+2*3")
-        self.assertEquals(7, expr.eval())
-
     def test_expr_context(self):
         expr = Expression(None, Context("3", 0))
         self.assertEquals(3, expr.eval())

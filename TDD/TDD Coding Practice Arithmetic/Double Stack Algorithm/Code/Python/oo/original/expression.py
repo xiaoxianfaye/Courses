@@ -1,24 +1,35 @@
-import doublestackprocessor as dsp
+from doublestackprocessor import DoubleStackProcessor
 
-def eval_expr(expr):
-    return _eval_expr(expr, 0, [], [])
-
-def _eval_expr(expr, curidx, operandstack, operatorstack):
-    while not_end(expr, curidx):
-        c, curidx = next_char(expr, curidx)
-        if '(' == c:
-            dsp.push_operand(_eval_expr(expr, curidx, [], []))
-        elif ')' == c:
-            return dsp.result(operandstack, operatorstack)
+class Expression(object):
+    def __init__(self, expr, context=None):
+        if context == None:
+            self.ctx = Context(expr, 0)
         else:
-            dsp.process(c, operandstack, operatorstack)
+            self.ctx = context
 
-    return dsp.result(operandstack, operatorstack)
+        self.dsp = DoubleStackProcessor()
 
-def not_end(expr, curidx):
-    return curidx < len(expr)
+    def eval(self):
+        while self.ctx.expr_not_end():
+            c = self.ctx.next_char()
+            if '(' == c:
+                self.dsp.push_operand(Expression(self.ctx.expr, self.ctx).eval())
+            elif ')' == c:
+                return self.dsp.result()
+            else:
+                self.dsp.process(c)
 
-def next_char(expr, curidx):
-    c = expr[curidx]
-    curidx += 1
-    return c, curidx
+        return self.dsp.result()
+
+class Context(object):
+    def __init__(self, expr, curidx):
+        self.expr = expr
+        self.curidx = curidx
+
+    def expr_not_end(self):
+        return self.curidx < len(self.expr)
+
+    def next_char(self):
+        c = self.expr[self.curidx]
+        self.curidx += 1
+        return c

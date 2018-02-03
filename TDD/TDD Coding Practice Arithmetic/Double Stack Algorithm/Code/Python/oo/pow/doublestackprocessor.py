@@ -11,8 +11,8 @@ class DoubleStackProcessor(object):
     operator_priority_map = {'+':1, '-':1, '*':2, '/':2, '%':2, '**':3}
     
     def __init__(self):
-        self.operandstack = []
-        self.operatorstack = []
+        self._operandstack = []
+        self._operatorstack = []
 
     def process(self, item):
         if item.isdigit():
@@ -38,7 +38,7 @@ class DoubleStackProcessor(object):
             self.calc_once()
 
     def not_empty_operatorstack(self):
-        return len(self.operatorstack) != 0
+        return len(self._operatorstack) != 0
 
     def not_prior_to(self, operator1, operator2):
         return self.priority(operator1) <= self.priority(operator2)
@@ -56,25 +56,25 @@ class DoubleStackProcessor(object):
         return DoubleStackProcessor.operator_func_map[operator](l_operand, r_operand)
 
     def push_operand(self, operand):
-        self.operandstack.append(operand)
+        self._operandstack.append(operand)
 
     def pop_operand(self):
-        return self.operandstack.pop()
+        return self._operandstack.pop()
 
     def push_operator(self, operator):
-        self.operatorstack.append(operator)
+        self._operatorstack.append(operator)
 
     def pop_operator(self):
-        return self.operatorstack.pop()
+        return self._operatorstack.pop()
 
     def top_operator(self):
-        return self.operatorstack[-1]
+        return self._operatorstack[-1]
 
     def _dump_operandstack(self):
-        return self._dump_stack(self.operandstack)
+        return self._dump_stack(self._operandstack)
 
     def _dump_operatorstack(self):
-        return self._dump_stack(self.operatorstack)
+        return self._dump_stack(self._operatorstack)
 
     def _dump_stack(self, stack):
         return copy.copy(stack)
