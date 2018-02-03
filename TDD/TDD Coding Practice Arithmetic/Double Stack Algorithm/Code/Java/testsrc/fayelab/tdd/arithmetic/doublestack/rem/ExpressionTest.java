@@ -10,18 +10,6 @@ public class ExpressionTest extends TestCase
         assertEquals(3, expr.eval());
     }
     
-    public void test_expr_has_one_operator()
-    {
-        Expression expr = new Expression("1+2");
-        assertEquals(3, expr.eval());
-    }
-    
-    public void test_expr_has_multiple_operators()
-    {
-        Expression expr = new Expression("1+2*3");
-        assertEquals(7, expr.eval());
-    }
-    
     public void test_expr_context()
     {
         Expression expr = new Expression(new Context("3", 0));

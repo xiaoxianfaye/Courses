@@ -153,4 +153,37 @@ public class DoubleStackProcessorTest extends TestCase
         assertEquals(asList(352), dsp.dumpOperandStack());
         assertEquals(asList('+'), dsp.dumpOperatorStack());
     }
+    
+    public void test_result_num()
+    {
+        dsp.process("12");
+        
+        assertEquals(12, dsp.result());
+        assertEquals(asList(), dsp.dumpOperandStack());
+        assertEquals(asList(), dsp.dumpOperatorStack());
+    }
+    
+    public void test_result_calc_once()
+    {
+        dsp.process("12");
+        dsp.process("+");
+        dsp.process("34");
+        
+        assertEquals(46, dsp.result());
+        assertEquals(asList(), dsp.dumpOperandStack());
+        assertEquals(asList(), dsp.dumpOperatorStack());
+    }
+    
+    public void test_result_calc_twice()
+    {
+        dsp.process("12");
+        dsp.process("+");
+        dsp.process("34");
+        dsp.process("*");
+        dsp.process("10");
+        
+        assertEquals(352, dsp.result());
+        assertEquals(asList(), dsp.dumpOperandStack());
+        assertEquals(asList(), dsp.dumpOperatorStack());
+    }
 }
