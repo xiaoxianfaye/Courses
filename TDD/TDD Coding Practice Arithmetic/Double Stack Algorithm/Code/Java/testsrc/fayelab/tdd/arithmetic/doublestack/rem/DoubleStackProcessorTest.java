@@ -163,7 +163,7 @@ public class DoubleStackProcessorTest extends TestCase
         assertEquals(7, dsp.result());
         assertEquals(asList(), dsp.dumpOperandStack());
         assertEquals(asList(), dsp.dumpOperatorStack());
-    }    
+    }
     
     public void test_num_plus_num_rem()
     {
