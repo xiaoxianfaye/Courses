@@ -35,9 +35,9 @@ public class Presenter
         view.presentChainTransIds(chainTransIds);
     }
 
-    private boolean notExistedInChain(String selectedAvailableTransId)
+    private boolean notExistedInChain(String transId)
     {
-        return !chainTransIds.contains(selectedAvailableTransId);
+        return !chainTransIds.contains(transId);
     }
 
     public void removeTransformer()
