@@ -29,6 +29,7 @@ public class BusinessLogicImplTest extends TestCase
     public void test_transform_trimPrefixSpaces()
     {
         assertEquals("Hello, world!  ", impl.transform("  Hello, world!  ", asList("TrimPrefixSpaces")));
+        assertEquals("", impl.transform("  ", asList("TrimPrefixSpaces")));
     }
     
     public void test_transform()
