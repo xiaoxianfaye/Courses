@@ -75,7 +75,7 @@ class ViewImpl(object):
         Label(bottomemptyframe, text="").pack()
 
         Button(operbtnsframe, text='Add >>', width=10, command=self.add_transformer).pack(pady=10)
-        Button(operbtnsframe, text='Remove >>', width=10, command=self.remove_transformer).pack(pady=10)
+        Button(operbtnsframe, text='Remove <<', width=10, command=self.remove_transformer).pack(pady=10)
         Button(operbtnsframe, text='Remove All', width=10, command=self.remove_all_transformers).pack(pady=10)
 
     def init_bottomframe(self):
