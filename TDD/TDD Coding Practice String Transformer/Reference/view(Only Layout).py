@@ -91,17 +91,13 @@ class ViewImpl(object):
         Button(btnsframe, text='Apply', width=10, command=self.apply_transformer_chain).pack(side=LEFT, padx=5)
         Button(btnsframe, text='Exit', width=10, command=self.exit).pack(side=LEFT, padx=5)
 
-    def add_transformer(self):
-        pass
+    def add_transformer(self): pass
 
-    def remove_transformer(self):
-        pass
+    def remove_transformer(self): pass
 
-    def remove_all_transformers(self):
-        pass
+    def remove_all_transformers(self): pass
 
-    def apply_transformer_chain(self):
-        pass
+    def apply_transformer_chain(self): pass
 
     def exit(self):
         self.root.destroy()
