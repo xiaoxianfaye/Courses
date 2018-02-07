@@ -45,7 +45,7 @@ public class BusinessLogicImpl implements BusinessLogic
     private static String trimPrefixSpaces(String str)
     {
         int firstNonSpaceCharIdx = findFirstNonSpaceCharIdx(str);
-        return firstNonSpaceCharIdx == -1 ? str : str.substring(firstNonSpaceCharIdx);
+        return firstNonSpaceCharIdx == -1 ? "" : str.substring(firstNonSpaceCharIdx);
     }
 
     private static int findFirstNonSpaceCharIdx(String str)
