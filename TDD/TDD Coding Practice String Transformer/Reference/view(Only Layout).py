@@ -6,11 +6,8 @@ class ViewImpl(object):
         self.root.title('String Transformer')
 
         self.initui()
-        self.centerwindow(560, 400)
 
-        self.root.mainloop()
-
-    def centerwindow(self, wndwidth, wndheight):
+    def centershow(self, wndwidth, wndheight):
         scnwidth, scnheight = self.root.maxsize()
         geometrystr = '%dx%d+%d+%d' % (wndwidth, wndheight,
                                        (scnwidth - wndwidth) / 2,
@@ -103,4 +100,6 @@ class ViewImpl(object):
         self.root.destroy()
 
 if __name__ == '__main__':
-    ViewImpl()
+    viewimpl = ViewImpl()
+    viewimpl.centershow(560, 400)
+    viewimpl.root.mainloop()
