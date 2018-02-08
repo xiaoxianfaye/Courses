@@ -20,7 +20,7 @@ class View(object):
 
     def set_presenter(self): pass
 
-class ViewImpl(object):
+class ViewImpl(View):
     def __init__(self):
         self.root = Tk()
         self.root.title('String Transformer')
