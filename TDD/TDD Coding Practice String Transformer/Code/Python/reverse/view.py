@@ -2,11 +2,12 @@ from Tkinter import *
 import tkMessageBox
 
 class View(object):
-    def present_available_transids(self, transids): pass
+    def present_available_transids(self, transids, selected_transid_idx): pass
 
     def get_selected_available_transid(self): pass
 
-    def present_chain_transids(self, transids): pass
+    def present_chain_transids(self, transids,
+                               selected_chain_transid_idx, selected_available_transid_idx): pass
 
     def get_selected_chain_transid(self): pass
 
@@ -108,17 +109,21 @@ class ViewImpl(View):
         Button(btnsframe, text='Apply', width=10, command=self.apply_transformer_chain).pack(side=LEFT, padx=5)
         Button(btnsframe, text='Exit', width=10, command=self.exit).pack(side=LEFT, padx=5)
 
-    def present_available_transids(self, transids):
+    def present_available_transids(self, transids, selected_transid_idx):
         self.set_list_data(self.lstavailable, transids)
+        self.set_list_selected_index(self.lstavailable, selected_transid_idx)
 
     def get_selected_available_transid(self):
-        return self.get_selected_item(self.lstavailable)
+        return self.get_list_selected_item(self.lstavailable)
 
-    def present_chain_transids(self, transids):
+    def present_chain_transids(self, transids,
+                               selected_chain_transid_idx, selected_available_transid_idx):
         self.set_list_data(self.lstchain, transids)
+        self.set_list_selected_index(self.lstchain, selected_chain_transid_idx)
+        self.set_list_selected_index(self.lstavailable, selected_available_transid_idx)
 
     def get_selected_chain_transid(self):
-        return self.get_selected_item(self.lstchain)
+        return self.get_list_selected_item(self.lstchain)
 
     def get_sourcestr(self):
         return self.txtsourcestr.get()
@@ -138,7 +143,12 @@ class ViewImpl(View):
         for item in items:
             lstbox.insert(END, item)
 
-    def get_selected_item(self, lstbox):
+    def set_list_selected_index(self, lstbox, index):
+        lstbox.selection_clear(0, END)
+        if index > -1:
+            lstbox.selection_set(index)
+
+    def get_list_selected_item(self, lstbox):
         return lstbox.get(ACTIVE)
 
     def show_info(self, info):

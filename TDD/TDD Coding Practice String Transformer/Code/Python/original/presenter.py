@@ -5,19 +5,28 @@ class Presenter(object):
         self.view.set_presenter(self)
 
         self.chain_transids = []
+        self.available_transids = None
 
     def init(self):
-        self.view.present_available_transids(self.businesslogic.get_all_transids())
+        self.available_transids = self.businesslogic.get_all_transids()
+        self.view.present_available_transids(self.available_transids, 0)
 
     def add_transformer(self):
-        selected_transid = self.view.get_selected_available_transid()
-        if self.not_exist_in_chain(selected_transid):
-            self.chain_transids.append(selected_transid)
-        self.view.present_chain_transids(self.chain_transids)
+        selected_available_transid = self.view.get_selected_available_transid()
+        if self.not_exist_in_chain(selected_available_transid):
+            self.chain_transids.append(selected_available_transid)
+        self.view.present_chain_transids(self.chain_transids,
+                                         self.chain_transids.index(selected_available_transid), -1)
 
     def remove_transformer(self):
-        self.chain_transids.remove(self.view.get_selected_chain_transid())
-        self.view.present_chain_transids(self.chain_transids)
+        if self.chain_transids == []:
+            self.view.present_chain_transids(self.chain_transids, -1, 0)
+            return
+
+        selected_chain_transid = self.view.get_selected_chain_transid()
+        self.chain_transids.remove(selected_chain_transid)
+        self.view.present_chain_transids(self.chain_transids,
+                                         -1, self.available_transids.index(selected_chain_transid))
 
     def apply_transformer_chain(self):
         sourcestr = self.view.get_sourcestr()
@@ -30,7 +39,7 @@ class Presenter(object):
 
     def remove_all_transformers(self):
         del self.chain_transids[:]
-        self.view.present_chain_transids(self.chain_transids)
+        self.view.present_chain_transids(self.chain_transids, -1, 0)
 
     def not_exist_in_chain(self, transid):
         return transid not in self.chain_transids
