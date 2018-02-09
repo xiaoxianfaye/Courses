@@ -65,6 +65,8 @@ class TestPresenter(unittest.TestCase):
         self.presenter.add_transformer()
 
         self.assertEquals(['Upper'], self.viewstub.get_chain_transids())
+        self.assertEquals(0, self.viewstub.get_selected_chain_transid_idx())
+        self.assertEquals(-1, self.viewstub.get_selected_available_transid_idx())
 
     def test_apply_transformer_chain_when_source_string_is_empty(self):
         self.viewstub.set_sourcestr('')
