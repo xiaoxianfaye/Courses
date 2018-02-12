@@ -1,106 +1,120 @@
 package fayelab.tdd.stringtransformer.original;
 
-import java.util.List;
+import java.util.Map;
 
+import fayelab.tdd.stringtransformer.original.Param.Name;
+import fayelab.tdd.stringtransformer.original.Presenter;
 import fayelab.tdd.stringtransformer.original.View;
 
 public class ViewStub implements View
 {
-    private List<String> availableTransIds;
-    private String selectedAvailableTransId;
-    private List<String> chainTransIds;
-    private String selectedChainTransId;
-    private String sourceStr;
-    private String resultStr;
-    private boolean isEmptySourceStrInputNotified;
-    private boolean isEmptyChainInputNotified;
+    private Map<Name, Object> onInitData;
+    private Map<Name, Object> addData;
+    private Map<Name, Object> onAddData;
+    private Map<Name, Object> removeData;
+    private Map<Name, Object> onRemoveData;
+    private Map<Name, Object> onRemoveAllData;
+    private Map<Name, Object> applyData;
+    private Map<Name, Object> onApplyData;
+    private Map<Name, Object> onValidatingFailedData;
 
     @Override
-    public void presentAvailableTransIds(List<String> transIds)
+    public void onInitData(Map<Name, Object> data)
     {
-        availableTransIds = transIds;
+        onInitData = data;
     }
     
-    public List<String> getAvailableTransIds()
+    public Map<Name, Object> getOnInitData()
     {
-        return availableTransIds;
+        return onInitData;
     }
 
     @Override
-    public String getSelectedAvailableTransId()
+    public Map<Name, Object> collectAddData()
     {
-        return selectedAvailableTransId;
+        return addData;
     }
 
-    public void setSelectedAvailableTransId(String transId)
+    public void setAddData(Map<Name, Object> data)
     {
-        selectedAvailableTransId = transId;
-    }
-
-    @Override
-    public void presentChainTransIds(List<String> transIds)
-    {
-        chainTransIds = transIds;
-    }
-
-    public List<String> getChainTransIds()
-    {
-        return chainTransIds;
+        addData = data;
     }
 
     @Override
-    public String getSelectedChainTransId()
+    public void onAddTransformer(Map<Name, Object> data)
     {
-        return selectedChainTransId;
+        onAddData = data;
     }
 
-    public void setSelectedChainTransId(String transId)
+    public Object getOnAddData()
     {
-        selectedChainTransId = transId;
+        return onAddData;
     }
 
     @Override
-    public String getSourceStr()
+    public Map<Name, Object> collectRemoveData()
     {
-        return sourceStr;
+        return removeData;
+    }
+
+    public void setRemoveData(Map<Name, Object> data)
+    {
+        removeData = data;
+    }
+
+    @Override
+    public void onRemoveTransformer(Map<Name, Object> data)
+    {
+        onRemoveData = data;
     }
     
-    public void setSourceStr(String str)
+    public Map<Name, Object> getOnRemoveData()
     {
-        sourceStr = str;
+        return onRemoveData;
+    }
+
+    public Map<Name, Object> getOnRemoveAllData()
+    {
+        return onRemoveAllData;
     }
 
     @Override
-    public void presentResultStr(String str)
+    public void onRemoveAllTransformers(Map<Name, Object> data)
     {
-        resultStr = str;
-    }
-
-    public String getResultStr()
-    {
-        return resultStr;
+        onRemoveAllData = data;
     }
 
     @Override
-    public void onEmptySourceStrInput()
+    public Map<Name, Object> collectApplyData()
     {
-        isEmptySourceStrInputNotified = true;
+        return applyData;
     }
 
-    public boolean isEmptySourceStrInputNotified()
+    public void setApplyData(Map<Name, Object> data)
     {
-        return isEmptySourceStrInputNotified;
+        applyData = data;
+    }
+    
+    public Map<Name, Object> getOnApplyData()
+    {
+        return onApplyData;
+    }
+    
+    @Override
+    public void onApplyTransformerChain(Map<Name, Object> data)
+    {
+        onApplyData = data;
     }
 
     @Override
-    public void onEmptyChainInput()
+    public void onValidatingFailed(Map<Name, Object> data)
     {
-        isEmptyChainInputNotified = true;
+        onValidatingFailedData = data;
     }
 
-    public boolean isEmptyChainInputNotified()
+    public Map<Name, Object> getOnValidatingFailedData()
     {
-        return isEmptyChainInputNotified;
+        return onValidatingFailedData;
     }
 
     @Override

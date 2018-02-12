@@ -7,7 +7,8 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -16,71 +17,124 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+
+import fayelab.tdd.stringtransformer.original.Param.Name;
+import fayelab.tdd.stringtransformer.original.Presenter.ValidatingFailedReason;
+
+import static fayelab.tdd.stringtransformer.original.Param.Name.*;
+import static fayelab.tdd.stringtransformer.original.DataBuilder.*;
+import static fayelab.tdd.stringtransformer.original.Presenter.SELECTED_INDEX_NONE;
+import static fayelab.tdd.stringtransformer.original.Presenter.ValidatingFailedReason.*;
 
 public class ViewImpl extends JFrame implements View
 {
     private Presenter presenter;
     
+    private static Map<ValidatingFailedReason, String> vfrAndTip = null;
+    static
+    {
+        vfrAndTip = new HashMap<>();
+        vfrAndTip.put(ADD_DUPLICATE_TRANSFORMER, "The transformer to be added has been existed in the chain.");
+    }
+
     public ViewImpl()
     {
         this.initUI();
+    }
+
+    @Override
+    public void onInitData(Map<Name, Object> data)
+    {
+        setListData(lstAvailableTransformers, data, AVAILABLE_TRANSNAMES);
+        setListSelectedItem(lstAvailableTransformers, data, AVAILABLE_SELECTED_INDEX);
+    }
+
+    @Override
+    public Map<Name, Object> collectAddData()
+    {
+        return build(getListSelectedItem(lstAvailableTransformers, AVAILABLE_SELECTED_TRANSNAME));
+    }
+
+    @Override
+    public void onAddTransformer(Map<Name, Object> data)
+    {
+        updateBothLists(data);
+    }
+
+    @Override
+    public Map<Name, Object> collectRemoveData()
+    {
+        return build(getListSelectedItem(lstTransformerChain, CHAIN_SELECTED_TRANSNAME));
+    }
+
+    @Override
+    public void onRemoveTransformer(Map<Name, Object> data)
+    {
+        updateBothLists(data);
+    }
+
+    @Override
+    public void onRemoveAllTransformers(Map<Name, Object> data)
+    {
+        updateBothLists(data);
+    }
+
+    @Override
+    public Map<Name, Object> collectApplyData()
+    {
+        return build(new Param<>(SOURCESTR, txtSourceStr.getText()));
+    }
+
+    @Override
+    public void onApplyTransformerChain(Map<Name, Object> data)
+    {
+        txtResultStr.setText(toStr(data.get(RESULTSTR)));
+    }
+
+    @Override
+    public void onValidatingFailed(Map<Name, Object> data)
+    {
+        ValidatingFailedReason vfr = toValidatingFailedReason(data.get(VALIDATING_FAILED_REASON));
+        JOptionPane.showMessageDialog(this, vfrAndTip.get(vfr));
+    }
+
+    private void updateBothLists(Map<Name, Object> data)
+    {
+        setListData(lstTransformerChain, data, CHAIN_TRANSNAMES);
+        setListSelectedItem(lstTransformerChain, data, CHAIN_SELECTED_INDEX);
+        setListSelectedItem(lstAvailableTransformers, data, AVAILABLE_SELECTED_INDEX);
+    }
+    
+    private void setListData(JList<String> lst, Map<Name, Object> data, Name name)
+    {
+        lst.setListData(toStringArray(data.get(name)));
+    }
+    
+    private void setListSelectedItem(JList<String> lst, Map<Name, Object> data, Name name)
+    {
+        int selectedIndex = toInt(data.get(name));
+        if(selectedIndex == SELECTED_INDEX_NONE)
+        {
+            lst.clearSelection();
+        }
+        else
+        {
+            lst.setSelectedIndex(selectedIndex);
+        }
+    }
+    
+    private Param<String> getListSelectedItem(JList<String> lst, Name name)
+    {
+        return new Param<>(name, lst.getSelectedValue());
     }
     
     @Override
     public void setPresenter(Presenter presenter)
     {
         this.presenter = presenter;
-    }
-    
-    @Override
-    public void presentAvailableTransIds(List<String> transIds)
-    {
-        lstAvailableTransformers.setListData(transIds.toArray(new String[] {}));
-    }
-
-    @Override
-    public String getSelectedAvailableTransId()
-    {
-        return lstAvailableTransformers.getSelectedValue();
-    }
-
-    @Override
-    public void presentChainTransIds(List<String> transIds)
-    {
-        lstTransformerChain.setListData(transIds.toArray(new String[] {}));
-    }
-
-    @Override
-    public String getSelectedChainTransId()
-    {
-        return lstTransformerChain.getSelectedValue();
-    }
-
-    @Override
-    public String getSourceStr()
-    {
-        return txtSourceStr.getText();
-    }
-
-    @Override
-    public void presentResultStr(String str)
-    {
-        txtResultStr.setText(str);
-    }
-
-    @Override
-    public void onEmptySourceStrInput()
-    {
-        JOptionPane.showMessageDialog(this, "Enter a source string, please.");
-        txtSourceStr.requestFocus();
-    }
-
-    @Override
-    public void onEmptyChainInput()
-    {
-        JOptionPane.showMessageDialog(this, "Specify the transformer chain, please.");
     }
     
     private void initUI()
@@ -146,8 +200,9 @@ public class ViewImpl extends JFrame implements View
         pnCWest.setLayout(new BorderLayout(0, 6));
         lblAvailableTransformers.setText("Available Transformers");
         pnCWest.add(lblAvailableTransformers, BorderLayout.NORTH);
+        pnCWest.add(scrPnAvailableTransformers, BorderLayout.CENTER);
+        scrPnAvailableTransformers.getViewport().add(lstAvailableTransformers);
         lstAvailableTransformers.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        pnCWest.add(lstAvailableTransformers, BorderLayout.CENTER);
         
         pnCenter.add(pnCEast, BorderLayout.EAST);
         pnCEast.setPreferredSize(new Dimension(200, 0));
@@ -155,8 +210,9 @@ public class ViewImpl extends JFrame implements View
         pnCEast.setLayout(new BorderLayout(0, 6));
         lblTransformerChain.setText("Transformer Chain");
         pnCEast.add(lblTransformerChain, BorderLayout.NORTH);
+        pnCEast.add(scrPnTransformerChain, BorderLayout.CENTER);
+        scrPnTransformerChain.getViewport().add(lstTransformerChain);
         lstTransformerChain.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        pnCEast.add(lstTransformerChain, BorderLayout.CENTER);
         
         pnCenter.add(pnCCenter, BorderLayout.CENTER);
         pnCCenter.setLayout(new GridLayout(8, 1));
@@ -230,7 +286,7 @@ public class ViewImpl extends JFrame implements View
     {
         System.exit(0);
     }
-
+    
     private static void centerShow(ViewImpl impl)
     {
         Toolkit tk = Toolkit.getDefaultToolkit();
@@ -268,7 +324,9 @@ public class ViewImpl extends JFrame implements View
     private JPanel pnCEast = new JPanel();    
     private JLabel lblAvailableTransformers = new JLabel();
     private JLabel lblTransformerChain = new JLabel();
+    private JScrollPane scrPnAvailableTransformers = new JScrollPane();
     private JList<String> lstAvailableTransformers = new JList<>();
+    private JScrollPane scrPnTransformerChain = new JScrollPane();
     private JList<String> lstTransformerChain = new JList<String>();
     private JPanel pnBtnAdd = new JPanel();
     private JButton btnAdd = new JButton();

@@ -3,20 +3,21 @@ package fayelab.tdd.stringtransformer.original;
 import java.util.List;
 
 import fayelab.tdd.stringtransformer.original.BusinessLogic;
+import fayelab.tdd.stringtransformer.original.Transformer;
 
 import static java.util.Arrays.asList;
 
 public class BusinessLogicStub implements BusinessLogic
 {
     @Override
-    public List<String> getAllTransIds()
+    public List<Transformer> getAllTransformers()
     {
-        return asList("Upper", "Lower", "TrimPrefixSpaces");
+        return asList(Transformer.values());
     }
 
     @Override
-    public String transform(String sourceStr, List<String> chainTransIds)
+    public String transform(String sourceStr, List<Transformer> transformers)
     {
-        return "HELLO, WORLD!";
+        return "HELLO, WORLD.";
     }
 }

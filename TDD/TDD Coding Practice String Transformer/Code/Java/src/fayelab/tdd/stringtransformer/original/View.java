@@ -1,24 +1,28 @@
 package fayelab.tdd.stringtransformer.original;
 
-import java.util.List;
+import java.util.Map;
+
+import fayelab.tdd.stringtransformer.original.Param.Name;
 
 public interface View
 {
-    void presentAvailableTransIds(List<String> transIds);
+    void onInitData(Map<Name, Object> data);
 
-    String getSelectedAvailableTransId();
+    Map<Name, Object> collectAddData();
 
-    void presentChainTransIds(List<String> transIds);
+    void onAddTransformer(Map<Name, Object> data);
 
-    String getSelectedChainTransId();
+    Map<Name, Object> collectRemoveData();
 
-    String getSourceStr();
+    void onRemoveTransformer(Map<Name, Object> data);
 
-    void presentResultStr(String str);
+    void onRemoveAllTransformers(Map<Name, Object> data);
 
-    void onEmptySourceStrInput();
+    Map<Name, Object> collectApplyData();
 
-    void onEmptyChainInput();
-
+    void onApplyTransformerChain(Map<Name, Object> data);
+    
+    void onValidatingFailed(Map<Name, Object> data);
+    
     void setPresenter(Presenter presenter);
 }

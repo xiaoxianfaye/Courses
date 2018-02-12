@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface BusinessLogic
 {
-    List<String> getAllTransIds();
+    List<Transformer> getAllTransformers();
 
-    String transform(String sourceStr, List<String> chainTransIds);
+    String transform(String sourceStr, List<Transformer> transformers);
 }

@@ -1,25 +1,33 @@
 from Tkinter import *
 import tkMessageBox
 
+from presenter import ParamEnum as PE
+
 class View(object):
-    def present_available_transids(self, transids, selected_transid_idx): pass
+    def on_init(self, data): pass
 
-    def get_selected_available_transid(self): pass
+    def collect_add_data(self): pass
 
-    def present_chain_transids(self, transids,
-                               selected_chain_transid_idx, selected_available_transid_idx): pass
+    def on_add_transformer(self, data): pass
 
-    def get_selected_chain_transid(self): pass
+    # def present_available_transids(self, transids, selected_transid_idx): pass
+    #
+    # def get_selected_available_transid(self): pass
+    #
+    # def present_chain_transids(self, transids,
+    #                            selected_chain_transid_idx, selected_available_transid_idx): pass
+    #
+    # def get_selected_chain_transid(self): pass
+    #
+    # def get_sourcestr(self): pass
+    #
+    # def present_resultstr(self, s): pass
+    #
+    # def on_empty_sourcestr_input(self): pass
+    #
+    # def on_empty_chain_input(self): pass
 
-    def get_sourcestr(self): pass
-
-    def present_resultstr(self, s): pass
-
-    def on_empty_sourcestr_input(self): pass
-
-    def on_empty_chain_input(self): pass
-
-    def set_presenter(self): pass
+    def set_presenter(self, presenter): pass
 
 class ViewImpl(View):
     def __init__(self):
@@ -27,6 +35,29 @@ class ViewImpl(View):
         self.root.title('String Transformer')
 
         self.initui()
+
+    def on_init(self, data):
+        self.set_list_data(self.lstavailable, data[PE.AVAILABLE_TRANSNAMES])
+        self.set_list_selected_index(self.lstavailable, data[PE.AVAILABLE_SELECTED_INDEX])
+
+    def collect_add_data(self): pass
+        # return AddData(self.lstavailable.selection_get())
+
+    def on_add_transformer(self, data):
+        self.set_list_data(self.lstchain, data.get_chain_transnames())
+        self.set_list_selected_index(self.lstavailable, data.get_available_selected_index())
+
+    def set_presenter(self, presenter):
+        self.presenter = presenter
+
+    def set_list_data(self, lstbox, items):
+        lstbox.delete(0, END)
+        for item in items:
+            lstbox.insert(END, item)
+
+    def set_list_selected_index(self, lstbox, index):
+        lstbox.selection_clear(0, END)
+        lstbox.selection_set(index)
 
     def centershow(self, wndwidth, wndheight):
         scnwidth, scnheight = self.root.maxsize()
@@ -109,65 +140,63 @@ class ViewImpl(View):
         Button(btnsframe, text='Apply', width=10, command=self.apply_transformer_chain).pack(side=LEFT, padx=5)
         Button(btnsframe, text='Exit', width=10, command=self.exit).pack(side=LEFT, padx=5)
 
-    def present_available_transids(self, transids, selected_transid_idx):
-        self.set_list_data(self.lstavailable, transids)
-        self.set_list_selected_index(self.lstavailable, selected_transid_idx)
-
-    def get_selected_available_transid(self):
-        return self.get_list_selected_item(self.lstavailable)
-
-    def present_chain_transids(self, transids,
-                               selected_chain_transid_idx, selected_available_transid_idx):
-        self.set_list_data(self.lstchain, transids)
-        self.set_list_selected_index(self.lstchain, selected_chain_transid_idx)
-        self.set_list_selected_index(self.lstavailable, selected_available_transid_idx)
-
-    def get_selected_chain_transid(self):
-        return self.get_list_selected_item(self.lstchain)
-
-    def get_sourcestr(self):
-        return self.txtsourcestr.get()
-
-    def present_resultstr(self, s):
-        self.resultstr.set(s)
-
-    def on_empty_sourcestr_input(self):
-        self.show_info('Enter a source string, please.')
-        self.txtsourcestr.focus_set()
-
-    def on_empty_chain_input(self):
-        self.show_info('Specify the transformer chain, please.')
-
-    def set_list_data(self, lstbox, items):
-        lstbox.delete(0, END)
-        for item in items:
-            lstbox.insert(END, item)
-
-    def set_list_selected_index(self, lstbox, index):
-        lstbox.selection_clear(0, END)
-        if index > -1:
-            lstbox.selection_set(index)
-
-    def get_list_selected_item(self, lstbox):
-        return lstbox.get(ACTIVE)
-
-    def show_info(self, info):
-        tkMessageBox.showinfo('Information', info)
-
-    def set_presenter(self, presenter):
-        self.presenter = presenter
+    # def present_available_transids(self, transids, selected_transid_idx):
+    #     self.set_list_data(self.lstavailable, transids)
+    #     self.set_list_selected_index(self.lstavailable, selected_transid_idx)
+    #
+    # def get_selected_available_transid(self):
+    #     return self.get_list_selected_item(self.lstavailable)
+    #
+    # def present_chain_transids(self, transids,
+    #                            selected_chain_transid_idx, selected_available_transid_idx):
+    #     self.set_list_data(self.lstchain, transids)
+    #     self.set_list_selected_index(self.lstchain, selected_chain_transid_idx)
+    #     self.set_list_selected_index(self.lstavailable, selected_available_transid_idx)
+    #
+    # def get_selected_chain_transid(self):
+    #     return self.get_list_selected_item(self.lstchain)
+    #
+    # def get_sourcestr(self):
+    #     return self.txtsourcestr.get()
+    #
+    # def present_resultstr(self, s):
+    #     self.resultstr.set(s)
+    #
+    # def on_empty_sourcestr_input(self):
+    #     self.show_info('Enter a source string, please.')
+    #     self.txtsourcestr.focus_set()
+    #
+    # def on_empty_chain_input(self):
+    #     self.show_info('Specify the transformer chain, please.')
+    #
+    # def set_list_data(self, lstbox, items):
+    #     lstbox.delete(0, END)
+    #     for item in items:
+    #         lstbox.insert(END, item)
+    #
+    # def set_list_selected_index(self, lstbox, index):
+    #     lstbox.selection_clear(0, END)
+    #     if index > -1:
+    #         lstbox.selection_set(index)
+    #
+    # def get_list_selected_item(self, lstbox):
+    #     return lstbox.get(ACTIVE)
+    #
+    # def show_info(self, info):
+    #     tkMessageBox.showinfo('Information', info)
+    #
 
     def add_transformer(self):
         self.presenter.add_transformer()
 
-    def remove_transformer(self):
-        self.presenter.remove_transformer()
+    def remove_transformer(self): pass
+        # self.presenter.remove_transformer()
 
-    def remove_all_transformers(self):
-        self.presenter.remove_all_transformers()
+    def remove_all_transformers(self): pass
+        # self.presenter.remove_all_transformers()
 
-    def apply_transformer_chain(self):
-        self.presenter.apply_transformer_chain()
+    def apply_transformer_chain(self): pass
+        # self.presenter.apply_transformer_chain()
 
     def exit(self):
         self.root.destroy()
