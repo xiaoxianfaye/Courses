@@ -40,18 +40,18 @@ class ViewImpl(object):
         centerframe = Frame(self.root)
         centerframe.pack(fill=BOTH, padx=10, pady=10)
 
-        self.init_availableframe(centerframe)
+        self.init_availframe(centerframe)
         self.init_chainframe(centerframe)
         self.init_operbtnsframe(centerframe)
 
-    def init_availableframe(self, parent):
-        availableframe = LabelFrame(parent, text='Available Transformers')
-        availableframe.pack(side=LEFT, padx=5)
-        scrolly = Scrollbar(availableframe)
+    def init_availframe(self, parent):
+        availframe = LabelFrame(parent, text='Available Transformers')
+        availframe.pack(side=LEFT, padx=5)
+        scrolly = Scrollbar(availframe)
         scrolly.pack(side=RIGHT, fill=Y)
-        self.lstavailable = Listbox(availableframe, width=25, yscrollcommand=scrolly.set)
-        self.lstavailable.pack(fill=BOTH)
-        scrolly.config(command=self.lstavailable.yview)
+        self.lstavail = Listbox(availframe, width=25, yscrollcommand=scrolly.set)
+        self.lstavail.pack(fill=BOTH)
+        scrolly.config(command=self.lstavail.yview)
 
     def init_chainframe(self, parent):
         chainframe = LabelFrame(parent, text='Transformer Chain')
@@ -87,6 +87,24 @@ class ViewImpl(object):
 
         Button(btnsframe, text='Apply', width=10, command=self.apply_transformer_chain).pack(side=LEFT, padx=5)
         Button(btnsframe, text='Exit', width=10, command=self.exit).pack(side=LEFT, padx=5)
+
+    def set_list_data(self, lstbox, items):
+        lstbox.delete(0, END)
+        for item in items:
+            lstbox.insert(END, item)
+
+    def set_list_selected_index(self, lstbox, index):
+        lstbox.selection_clear(0, END)
+        lstbox.selection_set(index)
+
+    def get_list_selected_item(self, lstbox):
+        return lstbox.selection_get()
+
+    def get_source_str(self):
+        return self.txtsourcestr.get()
+
+    def set_result_str(self, s):
+        self.resultstr.set(s)
 
     def add_transformer(self): pass
 
