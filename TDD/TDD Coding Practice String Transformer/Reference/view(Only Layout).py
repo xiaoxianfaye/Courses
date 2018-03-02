@@ -88,17 +88,21 @@ class ViewImpl(object):
         Button(btnsframe, text='Apply', width=10, command=self.apply_transformer_chain).pack(side=LEFT, padx=5)
         Button(btnsframe, text='Exit', width=10, command=self.exit).pack(side=LEFT, padx=5)
 
-    def set_list_data(self, lstbox, items):
+    @staticmethod
+    def set_list_data(lstbox, items):
         lstbox.delete(0, END)
         for item in items:
             lstbox.insert(END, item)
 
-    def set_list_selected_index(self, lstbox, index):
+    @staticmethod
+    def set_list_selected_index(lstbox, index):
         lstbox.selection_clear(0, END)
         lstbox.selection_set(index)
 
-    def get_list_selected_item(self, lstbox):
-        return lstbox.selection_get()
+    @staticmethod
+    def get_list_selected_item(lstbox):
+        selected_index = lstbox.curselection()
+        return lstbox.get(selected_index) if selected_index else None
 
     def get_source_str(self):
         return self.txtsourcestr.get()
