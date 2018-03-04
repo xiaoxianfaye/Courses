@@ -1,0 +1,5 @@
+UPPER_TRANS = 'Upper'
+LOWER_TRANS = 'Lower'
+TRIM_PREFIX_SPACES_TRANS = 'TrimPrefixSpaces'
+
+NONE_SELECTED_INDEX = -1
