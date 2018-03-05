@@ -3,6 +3,7 @@ class ValidatingResult(object):
     VRFR_ADD_ALREADY_EXISTED_IN_CHAIN_TRANS = 'validating_result_failed_reason_add_already_existed_in_chain_trans'
     VRFR_CHAIN_TRANS_NOT_SPECIFIED = 'validating_result_failed_reason_chain_trans_not_specified'
     VRFR_CHAIN_EMPTY = 'validating_result_failed_reason_chain_empty'
+    VRFR_SOURCE_STR_EMPTY = 'validating_result_failed_reason_source_str_empty'
 
     def __init__(self, is_succeeded, failed_reason=None):
         self.is_succeeded = is_succeeded

@@ -104,11 +104,13 @@ class ViewImpl(object):
         selected_index = lstbox.curselection()
         return lstbox.get(selected_index) if selected_index else None
 
-    def get_source_str(self):
-        return self.txtsourcestr.get()
+    @staticmethod
+    def get_entry_txt(entry):
+        return entry.get()
 
-    def set_result_str(self, s):
-        self.resultstr.set(s)
+    @staticmethod
+    def set_entry_txt(strvar, s):
+        strvar.set(s)
 
     def add_transformer(self): pass
 

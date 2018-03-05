@@ -21,6 +21,12 @@ class View(object):
 
     def notify_chain_empty(self): pass
 
+    def get_source_str(self): pass
+
+    def present_result_str(self, s): pass
+
+    def notify_source_str_empty(self): pass
+
 
 from Tkinter import *
 import tkMessageBox
@@ -133,11 +139,13 @@ class ViewImpl(View):
     def show_info(info):
         tkMessageBox.showinfo('Information', info)
 
-    def get_source_str(self):
-        return self.txtsourcestr.get()
+    @staticmethod
+    def get_entry_txt(entry):
+        return entry.get()
 
-    def set_result_str(self, s):
-        self.resultstr.set(s)
+    @staticmethod
+    def set_entry_txt(strvar, s):
+        strvar.set(s)
 
     def add_transformer(self):
         self.presenter.add_trans()
@@ -145,9 +153,11 @@ class ViewImpl(View):
     def remove_transformer(self):
         self.presenter.remove_trans()
 
-    def remove_all_transformers(self): pass
+    def remove_all_transformers(self):
+        self.presenter.remove_all_transes()
 
-    def apply_transformer_chain(self): pass
+    def apply_transformer_chain(self):
+        self.presenter.apply_trans_chain()
 
     def exit(self):
         self.root.destroy()
@@ -195,6 +205,20 @@ class ViewImpl(View):
     # Override
     def notify_chain_empty(self):
         ViewImpl.show_info('Specify the transformer chain, please.')
+
+    # Override
+    def get_source_str(self):
+        return ViewImpl.get_entry_txt(self.txtsourcestr)
+
+    # Override
+    def present_result_str(self, s):
+        ViewImpl.set_entry_txt(self.resultstr, s)
+
+    # Override
+    def notify_source_str_empty(self):
+        ViewImpl.show_info('Specify the source string, please.')
+        self.txtsourcestr.focus_set()
+
 
 from businesslogic import BusinessLogicImpl
 from presenter import Presenter

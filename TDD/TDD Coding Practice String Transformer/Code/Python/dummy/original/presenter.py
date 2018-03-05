@@ -44,6 +44,25 @@ class Presenter(object):
         self.view.set_avail_selected_index(self.avail_selected_index)
         self.view.set_chain_selected_index(self.chain_selected_index)
 
+    def remove_all_transes(self):
+        validating_result = self.validate_remove_all_transes()
+        if validating_result.is_succeeded:
+            del self.chain_transes[:]
+
+        self.update_chain_selected_index_for_remove_all()
+        self.update_avail_selected_index_for_remove_all(validating_result.failed_reason)
+
+        self.view.present_chain_transes(self.chain_transes)
+        self.view.set_chain_selected_index(self.chain_selected_index)
+        self.view.set_avail_selected_index(self.avail_selected_index)
+
+    def apply_trans_chain(self):
+        source_str = self.view.get_source_str()
+
+        validating_result = self.validate_apply_trans_chain(source_str)
+        if validating_result.is_succeeded:
+            self.view.present_result_str(self.businesslogic.transform(source_str, self.chain_transes))
+
     def validate_add_trans(self, avail_selected_trans):
         param_validating_rules = [ParamValidatingRule(avail_selected_trans,
                                                       Presenter.trans_not_specified,
@@ -75,7 +94,7 @@ class Presenter(object):
 
     def validate_remove_trans(self, chain_selected_trans):
         param_validating_rules = [ParamValidatingRule(self.chain_transes,
-                                                      Presenter.not_empty_list,
+                                                      Presenter.empty_list,
                                                       self.view.notify_chain_empty,
                                                       ValidatingResult.VRFR_CHAIN_EMPTY),
                                   ParamValidatingRule(chain_selected_trans,
@@ -111,6 +130,29 @@ class Presenter(object):
 
         self.avail_selected_index = self.avail_transes.index(chain_selected_trans)
 
+    def validate_remove_all_transes(self):
+        param_validating_rules = [ParamValidatingRule(self.chain_transes,
+                                                      Presenter.empty_list,
+                                                      self.view.notify_chain_empty,
+                                                      ValidatingResult.VRFR_CHAIN_EMPTY)]
+        return Validator.validate(param_validating_rules)
+
+    def update_chain_selected_index_for_remove_all(self):
+        self.chain_selected_index = NONE_SELECTED_INDEX
+
+    def update_avail_selected_index_for_remove_all(self, validating_result_failed_reason):
+        if validating_result_failed_reason == ValidatingResult.VRFR_CHAIN_EMPTY:
+            return
+
+        self.avail_selected_index = 0
+
+    def validate_apply_trans_chain(self, source_str):
+        param_validating_rules = [ParamValidatingRule(source_str,
+                                                      Presenter.empty_str,
+                                                      self.view.notify_source_str_empty,
+                                                      ValidatingResult.VRFR_CHAIN_EMPTY)]
+        return Validator.validate(param_validating_rules)
+
     def already_existed_in_chain(self, trans):
         return trans in self.chain_transes
 
@@ -123,5 +165,9 @@ class Presenter(object):
         return trans == None
 
     @staticmethod
-    def not_empty_list(lst):
+    def empty_list(lst):
         return lst == []
+
+    @staticmethod
+    def empty_str(s):
+        return s == ''
