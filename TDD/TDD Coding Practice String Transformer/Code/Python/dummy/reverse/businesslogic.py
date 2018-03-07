@@ -10,7 +10,8 @@ class BusinessLogicImpl(BusinessLogic):
     TRANS_FUNC_MAP = {
         UPPER_TRANS:lambda s: BusinessLogicImpl.upper(s),
         LOWER_TRANS:lambda s: BusinessLogicImpl.lower(s),
-        TRIM_PREFIX_SPACES_TRANS:lambda s: BusinessLogicImpl.trim_prefix_spaces(s)}
+        TRIM_PREFIX_SPACES_TRANS:lambda s: BusinessLogicImpl.trim_prefix_spaces(s),
+        REVERSE_TRANS:lambda s: BusinessLogicImpl.reverse(s)}
 
     # Override
     def get_all_transes(self):
@@ -34,3 +35,7 @@ class BusinessLogicImpl(BusinessLogic):
     @staticmethod
     def trim_prefix_spaces(s):
         return s.lstrip()
+
+    @staticmethod
+    def reverse(s):
+        return s[::-1]
