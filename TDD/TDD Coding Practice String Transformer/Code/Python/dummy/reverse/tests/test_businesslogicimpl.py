@@ -24,7 +24,7 @@ class TestBusinessLogicImpl(unittest.TestCase):
         self.assertEquals('Hello, world.  ', self.impl.transform('Hello, world.  ', [TRIM_PREFIX_SPACES_TRANS]))
 
     def test_transform_reverse(self):
-        self.assertEquals('  .dlrow ,olleH  ', self.impl.transform("  Hello, world.  ", [REVERSE_TRANS]))
+        self.assertEquals('  .dlrow ,olleH  ', self.impl.transform('  Hello, world.  ', [REVERSE_TRANS]))
 
     def test_transform(self):
         self.assertEquals("hello, world.  ",
