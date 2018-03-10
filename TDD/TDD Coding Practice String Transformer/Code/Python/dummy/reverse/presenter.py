@@ -13,6 +13,7 @@ class Presenter(object):
         self.chain_selected_index = NONE_SELECTED_INDEX
         self.avail_transes = None
         self.chain_transes = []
+        self.result_str = None
 
     def init(self):
         self.avail_transes = self.businesslogic.get_all_transes()
@@ -193,7 +194,8 @@ class Presenter(object):
 
     def update_presenter_data_for_apply(self, source_str, validating_result):
         if validating_result.is_succeeded:
-            self.view.present_result_str(self.businesslogic.transform(source_str, self.chain_transes))
+            self.result_str = self.businesslogic.transform(source_str, self.chain_transes)
+
         self.update_avail_selected_index_for_apply(validating_result.failed_reason)
 
     def update_avail_selected_index_for_apply(self, validating_result_failed_reason):
@@ -201,6 +203,7 @@ class Presenter(object):
             self.avail_selected_index = 0
 
     def present_view_data_for_apply(self):
+        self.view.present_result_str(self.result_str)
         self.view.set_avail_selected_index(self.avail_selected_index)
 
     def already_existed_in_chain(self, trans):

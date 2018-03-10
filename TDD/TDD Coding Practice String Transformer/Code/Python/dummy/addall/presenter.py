@@ -21,13 +21,15 @@ class Presenter(object):
         self.view.set_avail_selected_index(self.avail_selected_index)
 
     def _oper_trans(self, oper_data):
-        if oper_data.collect_view_data:
+        if oper_data.collect_view_data and oper_data.build_param_validating_rules:
             view_data = oper_data.collect_view_data()
             validating_result = Presenter.validate(oper_data.build_param_validating_rules(view_data))
             oper_data.update_presenter_data(view_data, validating_result)
-        else:
+        elif not oper_data.collect_view_data and oper_data.build_param_validating_rules:
             validating_result = Presenter.validate(oper_data.build_param_validating_rules())
             oper_data.update_presenter_data(validating_result)
+        else:
+            oper_data.update_presenter_data()
 
         oper_data.present_view_data()
 
@@ -150,7 +152,7 @@ class Presenter(object):
 
     def update_presenter_data_for_remove_all(self, validating_result):
         if validating_result.is_succeeded:
-            del self.chain_transes[:]
+            self.clear_chain_transes()
 
         self.update_chain_selected_index_for_remove_all()
         self.update_avail_selected_index_for_remove_all(validating_result.failed_reason)
@@ -206,8 +208,35 @@ class Presenter(object):
         self.view.present_result_str(self.result_str)
         self.view.set_avail_selected_index(self.avail_selected_index)
 
+    def add_all_transes(self):
+        self._oper_trans(OperData(None,
+                                  None,
+                                  self.update_presenter_data_for_add_all,
+                                  self.present_view_data_for_add_all))
+
+    def update_presenter_data_for_add_all(self):
+        self.clear_chain_transes()
+        self.chain_transes.extend(self.avail_transes)
+
+        self.update_chain_selected_index_for_add_all()
+        self.update_avail_selected_index_for_add_all()
+
+    def update_chain_selected_index_for_add_all(self):
+        self.chain_selected_index = len(self.chain_transes) - 1
+
+    def update_avail_selected_index_for_add_all(self):
+        self.avail_selected_index = 0
+
+    def present_view_data_for_add_all(self):
+        self.view.present_chain_transes(self.chain_transes)
+        self.view.set_avail_selected_index(self.avail_selected_index)
+        self.view.set_chain_selected_index(self.chain_selected_index)
+
     def already_existed_in_chain(self, trans):
         return trans in self.chain_transes
+
+    def clear_chain_transes(self):
+        del self.chain_transes[:]
 
     @staticmethod
     def is_last_index(index, lst):
