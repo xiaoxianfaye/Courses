@@ -1,12 +1,27 @@
 class View(object):
+    def set_presenter(self, presenter): pass
+
     def on_init(self, data): pass
+
+    def collect_add_trans_data(self): pass
+
+    def on_add_trans(self, data): pass
+
+    def on_validating_failed(self, data): pass
 
 
 from Tkinter import *
+import tkMessageBox
 
 from interaction import *
+from validator import ValidatingResult
 
 class ViewImpl(object):
+    VRFR_TIP_MAP = {
+        ValidatingResult.VRFR_ADD_ALREADY_EXISTED_IN_CHAIN_TRANS:
+            'The transformer to be added has been already existed in the chain.'
+    }
+
     def __init__(self):
         self.root = Tk()
         self.root.title('String Transformer')
@@ -118,7 +133,8 @@ class ViewImpl(object):
     def set_entry_txt(strvar, s):
         strvar.set(s)
 
-    def add_transformer(self): pass
+    def add_transformer(self):
+        self.presenter.add_trans()
 
     def remove_transformer(self): pass
 
@@ -130,9 +146,27 @@ class ViewImpl(object):
         self.root.destroy()
 
     # Override
+    def set_presenter(self, presenter):
+        self.presenter = presenter
+
+    # Override
     def on_init(self, data):
         ViewImpl.set_list_data(self.lstavail, data[AVAIL_TRANSES])
         ViewImpl.set_list_selected_index(self.lstavail, data[AVAIL_SELECTED_INDEX])
+
+    # Override
+    def collect_add_trans_data(self):
+        return {AVAIL_SELECTED_TRANS:ViewImpl.get_list_selected_item(self.lstavail)}
+
+    # Override
+    def on_add_trans(self, data):
+        ViewImpl.set_list_data(self.lstchain, data[CHAIN_TRANSES])
+        ViewImpl.set_list_selected_index(self.lstchain, data[CHAIN_SELECTED_INDEX])
+        ViewImpl.set_list_selected_index(self.lstavail, data[AVAIL_SELECTED_INDEX])
+
+    # Override
+    def on_validating_failed(self, data):
+        tkMessageBox.showinfo('Information', ViewImpl.VRFR_TIP_MAP[data])
 
 
 from businesslogic import BusinessLogicImpl
