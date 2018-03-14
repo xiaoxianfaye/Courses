@@ -7,6 +7,16 @@ class View(object):
 
     def on_add_trans(self, data): pass
 
+    def collect_remove_trans_data(self): pass
+
+    def on_remove_trans(self, data): pass
+
+    def on_remove_all_transes(self, data): pass
+
+    def collect_apply_trans_chain_data(self): pass
+
+    def on_apply_trans_chain(self, data): pass
+
     def on_validating_failed(self, data): pass
 
 
@@ -18,8 +28,14 @@ from validator import ValidatingResult
 
 class ViewImpl(object):
     VRFR_TIP_MAP = {
+        ValidatingResult.VRFR_AVAIL_TRANS_NOT_SPECIFIED:
+            'Specify an available transformer, please.',
         ValidatingResult.VRFR_ADD_ALREADY_EXISTED_IN_CHAIN_TRANS:
-            'The transformer to be added has been already existed in the chain.'
+            'The transformer to be added has been already existed in the chain.',
+        ValidatingResult.VRFR_CHAIN_TRANS_NOT_SPECIFIED:
+            'Specify a transformer from the chain, please.',
+        ValidatingResult.VRFR_CHAIN_EMPTY:
+            'Specify the transformer chain, please.'
     }
 
     def __init__(self):
@@ -136,9 +152,11 @@ class ViewImpl(object):
     def add_transformer(self):
         self.presenter.add_trans()
 
-    def remove_transformer(self): pass
+    def remove_transformer(self):
+        self.presenter.remove_trans()
 
-    def remove_all_transformers(self): pass
+    def remove_all_transformers(self):
+        self.presenter.remove_all_transes()
 
     def apply_transformer_chain(self): pass
 
@@ -160,6 +178,22 @@ class ViewImpl(object):
 
     # Override
     def on_add_trans(self, data):
+        ViewImpl.set_list_data(self.lstchain, data[CHAIN_TRANSES])
+        ViewImpl.set_list_selected_index(self.lstchain, data[CHAIN_SELECTED_INDEX])
+        ViewImpl.set_list_selected_index(self.lstavail, data[AVAIL_SELECTED_INDEX])
+
+    # Override
+    def collect_remove_trans_data(self):
+        return {CHAIN_SELECTED_TRANS:ViewImpl.get_list_selected_item(self.lstchain)}
+
+    # Override
+    def on_remove_trans(self, data):
+        ViewImpl.set_list_data(self.lstchain, data[CHAIN_TRANSES])
+        ViewImpl.set_list_selected_index(self.lstavail, data[AVAIL_SELECTED_INDEX])
+        ViewImpl.set_list_selected_index(self.lstchain, data[CHAIN_SELECTED_INDEX])
+
+    # Override
+    def on_remove_all_transes(self, data):
         ViewImpl.set_list_data(self.lstchain, data[CHAIN_TRANSES])
         ViewImpl.set_list_selected_index(self.lstchain, data[CHAIN_SELECTED_INDEX])
         ViewImpl.set_list_selected_index(self.lstavail, data[AVAIL_SELECTED_INDEX])

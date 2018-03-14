@@ -40,11 +40,11 @@ class TestPresenter(unittest.TestCase):
         self.assertEquals(expected, self.viewstub.get_on_add_trans_data())
 
     def test_add_already_existed_in_chain_trans(self):
-        self.viewstub.set_add_trans_data({AVAIL_SELECTED_TRANS: UPPER_TRANS})
+        self.viewstub.set_add_trans_data({AVAIL_SELECTED_TRANS:UPPER_TRANS})
         self.presenter.add_trans()
-        self.viewstub.set_add_trans_data({AVAIL_SELECTED_TRANS: LOWER_TRANS})
+        self.viewstub.set_add_trans_data({AVAIL_SELECTED_TRANS:LOWER_TRANS})
         self.presenter.add_trans()
-        self.viewstub.set_add_trans_data({AVAIL_SELECTED_TRANS: LOWER_TRANS})
+        self.viewstub.set_add_trans_data({AVAIL_SELECTED_TRANS:LOWER_TRANS})
 
         self.presenter.add_trans()
 
@@ -55,10 +55,134 @@ class TestPresenter(unittest.TestCase):
                     AVAIL_SELECTED_INDEX:1}
         self.assertEquals(expected, self.viewstub.get_on_add_trans_data())
 
+    def test_add_trans_but_avail_trans_not_specified(self):
+        self.viewstub.set_add_trans_data({AVAIL_SELECTED_TRANS:UPPER_TRANS})
+        self.presenter.add_trans()
+        self.viewstub.set_add_trans_data({AVAIL_SELECTED_TRANS:LOWER_TRANS})
+        self.presenter.add_trans()
+        self.viewstub.set_add_trans_data({AVAIL_SELECTED_TRANS:None})
+
+        self.presenter.add_trans()
+
+        self.assertEquals(ValidatingResult.VRFR_AVAIL_TRANS_NOT_SPECIFIED,
+                          self.viewstub.get_on_validating_failed_data())
+        expected = {CHAIN_TRANSES:[UPPER_TRANS, LOWER_TRANS],
+                    CHAIN_SELECTED_INDEX:1,
+                    AVAIL_SELECTED_INDEX:0}
+        self.assertEquals(expected, self.viewstub.get_on_add_trans_data())
+
+    def test_remove_not_the_last_trans_when_chain_has_more_than_one_transes(self):
+        self.viewstub.set_add_trans_data({AVAIL_SELECTED_TRANS:UPPER_TRANS})
+        self.presenter.add_trans()
+        self.viewstub.set_add_trans_data({AVAIL_SELECTED_TRANS:LOWER_TRANS})
+        self.presenter.add_trans()
+        self.viewstub.set_add_trans_data({AVAIL_SELECTED_TRANS:TRIM_PREFIX_SPACES_TRANS})
+        self.presenter.add_trans()
+        self.viewstub.set_remove_trans_data({CHAIN_SELECTED_TRANS:LOWER_TRANS})
+
+        self.presenter.remove_trans()
+
+        expected = {CHAIN_TRANSES:[UPPER_TRANS, TRIM_PREFIX_SPACES_TRANS],
+                    AVAIL_SELECTED_INDEX:1,
+                    CHAIN_SELECTED_INDEX:1}
+        self.assertEquals(expected, self.viewstub.get_on_remove_trans_data())
+
+    def test_remove_the_last_trans_when_chain_has_more_than_one_transes(self):
+        self.viewstub.set_add_trans_data({AVAIL_SELECTED_TRANS:UPPER_TRANS})
+        self.presenter.add_trans()
+        self.viewstub.set_add_trans_data({AVAIL_SELECTED_TRANS:LOWER_TRANS})
+        self.presenter.add_trans()
+        self.viewstub.set_add_trans_data({AVAIL_SELECTED_TRANS:TRIM_PREFIX_SPACES_TRANS})
+        self.presenter.add_trans()
+        self.viewstub.set_remove_trans_data({CHAIN_SELECTED_TRANS:TRIM_PREFIX_SPACES_TRANS})
+
+        self.presenter.remove_trans()
+
+        expected = {CHAIN_TRANSES:[UPPER_TRANS, LOWER_TRANS],
+                    AVAIL_SELECTED_INDEX:2,
+                    CHAIN_SELECTED_INDEX:0}
+        self.assertEquals(expected, self.viewstub.get_on_remove_trans_data())
+
+    def test_remove_a_trans_when_chain_has_only_one_transes(self):
+        self.viewstub.set_add_trans_data({AVAIL_SELECTED_TRANS:UPPER_TRANS})
+        self.presenter.add_trans()
+        self.viewstub.set_remove_trans_data({CHAIN_SELECTED_TRANS:UPPER_TRANS})
+
+        self.presenter.remove_trans()
+
+        expected = {CHAIN_TRANSES:[],
+                    AVAIL_SELECTED_INDEX:0,
+                    CHAIN_SELECTED_INDEX:NONE_SELECTED_INDEX}
+        self.assertEquals(expected, self.viewstub.get_on_remove_trans_data())
+
+    def test_remove_trans_when_chain_is_not_empty_but_chain_trans_not_specified(self):
+        self.viewstub.set_add_trans_data({AVAIL_SELECTED_TRANS:UPPER_TRANS})
+        self.presenter.add_trans()
+        self.viewstub.set_remove_trans_data({CHAIN_SELECTED_TRANS:None})
+
+        self.presenter.remove_trans()
+
+        self.assertEquals(ValidatingResult.VRFR_CHAIN_TRANS_NOT_SPECIFIED,
+                          self.viewstub.get_on_validating_failed_data())
+        expected = {CHAIN_TRANSES:[UPPER_TRANS],
+                    AVAIL_SELECTED_INDEX:1,
+                    CHAIN_SELECTED_INDEX:0}
+        self.assertEquals(expected, self.viewstub.get_on_remove_trans_data())
+
+    def test_remove_trans_when_chain_is_empty(self):
+        self.presenter.remove_trans()
+
+        self.assertEquals(ValidatingResult.VRFR_CHAIN_EMPTY,
+                          self.viewstub.get_on_validating_failed_data())
+        expected = {CHAIN_TRANSES:[],
+                    AVAIL_SELECTED_INDEX:0,
+                    CHAIN_SELECTED_INDEX:NONE_SELECTED_INDEX}
+        self.assertEquals(expected, self.viewstub.get_on_remove_trans_data())
+
+    def test_remove_all_transes_when_chain_is_not_empty(self):
+        self.viewstub.set_add_trans_data({AVAIL_SELECTED_TRANS:UPPER_TRANS})
+        self.presenter.add_trans()
+        self.viewstub.set_add_trans_data({AVAIL_SELECTED_TRANS:LOWER_TRANS})
+        self.presenter.add_trans()
+
+        self.presenter.remove_all_transes()
+
+        expected = {CHAIN_TRANSES:[],
+                    AVAIL_SELECTED_INDEX:0,
+                    CHAIN_SELECTED_INDEX:NONE_SELECTED_INDEX}
+        self.assertEquals(expected, self.viewstub.get_on_remove_all_transes_data())
+
+    def test_remove_all_transes_when_chain_is_empty(self):
+        self.viewstub.set_add_trans_data({AVAIL_SELECTED_TRANS:LOWER_TRANS})
+        self.presenter.add_trans()
+        self.viewstub.set_remove_trans_data({CHAIN_SELECTED_TRANS:LOWER_TRANS})
+        self.presenter.remove_trans()
+
+        self.presenter.remove_all_transes()
+
+        self.assertEquals(ValidatingResult.VRFR_CHAIN_EMPTY,
+                          self.viewstub.get_on_validating_failed_data())
+        expected = {CHAIN_TRANSES:[],
+                    AVAIL_SELECTED_INDEX:1,
+                    CHAIN_SELECTED_INDEX:NONE_SELECTED_INDEX}
+        self.assertEquals(expected, self.viewstub.get_on_remove_all_transes_data())
+
+    def test_apply_trans_chain(self):
+        self.viewstub.set_add_trans_data({AVAIL_SELECTED_TRANS:UPPER_TRANS})
+        self.presenter.add_trans()
+        self.viewstub.set_apply_trans_chain_data({SOURCE_STR:'Hello, world.'})
+
+        self.presenter.apply_trans_chain()
+
+        self.assertEquals({RESULT_STR:'HELLO, WORLD.'}, self.viewstub.get_on_apply_trans_chain_data())
+
 
 from view import View
 
 class ViewStub(View):
+    def __init__(self):
+        self.remove_trans_data = None
+
     # Override
     def set_presenter(self, presenter): pass
 
@@ -89,6 +213,41 @@ class ViewStub(View):
 
     def get_on_validating_failed_data(self):
         return self.on_validating_failed_data
+
+    # Override
+    def collect_remove_trans_data(self):
+        return self.remove_trans_data
+
+    def set_remove_trans_data(self, data):
+        self.remove_trans_data = data
+
+    # Override
+    def on_remove_trans(self, data):
+        self.on_remove_trans_data = data
+
+    def get_on_remove_trans_data(self):
+        return self.on_remove_trans_data
+
+    # Override
+    def on_remove_all_transes(self, data):
+        self.on_remove_all_transes_data = data
+
+    def get_on_remove_all_transes_data(self):
+        return self.on_remove_all_transes_data
+
+    # Override
+    def collect_apply_trans_chain_data(self):
+        return self.apply_trans_chain_data
+
+    def set_apply_trans_chain_data(self, data):
+        self.apply_trans_chain_data = data
+
+    # Override
+    def on_apply_trans_chain(self, data):
+        self.on_apply_trans_chain_data = data
+
+    def get_on_apply_trans_chain_data(self):
+        return self.on_apply_trans_chain_data
 
 
 from businesslogic import BusinessLogic
