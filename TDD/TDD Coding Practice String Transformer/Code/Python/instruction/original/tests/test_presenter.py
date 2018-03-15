@@ -208,13 +208,6 @@ class ViewStub(View):
         return self.on_add_trans_data
 
     # Override
-    def on_validating_failed(self, data):
-        self.on_validating_failed_data = data
-
-    def get_on_validating_failed_data(self):
-        return self.on_validating_failed_data
-
-    # Override
     def collect_remove_trans_data(self):
         return self.remove_trans_data
 
@@ -248,6 +241,13 @@ class ViewStub(View):
 
     def get_on_apply_trans_chain_data(self):
         return self.on_apply_trans_chain_data
+
+    # Override
+    def on_validating_failed(self, data):
+        self.on_validating_failed_data = data
+
+    def get_on_validating_failed_data(self):
+        return self.on_validating_failed_data
 
 
 from businesslogic import BusinessLogic
