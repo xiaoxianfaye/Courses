@@ -216,6 +216,14 @@ class TestPresenter(unittest.TestCase):
                           self.viewstub.get_on_validating_failed_data())
         self.assertEquals({AVAIL_SELECTED_INDEX:0, RESULT_STR: ''}, self.viewstub.get_on_apply_trans_chain_data())
 
+    def test_add_all_transes(self):
+        self.presenter.add_all_transes()
+
+        expected = {CHAIN_TRANSES:[UPPER_TRANS, LOWER_TRANS, TRIM_PREFIX_SPACES_TRANS],
+                    AVAIL_SELECTED_INDEX:0,
+                    CHAIN_SELECTED_INDEX:2}
+        self.assertEquals(expected, self.viewstub.get_on_add_all_transes_data())
+
 
 from view import View
 
@@ -282,6 +290,13 @@ class ViewStub(View):
 
     def get_on_apply_trans_chain_data(self):
         return self.on_apply_trans_chain_data
+
+    # Override
+    def on_add_all_transes(self, data):
+        self.on_add_all_transes_data = data
+
+    def get_on_add_all_transes_data(self):
+        return self.on_add_all_transes_data
 
     # Override
     def on_validating_failed(self, data):

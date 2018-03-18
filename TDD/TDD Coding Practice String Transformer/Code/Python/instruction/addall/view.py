@@ -17,6 +17,8 @@ class View(object):
 
     def on_apply_trans_chain(self, data): pass
 
+    def on_add_all_transes(self, data): pass
+
     def on_validating_failed(self, data): pass
 
 
@@ -103,6 +105,7 @@ class ViewImpl(object):
         Button(operbtnsframe, text='Add >>', width=10, command=self.add_transformer).pack(pady=10)
         Button(operbtnsframe, text='Remove <<', width=10, command=self.remove_transformer).pack(pady=10)
         Button(operbtnsframe, text='Remove All', width=10, command=self.remove_all_transformers).pack(pady=10)
+        Button(operbtnsframe, text='Add All', width=10, command=self.add_all_transformers).pack(pady=10)
 
     def init_bottomframe(self):
         bottomframe = Frame(self.root)
@@ -155,6 +158,9 @@ class ViewImpl(object):
     def apply_transformer_chain(self):
         self.presenter.apply_trans_chain()
 
+    def add_all_transformers(self):
+        self.presenter.add_all_transes()
+
     def exit(self):
         self.root.destroy()
 
@@ -201,6 +207,12 @@ class ViewImpl(object):
     def on_apply_trans_chain(self, data):
         ViewImpl.set_entry_txt(self.resultstr, data[RESULT_STR])
         ViewImpl.set_list_selected_index(self.lstavail, data[AVAIL_SELECTED_INDEX])
+
+    # Override
+    def on_add_all_transes(self, data):
+        ViewImpl.set_list_data(self.lstchain, data[CHAIN_TRANSES])
+        ViewImpl.set_list_selected_index(self.lstavail, data[AVAIL_SELECTED_INDEX])
+        ViewImpl.set_list_selected_index(self.lstchain, data[CHAIN_SELECTED_INDEX])
 
     ACTION_SHOW_INFO = 'show_info'
     ACTION_FOCUS_AND_SELECT_ALL_SOURCE_STR = 'focus_and_select_all_source_str'
