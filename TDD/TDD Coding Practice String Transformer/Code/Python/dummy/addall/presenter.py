@@ -195,8 +195,8 @@ class Presenter(object):
                                     ValidatingResult.VRFR_CHAIN_EMPTY)]
 
     def update_presenter_data_for_apply(self, source_str, validating_result):
-        if validating_result.is_succeeded:
-            self.result_str = self.businesslogic.transform(source_str, self.chain_transes)
+        self.result_str = self.businesslogic.transform(source_str, self.chain_transes) \
+            if validating_result.is_succeeded else ''
 
         self.update_avail_selected_index_for_apply(validating_result.failed_reason)
 

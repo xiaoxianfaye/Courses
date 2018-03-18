@@ -167,7 +167,7 @@ class TestPresenter(unittest.TestCase):
         self.presenter.apply_trans_chain()
 
         self.assertTrue(self.viewstub.is_source_str_empty_notified())
-        self.assertIsNone(self.viewstub.get_result_str())
+        self.assertEquals('', self.viewstub.get_result_str())
 
     def test_apply_trans_chain_when_source_str_is_illegal(self):
         self.viewstub.set_avail_selected_trans(UPPER_TRANS)
@@ -177,7 +177,7 @@ class TestPresenter(unittest.TestCase):
         self.presenter.apply_trans_chain()
 
         self.assertTrue(self.viewstub.is_source_str_illegal_notified())
-        self.assertIsNone(self.viewstub.get_result_str())
+        self.assertEquals('', self.viewstub.get_result_str())
 
     def test_apply_trans_chain_when_chain_is_empty(self):
         self.viewstub.set_avail_selected_trans(LOWER_TRANS)
@@ -189,7 +189,7 @@ class TestPresenter(unittest.TestCase):
         self.presenter.apply_trans_chain()
 
         self.assertTrue(self.viewstub.is_chain_empty_notified())
-        self.assertIsNone(self.viewstub.get_result_str())
+        self.assertEquals('', self.viewstub.get_result_str())
         self.assertEquals(0, self.viewstub.get_avail_selected_index())
 
     def test_add_all_transes(self):
@@ -205,7 +205,6 @@ from view import View
 class ViewStub(View):
     def __init__(self):
         self.chain_selected_trans = None
-        self.result_str = None
 
     # Override
     def set_presenter(self, presenter): pass
