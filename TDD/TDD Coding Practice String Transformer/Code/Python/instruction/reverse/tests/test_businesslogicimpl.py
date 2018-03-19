@@ -30,4 +30,3 @@ class TestBusinessLogicImpl(unittest.TestCase):
         self.assertEquals("hello, world.  ",
                           self.impl.transform('  Hello, world.  ',
                                               [UPPER_TRANS, LOWER_TRANS, TRIM_PREFIX_SPACES_TRANS]))
-

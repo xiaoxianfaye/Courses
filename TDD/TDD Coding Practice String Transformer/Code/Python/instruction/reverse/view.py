@@ -205,7 +205,7 @@ class ViewImpl(object):
     ACTION_SHOW_INFO = 'show_info'
     ACTION_FOCUS_AND_SELECT_ALL_SOURCE_STR = 'focus_and_select_all_source_str'
 
-    VRFR_ACTION_MAP = {
+    VRFR_ACTIONS_MAP = {
         ValidatingResult.VRFR_AVAIL_TRANS_NOT_SPECIFIED:
             [(ACTION_SHOW_INFO, 'Specify an available transformer, please.')],
         ValidatingResult.VRFR_ADD_ALREADY_EXISTED_IN_CHAIN_TRANS:
@@ -224,7 +224,7 @@ class ViewImpl(object):
 
     # Override
     def on_validating_failed(self, data):
-        actions = ViewImpl.VRFR_ACTION_MAP[data]
+        actions = ViewImpl.VRFR_ACTIONS_MAP[data]
         for (action_type, action_param) in actions:
             if action_type == ViewImpl.ACTION_SHOW_INFO:
                 tkMessageBox.showinfo('Information', action_param)
