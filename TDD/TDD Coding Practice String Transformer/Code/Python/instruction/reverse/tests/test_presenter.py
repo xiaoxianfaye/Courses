@@ -214,7 +214,7 @@ class TestPresenter(unittest.TestCase):
 
         self.assertEquals(ValidatingResult.VRFR_CHAIN_EMPTY,
                           self.viewstub.get_on_validating_failed_data())
-        self.assertEquals({AVAIL_SELECTED_INDEX:0, RESULT_STR: ''},
+        self.assertEquals({AVAIL_SELECTED_INDEX:0, RESULT_STR:''},
                           self.viewstub.get_on_apply_trans_chain_data())
 
 
