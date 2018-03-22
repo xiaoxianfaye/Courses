@@ -40,7 +40,7 @@ class ValidatingResult
         NONE,
         AVAIL_TRANS_NOT_SPECIFIED,
         ADD_ALREADY_EXISTED_IN_CHAIN_TRANS
-    };
+    }
 
     private boolean succeeded;
     private FailedReason failedReason;
