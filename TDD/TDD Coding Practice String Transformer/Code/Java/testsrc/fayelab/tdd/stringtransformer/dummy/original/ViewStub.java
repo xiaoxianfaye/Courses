@@ -11,6 +11,13 @@ public class ViewStub implements View
     private int chainSelectedIndex;
     private boolean addAlreadyExistedInChainTransNotified;
     private boolean availTransNotSpecifiedNotified;
+    private String chainSelectedTrans;
+    private boolean chainTransNotSpecifiedNotified;
+    private boolean chainEmptyNotified;
+    private String sourceStr;
+    private String resultStr;
+    private boolean sourceStrEmptyNotified;
+    private boolean sourceStrIllegalNotified;
 
     @Override
     public void setPresenter(Presenter presenter)
@@ -92,5 +99,82 @@ public class ViewStub implements View
     public boolean isAvailTransNotSpecifiedNotified()
     {
         return availTransNotSpecifiedNotified;
+    }
+
+    @Override
+    public String getChainSelectedTrans()
+    {
+        return chainSelectedTrans;
+    }
+
+    public void setChainSelectedTrans(String trans)
+    {
+        chainSelectedTrans = trans;
+    }
+
+    @Override
+    public void notifyChainTransNotSpecified()
+    {
+        chainTransNotSpecifiedNotified = true;
+    }
+
+    public boolean isChainTransNotSpecifiedNotified()
+    {
+        return chainTransNotSpecifiedNotified;
+    }
+
+    @Override
+    public void notifyChainEmpty()
+    {
+        chainEmptyNotified = true;
+    }
+
+    public boolean isChainEmptyNotified()
+    {
+        return chainEmptyNotified;
+    }
+
+    @Override
+    public String getSourceStr()
+    {
+        return sourceStr;
+    }
+
+    public void setSourceStr(String str)
+    {
+        sourceStr = str;
+    }
+
+    public String getResultStr()
+    {
+        return resultStr;
+    }
+
+    @Override
+    public void presentResultStr(String str)
+    {
+        resultStr = str;
+    }
+
+    @Override
+    public void notifySourceStrEmpty()
+    {
+        sourceStrEmptyNotified = true;
+    }
+
+    public boolean isSourceStrEmptyNotified()
+    {
+        return sourceStrEmptyNotified;
+    }
+
+    @Override
+    public void notifySourceStrIllegal()
+    {
+        sourceStrIllegalNotified = true;
+    }
+
+    public boolean isSourceStrIllegalNotified()
+    {
+        return sourceStrIllegalNotified;
     }
 }

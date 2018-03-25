@@ -19,4 +19,18 @@ public interface View
     void notifyAddAlreadyExistedInChainTrans();
 
     void notifyAvailTransNotSpecified();
+
+    String getChainSelectedTrans();
+
+    void notifyChainTransNotSpecified();
+
+    void notifyChainEmpty();
+
+    String getSourceStr();
+
+    void presentResultStr(String str);
+
+    void notifySourceStrEmpty();
+
+    void notifySourceStrIllegal();
 }

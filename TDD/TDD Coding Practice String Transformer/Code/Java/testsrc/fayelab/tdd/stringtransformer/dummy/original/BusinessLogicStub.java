@@ -12,4 +12,10 @@ public class BusinessLogicStub implements BusinessLogic
     {
         return asList(UPPER_TRANS, LOWER_TRANS, TRIM_PREFIX_SPACES_TRANS);
     }
+
+    @Override
+    public String transform(String sourceStr, List<String> transes)
+    {
+        return "HELLO, WORLD.";
+    }
 }

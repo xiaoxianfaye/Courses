@@ -76,6 +76,51 @@ public class ViewImpl extends JFrame implements View
         showInfo("Specify an available transformer, please.");
     }
 
+    @Override
+    public String getChainSelectedTrans()
+    {
+        return lstChain.getSelectedValue();
+    }
+
+    @Override
+    public void notifyChainTransNotSpecified()
+    {
+        showInfo("Specify a transformer from the chain, please.");
+    }
+
+    @Override
+    public void notifyChainEmpty()
+    {
+        showInfo("Specify the transformer chain, please.");
+    }
+
+    @Override
+    public String getSourceStr()
+    {
+        return txtSourceStr.getText();
+    }
+
+    @Override
+    public void presentResultStr(String str)
+    {
+        txtResultStr.setText(str);
+    }
+
+    @Override
+    public void notifySourceStrEmpty()
+    {
+        showInfo("Specify the source string, please.");
+        txtSourceStr.requestFocus();
+    }
+
+    @Override
+    public void notifySourceStrIllegal()
+    {
+        showInfo("Specify the legal source string, please.");
+        txtSourceStr.requestFocus();
+        txtSourceStr.selectAll();
+    }
+
     private void showInfo(String info)
     {
         JOptionPane.showMessageDialog(this, info);
@@ -211,17 +256,17 @@ public class ViewImpl extends JFrame implements View
 
     private void btnRemove_actionPerformed(ActionEvent e)
     {
-
+        presenter.removeTrans();
     }
 
     private void btnRemoveAll_actionPerformed(ActionEvent e)
     {
-
+        presenter.removeAllTranses();
     }
 
     private void btnApply_actionPerformed(ActionEvent e)
     {
-
+        presenter.applyTransChain();
     }
 
     private void btnExit_actionPerformed(ActionEvent e)

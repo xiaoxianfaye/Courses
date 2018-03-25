@@ -39,7 +39,11 @@ class ValidatingResult
     {
         NONE,
         AVAIL_TRANS_NOT_SPECIFIED,
-        ADD_ALREADY_EXISTED_IN_CHAIN_TRANS
+        ADD_ALREADY_EXISTED_IN_CHAIN_TRANS,
+        CHAIN_TRANS_NOT_SPECIFIED,
+        CHAIN_EMPTY,
+        SOURCE_STR_EMPTY,
+        SOURCE_STR_ILLEGAL
     }
 
     private boolean succeeded;
