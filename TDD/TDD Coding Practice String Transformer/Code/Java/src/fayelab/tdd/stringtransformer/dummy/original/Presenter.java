@@ -231,7 +231,7 @@ public class Presenter
                 new ParamValidatingRule<>(sourceStr, Presenter::emptyStr, 
                         view::notifySourceStrEmpty, FailedReason.SOURCE_STR_EMPTY),
                 new ParamValidatingRule<>(sourceStr, Presenter::illegalSourceStr, 
-                        view::notifySourceStrIllegal, FailedReason.SOURCE_STR_EMPTY),
+                        view::notifySourceStrIllegal, FailedReason.SOURCE_STR_ILLEGAL),
                 new ParamValidatingRule<>(chainTranses, Presenter::emptyList, 
                         view::notifyChainEmpty, FailedReason.CHAIN_EMPTY));
     }

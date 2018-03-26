@@ -145,15 +145,15 @@ public class ViewStub implements View
         sourceStr = str;
     }
 
-    public String getResultStr()
-    {
-        return resultStr;
-    }
-
     @Override
     public void presentResultStr(String str)
     {
         resultStr = str;
+    }
+
+    public String getResultStr()
+    {
+        return resultStr;
     }
 
     @Override
