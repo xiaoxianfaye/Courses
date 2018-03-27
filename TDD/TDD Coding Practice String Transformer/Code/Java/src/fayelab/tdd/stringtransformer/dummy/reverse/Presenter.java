@@ -1,4 +1,4 @@
-package fayelab.tdd.stringtransformer.dummy.original;
+package fayelab.tdd.stringtransformer.dummy.reverse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,11 +7,11 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import fayelab.tdd.stringtransformer.dummy.original.ValidatingResult.FailedReason;
+import fayelab.tdd.stringtransformer.dummy.reverse.ValidatingResult.FailedReason;
 
 import static java.util.Arrays.asList;
-import static fayelab.tdd.stringtransformer.dummy.original.Trans.NONE_SELECTED_INDEX;
-import static fayelab.tdd.stringtransformer.dummy.original.Trans.NONE_SELECTED_TRANS;
+import static fayelab.tdd.stringtransformer.dummy.reverse.Trans.NONE_SELECTED_INDEX;
+import static fayelab.tdd.stringtransformer.dummy.reverse.Trans.NONE_SELECTED_TRANS;
 
 public class Presenter
 {
