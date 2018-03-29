@@ -3,7 +3,7 @@ package fayelab.tdd.arithmetic.doublestack.parser;
 import junit.framework.TestCase;
 
 public class ExpressionTest extends TestCase
-{    
+{
     public void test_multidigit_operand()
     {
         Expression expr = new Expression("12");

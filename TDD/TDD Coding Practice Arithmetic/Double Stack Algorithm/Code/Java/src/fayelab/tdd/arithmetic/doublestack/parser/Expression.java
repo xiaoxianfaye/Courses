@@ -55,7 +55,7 @@ class Parser
 
     boolean exprNotEnd()
     {
-        return ctx.curIdx < ctx.expr.length(); 
+        return ctx.curIdx < ctx.expr.length();
     }
 
     String nextItem()
