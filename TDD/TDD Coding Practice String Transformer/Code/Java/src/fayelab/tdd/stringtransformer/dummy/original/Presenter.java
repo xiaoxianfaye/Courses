@@ -12,6 +12,8 @@ import fayelab.tdd.stringtransformer.dummy.original.ValidatingResult.FailedReaso
 import static java.util.Arrays.asList;
 import static fayelab.tdd.stringtransformer.dummy.original.Trans.NONE_SELECTED_INDEX;
 import static fayelab.tdd.stringtransformer.dummy.original.Trans.NONE_SELECTED_TRANS;
+import static fayelab.tdd.stringtransformer.dummy.original.OperData.operData;
+import static fayelab.tdd.stringtransformer.dummy.original.ParamValidatingRule.paramValidatingRule;
 
 public class Presenter
 {
@@ -40,10 +42,10 @@ public class Presenter
 
     public void addTrans()
     {
-        operTrans(new OperData<>(Optional.of(this::collectViewDataForAdd), 
-                                 this::buildParamValidatingRulesForAdd, 
-                                 this::updatePresenterDataForAdd, 
-                                 this::presentViewDataForBuildTransChain));
+        operTrans(operData(Optional.of(this::collectViewDataForAdd), 
+                           this::buildParamValidatingRulesForAdd, 
+                           this::updatePresenterDataForAdd, 
+                           this::presentViewDataForBuildTransChain));
     }
 
     private Optional<String> collectViewDataForAdd()
@@ -55,9 +57,9 @@ public class Presenter
     {
         String availSelectedTrans = viewData.orElse(NONE_SELECTED_TRANS);
         return asList(
-                new ParamValidatingRule<>(availSelectedTrans, Presenter::transNotSpecified, 
+                paramValidatingRule(availSelectedTrans, Presenter::transNotSpecified, 
                         view::notifyAvailTransNotSpecified, FailedReason.AVAIL_TRANS_NOT_SPECIFIED),
-                new ParamValidatingRule<>(availSelectedTrans, this::alreadyExistedInChain, 
+                paramValidatingRule(availSelectedTrans, this::alreadyExistedInChain, 
                         view::notifyAddAlreadyExistedInChainTrans, FailedReason.ADD_ALREADY_EXISTED_IN_CHAIN_TRANS));
     }
 
@@ -103,10 +105,10 @@ public class Presenter
 
     public void removeTrans()
     {
-        operTrans(new OperData<>(Optional.of(this::collectViewDataForRemove), 
-                                 this::buildParamValidatingRulesForRemove, 
-                                 this::updatePresenterDataForRemove, 
-                                 this::presentViewDataForBuildTransChain));
+        operTrans(operData(Optional.of(this::collectViewDataForRemove), 
+                           this::buildParamValidatingRulesForRemove, 
+                           this::updatePresenterDataForRemove, 
+                           this::presentViewDataForBuildTransChain));
     }
 
     private Optional<String> collectViewDataForRemove()
@@ -118,9 +120,9 @@ public class Presenter
     {
         String chainSelectedTrans = viewData.orElse(NONE_SELECTED_TRANS);
         return asList(
-                new ParamValidatingRule<>(chainTranses, Presenter::emptyList, 
+                paramValidatingRule(chainTranses, Presenter::emptyList, 
                         view::notifyChainEmpty, FailedReason.CHAIN_EMPTY),
-                new ParamValidatingRule<>(chainSelectedTrans, Presenter::transNotSpecified, 
+                paramValidatingRule(chainSelectedTrans, Presenter::transNotSpecified, 
                         view::notifyChainTransNotSpecified, FailedReason.CHAIN_TRANS_NOT_SPECIFIED));
     }
 
@@ -177,16 +179,16 @@ public class Presenter
 
     public void removeAllTranses()
     {
-        operTrans(new OperData<>(Optional.empty(), 
-                                 this::buildParamValidatingRulesForRemoveAll, 
-                                 this::updatePresenterDataForRemoveAll, 
-                                 this::presentViewDataForBuildTransChain));
+        operTrans(operData(Optional.empty(), 
+                           this::buildParamValidatingRulesForRemoveAll, 
+                           this::updatePresenterDataForRemoveAll, 
+                           this::presentViewDataForBuildTransChain));
     }
 
     private List<ParamValidatingRule<?>> buildParamValidatingRulesForRemoveAll(Optional<?> emptyViewData)
     {
         return asList(
-                new ParamValidatingRule<>(chainTranses, Presenter::emptyList, 
+                paramValidatingRule(chainTranses, Presenter::emptyList, 
                         view::notifyChainEmpty, FailedReason.CHAIN_EMPTY));
     }
 
@@ -217,10 +219,10 @@ public class Presenter
 
     public void applyTransChain()
     {
-        operTrans(new OperData<>(Optional.of(this::collectViewDataForApply), 
-                                 this::buildParamValidatingRulesForApply, 
-                                 this::updatePresenterDataForApply, 
-                                 this::presentViewDataForApply));
+        operTrans(operData(Optional.of(this::collectViewDataForApply), 
+                           this::buildParamValidatingRulesForApply, 
+                           this::updatePresenterDataForApply, 
+                           this::presentViewDataForApply));
     }
 
     private Optional<String> collectViewDataForApply()
@@ -232,11 +234,11 @@ public class Presenter
     {
         String sourceStr = viewData.get();
         return asList(
-                new ParamValidatingRule<>(sourceStr, Presenter::emptyStr, 
+                paramValidatingRule(sourceStr, Presenter::emptyStr, 
                         view::notifySourceStrEmpty, FailedReason.SOURCE_STR_EMPTY),
-                new ParamValidatingRule<>(sourceStr, Presenter::illegalSourceStr, 
+                paramValidatingRule(sourceStr, Presenter::illegalSourceStr, 
                         view::notifySourceStrIllegal, FailedReason.SOURCE_STR_ILLEGAL),
-                new ParamValidatingRule<>(chainTranses, Presenter::emptyList, 
+                paramValidatingRule(chainTranses, Presenter::emptyList, 
                         view::notifyChainEmpty, FailedReason.CHAIN_EMPTY));
     }
 
@@ -313,10 +315,20 @@ class OperData<T>
     private BiConsumer<Optional<T>, ValidatingResult> updatePresenterDataFunc;
     private Runnable presentViewDataFunc;
 
-    public OperData(Optional<Supplier<Optional<T>>> collectViewDataFunc, 
-                    Function<Optional<T>, List<ParamValidatingRule<?>>> buildParamValidatingRulesFunc, 
-                    BiConsumer<Optional<T>, ValidatingResult> updatePresenterDataFunc, 
-                    Runnable presentViewDataFunc)
+    static <T> OperData<T> operData(
+            Optional<Supplier<Optional<T>>> collectViewDataFunc, 
+            Function<Optional<T>, List<ParamValidatingRule<?>>> buildParamValidatingRulesFunc, 
+            BiConsumer<Optional<T>, ValidatingResult> updatePresenterDataFunc, 
+            Runnable presentViewDataFunc)
+    {
+        return new OperData<>(collectViewDataFunc, buildParamValidatingRulesFunc, 
+                updatePresenterDataFunc, presentViewDataFunc);
+    }
+
+    private OperData(Optional<Supplier<Optional<T>>> collectViewDataFunc, 
+                     Function<Optional<T>, List<ParamValidatingRule<?>>> buildParamValidatingRulesFunc, 
+                     BiConsumer<Optional<T>, ValidatingResult> updatePresenterDataFunc, 
+                     Runnable presentViewDataFunc)
     {
         this.collectViewDataFunc = collectViewDataFunc;
         this.buildParamValidatingRulesFunc = buildParamValidatingRulesFunc;

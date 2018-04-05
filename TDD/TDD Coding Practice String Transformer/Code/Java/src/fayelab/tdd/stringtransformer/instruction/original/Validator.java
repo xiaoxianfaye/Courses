@@ -1,9 +1,9 @@
-package fayelab.tdd.stringtransformer.dummy.reverse;
+package fayelab.tdd.stringtransformer.instruction.original;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-import fayelab.tdd.stringtransformer.dummy.reverse.ValidatingResult.FailedReason;
+import fayelab.tdd.stringtransformer.instruction.original.ValidatingResult.FailedReason;
 
 public class Validator
 {
@@ -25,7 +25,6 @@ public class Validator
     {
         if(rule.getFailedPred().test(rule.getParam()))
         {
-            rule.getFailedAction().run();
             return ValidatingResult.failedResult(rule.getFailedReason());
         }
 
@@ -41,9 +40,7 @@ class ValidatingResult
         AVAIL_TRANS_NOT_SPECIFIED,
         ADD_ALREADY_EXISTED_IN_CHAIN_TRANS,
         CHAIN_TRANS_NOT_SPECIFIED,
-        CHAIN_EMPTY,
-        SOURCE_STR_EMPTY,
-        SOURCE_STR_ILLEGAL
+        CHAIN_EMPTY
     }
 
     private boolean succeeded;
@@ -80,20 +77,17 @@ class ParamValidatingRule<T>
 {
     private T param;
     private Predicate<T> failedPred;
-    private Runnable failedAction;
     private FailedReason failedReason;
 
-    static <T> ParamValidatingRule<T> paramValidatingRule(T param, Predicate<T> failedPred, 
-            Runnable failedAction, FailedReason failedReason)
+    static <T> ParamValidatingRule<T> paramValidatingRule(T param, Predicate<T> failedPred, FailedReason failedReason)
     {
-        return new ParamValidatingRule<>(param, failedPred, failedAction, failedReason);
+        return new ParamValidatingRule<>(param, failedPred, failedReason);
     }
 
-    private ParamValidatingRule(T param, Predicate<T> failedPred, Runnable failedAction, FailedReason failedReason)
+    private ParamValidatingRule(T param, Predicate<T> failedPred, FailedReason failedReason)
     {
         this.param = param;
         this.failedPred = failedPred;
-        this.failedAction = failedAction;
         this.failedReason = failedReason;
     }
 
@@ -105,11 +99,6 @@ class ParamValidatingRule<T>
     public Predicate<T> getFailedPred()
     {
         return failedPred;
-    }
-
-    public Runnable getFailedAction()
-    {
-        return failedAction;
     }
 
     public FailedReason getFailedReason()

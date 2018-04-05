@@ -83,7 +83,13 @@ class ParamValidatingRule<T>
     private Runnable failedAction;
     private FailedReason failedReason;
 
-    public ParamValidatingRule(T param, Predicate<T> failedPred, Runnable failedAction, FailedReason failedReason)
+    static <T> ParamValidatingRule<T> paramValidatingRule(T param, Predicate<T> failedPred, 
+            Runnable failedAction, FailedReason failedReason)
+    {
+        return new ParamValidatingRule<>(param, failedPred, failedAction, failedReason);
+    }
+
+    private ParamValidatingRule(T param, Predicate<T> failedPred, Runnable failedAction, FailedReason failedReason)
     {
         this.param = param;
         this.failedPred = failedPred;
