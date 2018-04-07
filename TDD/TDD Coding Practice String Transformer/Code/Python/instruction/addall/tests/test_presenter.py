@@ -50,8 +50,9 @@ class TestPresenter(unittest.TestCase):
 
         self.presenter.add_trans()
 
-        self.assertEquals(ValidatingResult.VRFR_ADD_ALREADY_EXISTED_IN_CHAIN_TRANS,
-                          self.viewstub.get_on_validating_failed_data())
+        self.assertEquals(
+            {VALIDATING_FAILED_REASON:ValidatingResult.VRFR_ADD_ALREADY_EXISTED_IN_CHAIN_TRANS},
+            self.viewstub.get_on_validating_failed_data())
         expected = {CHAIN_TRANSES:[UPPER_TRANS, LOWER_TRANS],
                     CHAIN_SELECTED_INDEX:1,
                     AVAIL_SELECTED_INDEX:1}
@@ -66,8 +67,9 @@ class TestPresenter(unittest.TestCase):
 
         self.presenter.add_trans()
 
-        self.assertEquals(ValidatingResult.VRFR_AVAIL_TRANS_NOT_SPECIFIED,
-                          self.viewstub.get_on_validating_failed_data())
+        self.assertEquals(
+            {VALIDATING_FAILED_REASON:ValidatingResult.VRFR_AVAIL_TRANS_NOT_SPECIFIED},
+            self.viewstub.get_on_validating_failed_data())
         expected = {CHAIN_TRANSES:[UPPER_TRANS, LOWER_TRANS],
                     CHAIN_SELECTED_INDEX:1,
                     AVAIL_SELECTED_INDEX:0}
@@ -124,8 +126,9 @@ class TestPresenter(unittest.TestCase):
 
         self.presenter.remove_trans()
 
-        self.assertEquals(ValidatingResult.VRFR_CHAIN_TRANS_NOT_SPECIFIED,
-                          self.viewstub.get_on_validating_failed_data())
+        self.assertEquals(
+            {VALIDATING_FAILED_REASON:ValidatingResult.VRFR_CHAIN_TRANS_NOT_SPECIFIED},
+            self.viewstub.get_on_validating_failed_data())
         expected = {CHAIN_TRANSES:[UPPER_TRANS],
                     AVAIL_SELECTED_INDEX:1,
                     CHAIN_SELECTED_INDEX:0}
@@ -134,7 +137,7 @@ class TestPresenter(unittest.TestCase):
     def test_remove_trans_when_chain_is_empty(self):
         self.presenter.remove_trans()
 
-        self.assertEquals(ValidatingResult.VRFR_CHAIN_EMPTY,
+        self.assertEquals({VALIDATING_FAILED_REASON:ValidatingResult.VRFR_CHAIN_EMPTY},
                           self.viewstub.get_on_validating_failed_data())
         expected = {CHAIN_TRANSES:[],
                     AVAIL_SELECTED_INDEX:0,
@@ -162,7 +165,7 @@ class TestPresenter(unittest.TestCase):
 
         self.presenter.remove_all_transes()
 
-        self.assertEquals(ValidatingResult.VRFR_CHAIN_EMPTY,
+        self.assertEquals({VALIDATING_FAILED_REASON:ValidatingResult.VRFR_CHAIN_EMPTY},
                           self.viewstub.get_on_validating_failed_data())
         expected = {CHAIN_TRANSES:[],
                     AVAIL_SELECTED_INDEX:1,
@@ -186,7 +189,7 @@ class TestPresenter(unittest.TestCase):
 
         self.presenter.apply_trans_chain()
 
-        self.assertEquals(ValidatingResult.VRFR_SOURCE_STR_EMPTY,
+        self.assertEquals({VALIDATING_FAILED_REASON:ValidatingResult.VRFR_SOURCE_STR_EMPTY},
                           self.viewstub.get_on_validating_failed_data())
         self.assertEquals({AVAIL_SELECTED_INDEX:1, RESULT_STR:''},
                           self.viewstub.get_on_apply_trans_chain_data())
@@ -198,7 +201,7 @@ class TestPresenter(unittest.TestCase):
 
         self.presenter.apply_trans_chain()
 
-        self.assertEquals(ValidatingResult.VRFR_SOURCE_STR_ILLEGAL,
+        self.assertEquals({VALIDATING_FAILED_REASON:ValidatingResult.VRFR_SOURCE_STR_ILLEGAL},
                           self.viewstub.get_on_validating_failed_data())
         self.assertEquals({AVAIL_SELECTED_INDEX:1, RESULT_STR:''},
                           self.viewstub.get_on_apply_trans_chain_data())
@@ -212,7 +215,7 @@ class TestPresenter(unittest.TestCase):
 
         self.presenter.apply_trans_chain()
 
-        self.assertEquals(ValidatingResult.VRFR_CHAIN_EMPTY,
+        self.assertEquals({VALIDATING_FAILED_REASON:ValidatingResult.VRFR_CHAIN_EMPTY},
                           self.viewstub.get_on_validating_failed_data())
         self.assertEquals({AVAIL_SELECTED_INDEX:0, RESULT_STR:''},
                           self.viewstub.get_on_apply_trans_chain_data())

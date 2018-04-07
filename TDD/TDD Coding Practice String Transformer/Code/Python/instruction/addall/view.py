@@ -236,7 +236,7 @@ class ViewImpl(object):
 
     # Override
     def on_validating_failed(self, data):
-        actions = ViewImpl.VRFR_ACTIONS_MAP[data]
+        actions = ViewImpl.VRFR_ACTIONS_MAP[data[VALIDATING_FAILED_REASON]]
         for (action_type, action_param) in actions:
             if action_type == ViewImpl.ACTION_SHOW_INFO:
                 tkMessageBox.showinfo('Information', action_param)

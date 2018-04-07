@@ -199,7 +199,7 @@ class Presenter(object):
     def validate(self, param_validating_rules):
         validating_result = Validator.validate(param_validating_rules)
         if not validating_result.is_succeeded:
-            self.view.on_validating_failed(validating_result.failed_reason)
+            self.view.on_validating_failed({VALIDATING_FAILED_REASON:validating_result.failed_reason})
         return validating_result
 
     def already_existed_in_chain(self, trans):
