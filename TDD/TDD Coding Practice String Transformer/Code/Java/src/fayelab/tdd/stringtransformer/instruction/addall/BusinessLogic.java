@@ -1,4 +1,4 @@
-package fayelab.tdd.stringtransformer.instruction.original;
+package fayelab.tdd.stringtransformer.instruction.addall;
 
 import java.util.List;
 

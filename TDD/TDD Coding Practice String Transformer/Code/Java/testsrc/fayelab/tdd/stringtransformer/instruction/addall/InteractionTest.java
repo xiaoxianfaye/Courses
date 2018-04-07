@@ -1,16 +1,16 @@
-package fayelab.tdd.stringtransformer.instruction.original;
+package fayelab.tdd.stringtransformer.instruction.addall;
 
 import junit.framework.TestCase;
 
 import java.util.Map;
-import fayelab.tdd.stringtransformer.instruction.original.Entry.Key;
-import fayelab.tdd.stringtransformer.instruction.original.ValidatingResult.FailedReason;
+import fayelab.tdd.stringtransformer.instruction.addall.Entry.Key;
+import fayelab.tdd.stringtransformer.instruction.addall.ValidatingResult.FailedReason;
 
 import static java.util.Arrays.asList;
-import static fayelab.tdd.stringtransformer.instruction.original.Trans.*;
-import static fayelab.tdd.stringtransformer.instruction.original.Entry.*;
-import static fayelab.tdd.stringtransformer.instruction.original.Entry.Key.*;
-import static fayelab.tdd.stringtransformer.instruction.original.Interaction.*;
+import static fayelab.tdd.stringtransformer.instruction.addall.Trans.*;
+import static fayelab.tdd.stringtransformer.instruction.addall.Entry.*;
+import static fayelab.tdd.stringtransformer.instruction.addall.Entry.Key.*;
+import static fayelab.tdd.stringtransformer.instruction.addall.Interaction.*;
 
 public class InteractionTest extends TestCase
 {

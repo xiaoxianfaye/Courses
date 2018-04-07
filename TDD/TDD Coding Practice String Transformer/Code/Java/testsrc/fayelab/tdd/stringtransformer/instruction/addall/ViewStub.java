@@ -1,8 +1,8 @@
-package fayelab.tdd.stringtransformer.instruction.original;
+package fayelab.tdd.stringtransformer.instruction.addall;
 
 import java.util.Map;
 
-import fayelab.tdd.stringtransformer.instruction.original.Entry.Key;
+import fayelab.tdd.stringtransformer.instruction.addall.Entry.Key;
 
 public class ViewStub implements View
 {
@@ -14,6 +14,7 @@ public class ViewStub implements View
     private Map<Key, Value<?>> onRemoveAllTransesData;
     private Map<Key, Value<?>> applyTransChainData;
     private Map<Key, Value<?>> onApplyTransChainData;
+    private Map<Key, Value<?>> onAddAllTransesData;
     private Map<Key, Value<?>> onValidatingFailedData;
 
     @Override
@@ -107,6 +108,17 @@ public class ViewStub implements View
     public Map<Key, Value<?>> getOnApplyTransChainData()
     {
         return onApplyTransChainData;
+    }
+
+    @Override
+    public void onAddAllTranses(Map<Key, Value<?>> data)
+    {
+        onAddAllTransesData = data;
+    }
+
+    public Map<Key, Value<?>> getOnAddAllTransesData()
+    {
+        return onAddAllTransesData;
     }
 
     @Override

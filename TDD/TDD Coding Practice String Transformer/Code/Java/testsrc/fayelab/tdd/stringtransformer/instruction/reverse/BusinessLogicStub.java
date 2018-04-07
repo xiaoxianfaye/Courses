@@ -1,9 +1,9 @@
-package fayelab.tdd.stringtransformer.instruction.original;
+package fayelab.tdd.stringtransformer.instruction.reverse;
 
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static fayelab.tdd.stringtransformer.instruction.original.Trans.*;
+import static fayelab.tdd.stringtransformer.instruction.reverse.Trans.*;
 
 public class BusinessLogicStub implements BusinessLogic
 {

@@ -1,4 +1,4 @@
-package fayelab.tdd.stringtransformer.instruction.original;
+package fayelab.tdd.stringtransformer.instruction.reverse;
 
 import java.util.List;
 import java.util.Map;
@@ -6,7 +6,7 @@ import java.util.function.Function;
 import java.util.LinkedHashMap;
 
 import static java.util.Arrays.asList;
-import static fayelab.tdd.stringtransformer.instruction.original.Trans.*;
+import static fayelab.tdd.stringtransformer.instruction.reverse.Trans.*;
 
 public class BusinessLogicImpl implements BusinessLogic
 {
@@ -18,6 +18,7 @@ public class BusinessLogicImpl implements BusinessLogic
         TRANS_FUNC_MAP.put(UPPER_TRANS, BusinessLogicImpl::upper);
         TRANS_FUNC_MAP.put(LOWER_TRANS, BusinessLogicImpl::lower);
         TRANS_FUNC_MAP.put(TRIM_PREFIX_SPACES_TRANS, BusinessLogicImpl::trimPrefixSpaces);
+        TRANS_FUNC_MAP.put(REVERSE_TRANS, BusinessLogicImpl::reverse);
     }
 
     @Override
@@ -57,5 +58,10 @@ public class BusinessLogicImpl implements BusinessLogic
                   .mapToInt(indexAndChar -> indexAndChar.get(0))
                   .findFirst()
                   .orElse(-1);
+    }
+
+    private static String reverse(String str)
+    {
+        return new StringBuffer(str).reverse().toString();
     }
 }

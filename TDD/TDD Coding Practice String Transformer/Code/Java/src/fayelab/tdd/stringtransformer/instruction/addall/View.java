@@ -1,8 +1,8 @@
-package fayelab.tdd.stringtransformer.instruction.original;
+package fayelab.tdd.stringtransformer.instruction.addall;
 
 import java.util.Map;
 
-import fayelab.tdd.stringtransformer.instruction.original.Entry.Key;
+import fayelab.tdd.stringtransformer.instruction.addall.Entry.Key;
 
 public interface View
 {
@@ -23,6 +23,8 @@ public interface View
     Map<Key, Value<?>> collectApplyTransChainData();
 
     void onApplyTransChain(Map<Key, Value<?>> data);
+
+    void onAddAllTranses(Map<Key, Value<?>> data);
 
     void onValidatingFailed(Map<Key, Value<?>> data);
 }

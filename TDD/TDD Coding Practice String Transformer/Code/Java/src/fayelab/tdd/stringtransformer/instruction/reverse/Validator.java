@@ -1,9 +1,9 @@
-package fayelab.tdd.stringtransformer.instruction.original;
+package fayelab.tdd.stringtransformer.instruction.reverse;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-import fayelab.tdd.stringtransformer.instruction.original.ValidatingResult.FailedReason;
+import fayelab.tdd.stringtransformer.instruction.reverse.ValidatingResult.FailedReason;
 
 public class Validator
 {

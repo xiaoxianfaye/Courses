@@ -1,4 +1,4 @@
-package fayelab.tdd.stringtransformer.instruction.original;
+package fayelab.tdd.stringtransformer.instruction.addall;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -23,13 +23,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import fayelab.tdd.stringtransformer.instruction.original.Entry.Key;
-import fayelab.tdd.stringtransformer.instruction.original.ValidatingResult.FailedReason;
+import fayelab.tdd.stringtransformer.instruction.addall.Entry.Key;
+import fayelab.tdd.stringtransformer.instruction.addall.ValidatingResult.FailedReason;
 
 import static java.util.Arrays.asList;
-import static fayelab.tdd.stringtransformer.instruction.original.Interaction.*;
-import static fayelab.tdd.stringtransformer.instruction.original.Entry.*;
-import static fayelab.tdd.stringtransformer.instruction.original.Entry.Key.*;
+import static fayelab.tdd.stringtransformer.instruction.addall.Interaction.*;
+import static fayelab.tdd.stringtransformer.instruction.addall.Entry.*;
+import static fayelab.tdd.stringtransformer.instruction.addall.Entry.Key.*;
 
 public class ViewImpl extends JFrame implements View
 {
@@ -127,6 +127,12 @@ public class ViewImpl extends JFrame implements View
     {
         txtResultStr.setText(data.get(RESULT_STR).toStr());
         lstAvail.setSelectedIndex(data.get(AVAIL_SELECTED_INDEX).toInt());
+    }
+
+    @Override
+    public void onAddAllTranses(Map<Key, Value<?>> data)
+    {
+        onBuildTransChain(data);
     }
 
     @Override
@@ -230,7 +236,7 @@ public class ViewImpl extends JFrame implements View
         pnCEast.add(lstChain, BorderLayout.CENTER);
 
         pnCenter.add(pnCCenter, BorderLayout.CENTER);
-        pnCCenter.setLayout(new GridLayout(8, 1));
+        pnCCenter.setLayout(new GridLayout(10, 1));
         pnCCenter.add(new JPanel());
         pnCCenter.add(new JPanel());
         pnCCenter.add(pnBtnAdd);
@@ -238,6 +244,8 @@ public class ViewImpl extends JFrame implements View
         pnCCenter.add(pnBtnRemove);
         pnCCenter.add(new JPanel());
         pnCCenter.add(pnBtnRemoveAll);
+        pnCCenter.add(new JPanel());
+        pnCCenter.add(pnBtnAddAll);
         pnCCenter.add(new JPanel());
 
         pnBtnAdd.setLayout(new BorderLayout());
@@ -275,6 +283,18 @@ public class ViewImpl extends JFrame implements View
             }
         });
         pnBtnRemoveAll.add(btnRemoveAll, BorderLayout.NORTH);
+
+        pnBtnAddAll.setLayout(new BorderLayout());
+        btnAddAll.setText("Add All");
+        btnAddAll.setPreferredSize(new Dimension(120, 23));
+        btnAddAll.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                btnAddAll_actionPerformed(e);
+            }
+        });
+        pnBtnAddAll.add(btnAddAll, BorderLayout.NORTH);
     }
 
     private void btnAdd_actionPerformed(ActionEvent e)
@@ -295,6 +315,11 @@ public class ViewImpl extends JFrame implements View
     private void btnApply_actionPerformed(ActionEvent e)
     {
         presenter.applyTransChain();
+    }
+
+    private void btnAddAll_actionPerformed(ActionEvent e)
+    {
+        presenter.addAllTranses();
     }
 
     private void btnExit_actionPerformed(ActionEvent e)
@@ -347,6 +372,8 @@ public class ViewImpl extends JFrame implements View
     private JButton btnRemove = new JButton();
     private JPanel pnBtnRemoveAll = new JPanel();
     private JButton btnRemoveAll = new JButton();
+    private JPanel pnBtnAddAll = new JPanel();
+    private JButton btnAddAll = new JButton();
 
     private static final long serialVersionUID = 1L;
 }

@@ -1,4 +1,4 @@
-package fayelab.tdd.stringtransformer.instruction.original;
+package fayelab.tdd.stringtransformer.instruction.addall;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,15 +8,15 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import fayelab.tdd.stringtransformer.instruction.original.Entry.Key;
-import fayelab.tdd.stringtransformer.instruction.original.ValidatingResult.FailedReason;
+import fayelab.tdd.stringtransformer.instruction.addall.Entry.Key;
+import fayelab.tdd.stringtransformer.instruction.addall.ValidatingResult.FailedReason;
 
 import static java.util.Arrays.asList;
-import static fayelab.tdd.stringtransformer.instruction.original.Interaction.*;
-import static fayelab.tdd.stringtransformer.instruction.original.Entry.*;
-import static fayelab.tdd.stringtransformer.instruction.original.Entry.Key.*;
-import static fayelab.tdd.stringtransformer.instruction.original.ParamValidatingRule.*;
-import static fayelab.tdd.stringtransformer.instruction.original.OperData.*;
+import static fayelab.tdd.stringtransformer.instruction.addall.Interaction.*;
+import static fayelab.tdd.stringtransformer.instruction.addall.Entry.*;
+import static fayelab.tdd.stringtransformer.instruction.addall.Entry.Key.*;
+import static fayelab.tdd.stringtransformer.instruction.addall.ParamValidatingRule.*;
+import static fayelab.tdd.stringtransformer.instruction.addall.OperData.*;
 
 public class Presenter
 {
@@ -47,7 +47,7 @@ public class Presenter
     public void addTrans()
     {
         operTrans(operData(Optional.of(this::collectViewDataForAdd), 
-                           this::buildParamValidatingRulesForAdd, 
+                           Optional.of(this::buildParamValidatingRulesForAdd), 
                            this::updatePresenterDataForAdd, 
                            this::presentViewDataForAdd));
     }
@@ -67,9 +67,10 @@ public class Presenter
                         FailedReason.ADD_ALREADY_EXISTED_IN_CHAIN_TRANS));
     }
 
-    private void updatePresenterDataForAdd(Optional<String> viewData, ValidatingResult validatingResult)
+    private void updatePresenterDataForAdd(Optional<String> viewData, Optional<ValidatingResult> opValidatingResult)
     {
         String availSelectedTrans = viewData.orElse(NONE_SELECTED_TRANS);
+        ValidatingResult validatingResult = opValidatingResult.get();
         if(validatingResult.isSucceeded())
         {
             chainTranses.add(availSelectedTrans);
@@ -115,7 +116,7 @@ public class Presenter
     public void removeTrans()
     {
         operTrans(operData(Optional.of(this::collectViewDataForRemove), 
-                           this::buildParamValidatingRulesForRemove, 
+                           Optional.of(this::buildParamValidatingRulesForRemove), 
                            this::updatePresenterDataForRemove, 
                            this::presentViewDataForRemove));
     }
@@ -137,9 +138,10 @@ public class Presenter
                         FailedReason.CHAIN_TRANS_NOT_SPECIFIED));
     }
 
-    private void updatePresenterDataForRemove(Optional<String> viewData, ValidatingResult validatingResult)
+    private void updatePresenterDataForRemove(Optional<String> viewData, Optional<ValidatingResult> opValidatingResult)
     {
         String chainSelectedTrans = viewData.orElse(NONE_SELECTED_TRANS);
+        ValidatingResult validatingResult = opValidatingResult.get();
         updateChainSelectedIndexForRemove(chainSelectedTrans, validatingResult.getFailedReason());
         if(validatingResult.isSucceeded())
         {
@@ -196,7 +198,7 @@ public class Presenter
     public void removeAllTranses()
     {
         operTrans(operData(Optional.empty(), 
-                           this::buildParamValidatingRulesForRemoveAll, 
+                           Optional.of(this::buildParamValidatingRulesForRemoveAll), 
                            this::updatePresenterDataForRemoveAll, 
                            this::presentViewDataForRemoveAll));
     }
@@ -206,8 +208,9 @@ public class Presenter
         return asList(paramValidatingRule(chainTranses, Presenter::emptyList, FailedReason.CHAIN_EMPTY));
     }
 
-    private void updatePresenterDataForRemoveAll(Optional<?> emptyViewData, ValidatingResult validatingResult)
+    private void updatePresenterDataForRemoveAll(Optional<?> emptyViewData, Optional<ValidatingResult> opValidatingResult)
     {
+        ValidatingResult validatingResult = opValidatingResult.get();
         if(validatingResult.isSucceeded())
         {
             chainTranses.clear();
@@ -239,7 +242,7 @@ public class Presenter
     public void applyTransChain()
     {
         operTrans(operData(Optional.of(this::collectViewDataForApply), 
-                           this::buildParamValidatingRulesForApply, 
+                           Optional.of(this::buildParamValidatingRulesForApply), 
                            this::updatePresenterDataForApply, 
                            this::presentViewDataForApply));
     }
@@ -261,8 +264,9 @@ public class Presenter
                         FailedReason.CHAIN_EMPTY));
     }
 
-    private void updatePresenterDataForApply(Optional<String> viewData, ValidatingResult validatingResult)
+    private void updatePresenterDataForApply(Optional<String> viewData, Optional<ValidatingResult> opValidatingResult)
     {
+        ValidatingResult validatingResult = opValidatingResult.get();
         resultStr = validatingResult.isSucceeded() ? businessLogic.transform(viewData.get(), chainTranses) : "";
         updateAvailSelectedIndexForApply(validatingResult.getFailedReason());
     }
@@ -282,10 +286,43 @@ public class Presenter
                 entry(AVAIL_SELECTED_INDEX, availSelectedIndex)));
     }
 
+    public void addAllTranses()
+    {
+        operTrans(operData(Optional.empty(), 
+                           Optional.empty(), 
+                           this::updatePresenterDataForAddAll, 
+                           this::presentViewDataForAddAll));
+    }
+
+    private void updatePresenterDataForAddAll(Optional<?> emptyViewData, Optional<?> emptyValidatingResult)
+    {
+        chainTranses.clear();
+        chainTranses.addAll(availTranses);
+        updateChainSelectedIndexForAddAll();
+        updateAvailSelectedIndexForAddAll();
+    }
+
+    private void updateChainSelectedIndexForAddAll()
+    {
+        chainSelectedIndex = chainTranses.size() - 1;
+    }
+
+    private void updateAvailSelectedIndexForAddAll()
+    {
+        availSelectedIndex = 0;
+    }
+
+    private void presentViewDataForAddAll()
+    {
+        view.onAddAllTranses(buildPresentViewDataForBuildingTransChain());
+    }
+
     private <T> void operTrans(OperData<T> operData)
     {
         Optional<T> viewData = operData.getCollectViewDataFunc().orElse(() -> Optional.empty()).get();
-        ValidatingResult validatingResult = validate(operData.getBuildParamValidatingRulesFunc().apply(viewData));
+        Optional<ValidatingResult> validatingResult = 
+                operData.getBuildParamValidatingRulesFunc()
+                        .flatMap(func -> Optional.of(validate(func.apply(viewData))));
         operData.getUpdatePresenterDataFunc().accept(viewData, validatingResult);
         operData.getPresentViewDataFunc().run();
     }
@@ -343,14 +380,14 @@ public class Presenter
 class OperData<T>
 {
     private Optional<Supplier<Optional<T>>> collectViewDataFunc;
-    private Function<Optional<T>, List<ParamValidatingRule<?>>> buildParamValidatingRulesFunc;
-    private BiConsumer<Optional<T>, ValidatingResult> updatePresenterDataFunc;
+    private Optional<Function<Optional<T>, List<ParamValidatingRule<?>>>> buildParamValidatingRulesFunc;
+    private BiConsumer<Optional<T>, Optional<ValidatingResult>> updatePresenterDataFunc;
     private Runnable presentViewDataFunc;
 
     static <T> OperData<T> operData(
             Optional<Supplier<Optional<T>>> collectViewDataFunc, 
-            Function<Optional<T>, List<ParamValidatingRule<?>>> buildParamValidatingRulesFunc, 
-            BiConsumer<Optional<T>, ValidatingResult> updatePresenterDataFunc, 
+            Optional<Function<Optional<T>, List<ParamValidatingRule<?>>>> buildParamValidatingRulesFunc, 
+            BiConsumer<Optional<T>, Optional<ValidatingResult>> updatePresenterDataFunc, 
             Runnable presentViewDataFunc)
     {
         return new OperData<>(collectViewDataFunc, buildParamValidatingRulesFunc, 
@@ -358,8 +395,8 @@ class OperData<T>
     }
 
     private OperData(Optional<Supplier<Optional<T>>> collectViewDataFunc, 
-                     Function<Optional<T>, List<ParamValidatingRule<?>>> buildParamValidatingRulesFunc, 
-                     BiConsumer<Optional<T>, ValidatingResult> updatePresenterDataFunc, 
+                     Optional<Function<Optional<T>, List<ParamValidatingRule<?>>>> buildParamValidatingRulesFunc, 
+                     BiConsumer<Optional<T>, Optional<ValidatingResult>> updatePresenterDataFunc, 
                      Runnable presentViewDataFunc)
     {
         this.collectViewDataFunc = collectViewDataFunc;
@@ -373,12 +410,12 @@ class OperData<T>
         return collectViewDataFunc;
     }
 
-    public Function<Optional<T>, List<ParamValidatingRule<?>>> getBuildParamValidatingRulesFunc()
+    public Optional<Function<Optional<T>, List<ParamValidatingRule<?>>>> getBuildParamValidatingRulesFunc()
     {
         return buildParamValidatingRulesFunc;
     }
 
-    public BiConsumer<Optional<T>, ValidatingResult> getUpdatePresenterDataFunc()
+    public BiConsumer<Optional<T>, Optional<ValidatingResult>> getUpdatePresenterDataFunc()
     {
         return updatePresenterDataFunc;
     }

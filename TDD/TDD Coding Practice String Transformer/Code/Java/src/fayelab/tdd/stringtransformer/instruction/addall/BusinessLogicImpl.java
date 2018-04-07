@@ -1,4 +1,4 @@
-package fayelab.tdd.stringtransformer.instruction.original;
+package fayelab.tdd.stringtransformer.instruction.addall;
 
 import java.util.List;
 import java.util.Map;
@@ -6,7 +6,7 @@ import java.util.function.Function;
 import java.util.LinkedHashMap;
 
 import static java.util.Arrays.asList;
-import static fayelab.tdd.stringtransformer.instruction.original.Trans.*;
+import static fayelab.tdd.stringtransformer.instruction.addall.Trans.*;
 
 public class BusinessLogicImpl implements BusinessLogic
 {

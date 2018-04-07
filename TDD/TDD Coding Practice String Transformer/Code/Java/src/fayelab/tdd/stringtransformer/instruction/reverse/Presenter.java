@@ -1,4 +1,4 @@
-package fayelab.tdd.stringtransformer.instruction.original;
+package fayelab.tdd.stringtransformer.instruction.reverse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,15 +8,15 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import fayelab.tdd.stringtransformer.instruction.original.Entry.Key;
-import fayelab.tdd.stringtransformer.instruction.original.ValidatingResult.FailedReason;
+import fayelab.tdd.stringtransformer.instruction.reverse.Entry.Key;
+import fayelab.tdd.stringtransformer.instruction.reverse.ValidatingResult.FailedReason;
 
 import static java.util.Arrays.asList;
-import static fayelab.tdd.stringtransformer.instruction.original.Interaction.*;
-import static fayelab.tdd.stringtransformer.instruction.original.Entry.*;
-import static fayelab.tdd.stringtransformer.instruction.original.Entry.Key.*;
-import static fayelab.tdd.stringtransformer.instruction.original.ParamValidatingRule.*;
-import static fayelab.tdd.stringtransformer.instruction.original.OperData.*;
+import static fayelab.tdd.stringtransformer.instruction.reverse.Interaction.*;
+import static fayelab.tdd.stringtransformer.instruction.reverse.Entry.*;
+import static fayelab.tdd.stringtransformer.instruction.reverse.Entry.Key.*;
+import static fayelab.tdd.stringtransformer.instruction.reverse.ParamValidatingRule.*;
+import static fayelab.tdd.stringtransformer.instruction.reverse.OperData.*;
 
 public class Presenter
 {

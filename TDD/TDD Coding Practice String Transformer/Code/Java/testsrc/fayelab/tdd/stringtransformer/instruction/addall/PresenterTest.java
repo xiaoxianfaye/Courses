@@ -1,14 +1,14 @@
-package fayelab.tdd.stringtransformer.instruction.original;
+package fayelab.tdd.stringtransformer.instruction.addall;
 
 import junit.framework.TestCase;
 
-import fayelab.tdd.stringtransformer.instruction.original.ValidatingResult.FailedReason;
+import fayelab.tdd.stringtransformer.instruction.addall.ValidatingResult.FailedReason;
 
 import static java.util.Arrays.asList;
-import static fayelab.tdd.stringtransformer.instruction.original.Interaction.*;
-import static fayelab.tdd.stringtransformer.instruction.original.Entry.*;
-import static fayelab.tdd.stringtransformer.instruction.original.Entry.Key.*;
-import static fayelab.tdd.stringtransformer.instruction.original.Trans.*;
+import static fayelab.tdd.stringtransformer.instruction.addall.Interaction.*;
+import static fayelab.tdd.stringtransformer.instruction.addall.Entry.*;
+import static fayelab.tdd.stringtransformer.instruction.addall.Entry.Key.*;
+import static fayelab.tdd.stringtransformer.instruction.addall.Trans.*;
 
 public class PresenterTest extends TestCase
 {
@@ -269,5 +269,15 @@ public class PresenterTest extends TestCase
         assertEquals(interactionData(
                 entry(RESULT_STR, ""), entry(AVAIL_SELECTED_INDEX, 0)), 
                 viewStub.getOnApplyTransChainData());
+    }
+
+    public void test_add_all_transes()
+    {
+        presenter.addAllTranses();
+
+        assertEquals(interactionData(
+                entry(CHAIN_TRANSES, asList(UPPER_TRANS, LOWER_TRANS, TRIM_PREFIX_SPACES_TRANS)),
+                entry(AVAIL_SELECTED_INDEX, 0),
+                entry(CHAIN_SELECTED_INDEX, 2)), viewStub.getOnAddAllTransesData());
     }
 }

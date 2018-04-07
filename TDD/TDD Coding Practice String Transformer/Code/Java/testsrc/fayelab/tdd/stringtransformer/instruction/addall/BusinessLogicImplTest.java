@@ -1,11 +1,11 @@
-package fayelab.tdd.stringtransformer.instruction.original;
+package fayelab.tdd.stringtransformer.instruction.addall;
 
 import junit.framework.TestCase;
 
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static fayelab.tdd.stringtransformer.instruction.original.Trans.*;
+import static fayelab.tdd.stringtransformer.instruction.addall.Trans.*;
 
 public class BusinessLogicImplTest extends TestCase
 {

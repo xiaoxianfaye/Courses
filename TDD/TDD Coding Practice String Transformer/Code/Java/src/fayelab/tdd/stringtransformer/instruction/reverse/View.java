@@ -1,8 +1,8 @@
-package fayelab.tdd.stringtransformer.instruction.original;
+package fayelab.tdd.stringtransformer.instruction.reverse;
 
 import java.util.Map;
 
-import fayelab.tdd.stringtransformer.instruction.original.Entry.Key;
+import fayelab.tdd.stringtransformer.instruction.reverse.Entry.Key;
 
 public interface View
 {

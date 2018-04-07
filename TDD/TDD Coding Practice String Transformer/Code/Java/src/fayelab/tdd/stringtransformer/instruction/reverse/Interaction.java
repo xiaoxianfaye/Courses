@@ -1,4 +1,4 @@
-package fayelab.tdd.stringtransformer.instruction.original;
+package fayelab.tdd.stringtransformer.instruction.reverse;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import fayelab.tdd.stringtransformer.instruction.original.Entry.Key;
-import fayelab.tdd.stringtransformer.instruction.original.ValidatingResult.FailedReason;
+import fayelab.tdd.stringtransformer.instruction.reverse.Entry.Key;
+import fayelab.tdd.stringtransformer.instruction.reverse.ValidatingResult.FailedReason;
 
 public class Interaction
 {

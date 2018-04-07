@@ -1,4 +1,4 @@
-package fayelab.tdd.stringtransformer.instruction.original;
+package fayelab.tdd.stringtransformer.instruction.reverse;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -23,13 +23,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import fayelab.tdd.stringtransformer.instruction.original.Entry.Key;
-import fayelab.tdd.stringtransformer.instruction.original.ValidatingResult.FailedReason;
+import fayelab.tdd.stringtransformer.instruction.reverse.Entry.Key;
+import fayelab.tdd.stringtransformer.instruction.reverse.ValidatingResult.FailedReason;
 
 import static java.util.Arrays.asList;
-import static fayelab.tdd.stringtransformer.instruction.original.Interaction.*;
-import static fayelab.tdd.stringtransformer.instruction.original.Entry.*;
-import static fayelab.tdd.stringtransformer.instruction.original.Entry.Key.*;
+import static fayelab.tdd.stringtransformer.instruction.reverse.Interaction.*;
+import static fayelab.tdd.stringtransformer.instruction.reverse.Entry.*;
+import static fayelab.tdd.stringtransformer.instruction.reverse.Entry.Key.*;
 
 public class ViewImpl extends JFrame implements View
 {
