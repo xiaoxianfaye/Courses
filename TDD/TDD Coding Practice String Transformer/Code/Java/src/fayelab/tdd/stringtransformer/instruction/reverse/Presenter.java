@@ -51,7 +51,7 @@ public class Presenter
                            this::updatePresenterDataForAdd, 
                            this::presentViewDataForAdd));
     }
-    
+
     private Optional<String> collectViewDataForAdd()
     {
         return Optional.ofNullable(view.collectAddTransData().get(AVAIL_SELECTED_TRANS).toStr());
