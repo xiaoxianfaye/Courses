@@ -99,10 +99,12 @@ if __name__ == '__main__':
 
     r9 = scale('2', '2 Yard 3 Feet', implen_sysunits, implen_stepfactors)
     print '2 * 2 Yard 3 Feet = %s' % (r9)
-    r10 = add(scale('2', '2 Yard 3 Feet', implen_sysunits, implen_stepfactors), '13 Inch', implen_sysunits, implen_stepfactors)
+    r10 = add(scale('2', '2 Yard 3 Feet', implen_sysunits, implen_stepfactors), '13 Inch',
+              implen_sysunits, implen_stepfactors)
     print '2 * 2 Yard 3 Feet + 13 Inch = %s' % (r10)
 
     r11 = scale('3', '1 OZ 10 TSP', impvol_sysunits, impvol_stepfactors)
     print '3 * 1 OZ 10 TSP = %s' % (r11)
-    r12 = add(scale('3', '1 OZ 10 TSP', impvol_sysunits, impvol_stepfactors), '3 TBSP 1 TSP', impvol_sysunits, impvol_stepfactors)
+    r12 = add(scale('3', '1 OZ 10 TSP', impvol_sysunits, impvol_stepfactors), '3 TBSP 1 TSP',
+              impvol_sysunits, impvol_stepfactors)
     print '3 * 1 OZ 10 TSP + 3 TBSP 1 TSP = %s' % (r12)
