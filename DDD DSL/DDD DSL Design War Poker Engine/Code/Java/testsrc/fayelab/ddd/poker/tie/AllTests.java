@@ -1,6 +1,6 @@
-package fayelab.ddd.poker.first;
+package fayelab.ddd.poker.tie;
 
-import fayelab.ddd.poker.first.util.ListsTest;
+import fayelab.ddd.poker.tie.util.ListsTest;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
